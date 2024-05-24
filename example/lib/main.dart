@@ -11,7 +11,7 @@ Future<void> main() async {
   // setUpServiceLocator();
 
   overlayPopUp();
-  await initializeService();
+  // await initializeService();
   runApp(MyApp());
 }
 
@@ -28,7 +28,7 @@ void overlayPopUp() {
 }
 
 class MyApp extends StatelessWidget {
-   final _checkAppPlugin = CheckappPlugin();
+  final _checkAppPlugin = CheckappPlugin();
 
   @override
   Widget build(BuildContext context) {
@@ -41,14 +41,19 @@ class MyApp extends StatelessWidget {
             const Text("Monitor Facebook App Usage"),
             ElevatedButton(
                 onPressed: () async {
-                   await _checkAppPlugin.requestUsagePermission();
+                  await _checkAppPlugin.getPlatformVersion();
                 },
                 child: const Text("ENABLE Usage PERMISSION")),
-                  ElevatedButton(
+            ElevatedButton(
                 onPressed: () async {
-                   await _checkAppPlugin.requestOverlayPermission();
+                  await _checkAppPlugin.requestOverlayPermission();
                 },
-                child: const Text("ENABLE Overlay PERMISSION"))
+                child: const Text("ENABLE Overlay PERMISSION")),
+            ElevatedButton(
+                onPressed: () async {
+                  await _checkAppPlugin.requestNotificationPermission();
+                },
+                child: const Text("ENABLE Notification PERMISSION"))
           ],
         )),
       ),
