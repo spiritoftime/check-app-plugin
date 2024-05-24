@@ -32,9 +32,17 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="com.example.foo.bar.REDIRECT_HOME" />
+                <action android:name="com.example.foo.bar.START" />
+                <action android:name="com.example.foo.bar.STOP" />
+
+
+
+                <category android:name="android.intent.category.DEFAULT" />
+
             </intent-filter>
         </activity>
-        <service android:foregroundServiceType="specialUse"  android:exported="false" android:name="com.doomscroll.checkapp_plugin.AppService"
+        <service android:foregroundServiceType="specialUse"  android:exported="true" android:name="com.doomscroll.checkapp_plugin.AppService"
             tools:ignore="ForegroundServicePermission" />
         <property
             android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
