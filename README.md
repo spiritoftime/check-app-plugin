@@ -1,6 +1,6 @@
 # checkapp_plugin
 
-A new Flutter plugin project.
+Flutter Plugin for use to implement App Blocker Activities.
 
 ## Getting Started
 
