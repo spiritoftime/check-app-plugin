@@ -58,7 +58,12 @@ class MyApp extends StatelessWidget {
                 onPressed: () async {
                   await _checkAppPlugin.requestBackgroundPermission();
                 },
-                child: const Text("ENABLE Background PERMISSION"))
+                child: const Text("ENABLE Background PERMISSION")),
+                 ElevatedButton(
+                onPressed: () async {
+                  await _checkAppPlugin.requestBackgroundPermission();
+                },
+                child: const Text("Stop Service"))
           ],
         )),
       ),

@@ -1,0 +1,112 @@
+package com.doomscroll.checkapp_plugin;
+
+import android.Manifest;
+import android.app.Activity;
+import android.app.AppOpsManager;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.Settings;
+import android.util.Log;
+
+import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationManagerCompat;
+
+import java.lang.reflect.Method;
+import java.util.Locale;
+
+public class Permissions {
+    private static final int OVERLAY_PERMISSION_REQUEST_CODE = 1001;
+    private static final int NOTIFICATION_PERMISSION_REQUEST_CODE = 1002;
+    public static final int OP_BACKGROUND_START_ACTIVITY = 10021;
+
+
+    private static int checkUsagePermission(Context context) {
+        PackageManager packageManager = context.getPackageManager();
+        ApplicationInfo applicationInfo;
+        try {
+            applicationInfo = packageManager.getApplicationInfo(context.getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e("PackageManager", e.toString());
+            return 0;
+        }
+        AppOpsManager appOpsManager = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            return appOpsManager.unsafeCheckOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, applicationInfo.uid, applicationInfo.packageName);
+        }
+        return AppOpsManager.MODE_ALLOWED;
+    }
+
+    public static void requestUsagePermission(Context context, Activity activity) {
+        int mode = checkUsagePermission(context);
+        if (mode != AppOpsManager.MODE_ALLOWED && activity != null) {
+            activity.startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+        }
+    }
+
+    private static boolean checkOverlayPermission(Context context) {
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(context);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public static void requestOverlayPermission(Context context, Activity activity) {
+        if (activity != null && !checkOverlayPermission(context)) {
+
+            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + activity.getPackageName()));
+            activity.startActivityForResult(intent, OVERLAY_PERMISSION_REQUEST_CODE);
+        }
+    }
+
+    //    needed to run foreground service
+    private static boolean checkNotificationPermission(Context context) {
+        return NotificationManagerCompat.from(context).areNotificationsEnabled();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
+    public static void requestNotificationPermission(Context context, Activity activity) {
+
+        boolean notificationPermissionEnabled = checkNotificationPermission(context);
+
+
+        if (!notificationPermissionEnabled && activity != null) {
+
+            String[] permissions = {Manifest.permission.POST_NOTIFICATIONS};
+
+            ActivityCompat.requestPermissions(activity, permissions, NOTIFICATION_PERMISSION_REQUEST_CODE);
+
+        }
+
+    }
+
+    //check special permission open new windows while running in background enabled or not (unique to mui)
+//     see https://stackoverflow.com/questions/59645936/displaying-popup-windows-while-running-in-the-background
+
+    @SuppressWarnings("JavaReflectionMemberAccess")
+    private static boolean isBackgroundStartActivityPermissionGranted(Context context) {
+        try {
+            AppOpsManager mgr = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
+            Method m = AppOpsManager.class.getMethod("checkOpNoThrow", int.class, int.class, String.class);
+            int result = (int) m.invoke(mgr, OP_BACKGROUND_START_ACTIVITY, android.os.Process.myUid(), context.getPackageName());
+            return result == AppOpsManager.MODE_ALLOWED;
+        } catch (Exception e) {
+            Log.d("Exception", e.toString());
+        }
+        return true;
+    }
+
+    public static void requestBackgroundPermissionForXiaomi(Context context, Activity activity) {
+        if (!isBackgroundStartActivityPermissionGranted(context) && activity != null) {
+            if ("xiaomi".equals(Build.MANUFACTURER.toLowerCase(Locale.ROOT))) {
+                Intent intent = new Intent("miui.intent.action.APP_PERM_EDITOR");
+                intent.setClassName("com.miui.securitycenter",
+                        "com.miui.permcenter.permissions.PermissionsEditorActivity");
+                intent.putExtra("extra_pkgname", context.getPackageName());
+                activity.startActivity(intent);
+            }
+        }
+    }
+}

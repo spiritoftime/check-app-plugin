@@ -28,6 +28,18 @@ class MockCheckappPluginPlatform
     // TODO: implement requestUsagePermission
     throw UnimplementedError();
   }
+  
+  @override
+  Future<void> requestNotificationPermission() {
+    // TODO: implement requestNotificationPermission
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> requestBackgroundPermission() {
+    // TODO: implement requestBackgroundPermission
+    throw UnimplementedError();
+  }
 }
 
 void main() {

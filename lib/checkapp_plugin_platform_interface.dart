@@ -40,4 +40,15 @@ abstract class CheckappPluginPlatform extends PlatformInterface {
     throw UnimplementedError(
         'requestUsagePermission() has not been implemented.');
   }
+
+  Future<void> requestNotificationPermission() {
+    throw UnimplementedError(
+        'requestNotificationPermission() has not been implemented.');
+  }
+    Future<void> requestBackgroundPermission() {
+    throw UnimplementedError(
+        'requestNotificationPermission() has not been implemented.');
+  }
+
+  
 }

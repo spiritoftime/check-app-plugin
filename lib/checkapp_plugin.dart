@@ -1,17 +1,27 @@
-
 import 'checkapp_plugin_platform_interface.dart';
 
 class CheckappPlugin {
   Future<String?> getPlatformVersion() {
     return CheckappPluginPlatform.instance.getPlatformVersion();
   }
-    Future<bool?> detectForbiddenApp() {
+
+  Future<bool?> detectForbiddenApp() {
     return CheckappPluginPlatform.instance.detectForbiddenApp();
   }
-    Future<void> requestOverlayPermission() {
+
+  Future<void> requestOverlayPermission() {
     return CheckappPluginPlatform.instance.requestOverlayPermission();
   }
-    Future<void> requestUsagePermission() {
+
+  Future<void> requestUsagePermission() {
     return CheckappPluginPlatform.instance.requestUsagePermission();
+  }
+
+  Future<void> requestNotificationPermission() {
+    return CheckappPluginPlatform.instance.requestNotificationPermission();
+  }
+
+  Future<void> requestBackgroundPermission() {
+    return CheckappPluginPlatform.instance.requestBackgroundPermission();
   }
 }
