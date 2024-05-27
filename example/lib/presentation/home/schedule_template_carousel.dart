@@ -2,15 +2,18 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:checkapp_plugin_example/presentation/home/carousel_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
-class CarouselWithIndicatorDemo extends StatefulWidget {
+class ScheduleTemplateCarousel extends StatefulWidget {
+  const ScheduleTemplateCarousel({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _CarouselWithIndicatorState();
   }
 }
 
-class _CarouselWithIndicatorState extends State<CarouselWithIndicatorDemo> {
+class _CarouselWithIndicatorState extends State<ScheduleTemplateCarousel> {
   int _current = 0;
   final CarouselController _controller = CarouselController();
 
@@ -18,20 +21,35 @@ class _CarouselWithIndicatorState extends State<CarouselWithIndicatorDemo> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        CarouselSlider(
-          items: templateSliders,
-          carouselController: _controller,
-          options: CarouselOptions(
-              autoPlay: true,
-              viewportFraction: 1.0,
-              // enlargeCenterPage: true,
-              aspectRatio: 1.8,
-              onPageChanged: (index, reason) {
-                setState(() {
-                  _current = index;
-                });
-              }),
+        Material(
+          child: InkWell(
+            onTap: () => context.go('/create-block'),
+            child: Ink(
+              color: Colors.black,
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: CarouselSlider(
+                  items: templateSliders,
+                  carouselController: _controller,
+                  options: CarouselOptions(
+                      autoPlay: true,
+                      viewportFraction: 1.0,
+                      // enlargeCenterPage: true,
+                      aspectRatio: 2,
+                      onPageChanged: (index, reason) {
+                        setState(() {
+                          _current = index;
+                        });
+                      }),
+                ),
+              ),
+            ),
+          ),
         ),
+        const Gap(16),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: templateList.asMap().entries.map((entry) {
@@ -62,13 +80,10 @@ final List<Widget> templateSliders = templateList.map((item) {
   String content = item.content;
   String quote = item.quote;
   return Padding(
-    padding: const EdgeInsets.all(8.0),
+    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const Row(
-          children: [Icon(Icons.schedule), Spacer(), Icon(Icons.add_circle)],
-        ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [

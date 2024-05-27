@@ -1,5 +1,6 @@
 import 'package:checkapp_plugin_example/presentation/basic/basic_screen.dart';
 import 'package:checkapp_plugin_example/presentation/details/details_screen.dart';
+import 'package:checkapp_plugin_example/presentation/home/home_page.dart';
 import 'package:checkapp_plugin_example/presentation/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -10,7 +11,7 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/',
       builder: (BuildContext context, GoRouterState state) {
-        return  HomeScreen();
+        return const HomePage();
       },
       routes: <RouteBase>[
         GoRoute(
@@ -21,6 +22,11 @@ final GoRouter _router = GoRouter(
         ),
         GoRoute(
             path: 'basic',
+            builder: (BuildContext context, GoRouterState state) {
+              return BasicScreen();
+            }),
+        GoRoute(
+            path: 'create-block',
             builder: (BuildContext context, GoRouterState state) {
               return BasicScreen();
             }),
@@ -41,6 +47,9 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           brightness: Brightness.dark,
           scaffoldBackgroundColor: Colors.black,
+          bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+            backgroundColor: Colors.transparent,
+          ),
         ));
   }
 }

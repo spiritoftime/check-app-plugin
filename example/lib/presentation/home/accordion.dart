@@ -9,7 +9,7 @@ class AccordionPage extends StatelessWidget //__
   const AccordionPage({super.key, required this.header, required this.content});
 
   static const headerStyle = TextStyle(
-      color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24.0);
+      color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 24.0);
   static const contentStyleHeader = TextStyle(
       color: Color(0xff999999), fontSize: 14, fontWeight: FontWeight.w700);
   static const contentStyle = TextStyle(
@@ -27,7 +27,7 @@ class AccordionPage extends StatelessWidget //__
         contentBorderRadius: 0,
         contentBackgroundColor: Colors.black,
         contentBorderColor: Colors.black,
-        headerPadding: const EdgeInsets.symmetric(horizontal: 0),
+        headerPadding: const EdgeInsets.symmetric(horizontal: 0,vertical: 16),
         contentBorderWidth: 0,
         contentHorizontalPadding: 0,
         scaleWhenAnimating: true,
@@ -45,7 +45,7 @@ class AccordionPage extends StatelessWidget //__
             // leftIcon: const Icon(Icons.input, color: Colors.white),
             header: Text(header, style: headerStyle),
             // contentHorizontalPadding: 40,
-            contentVerticalPadding: 20,
+            contentVerticalPadding: 0,
             content: content,
           ),
         ],

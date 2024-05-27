@@ -2,17 +2,19 @@ import 'dart:ui';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:checkapp_plugin_example/presentation/home/accordion.dart';
+import 'package:checkapp_plugin_example/presentation/home/home_page.dart';
 import 'package:checkapp_plugin_example/presentation/home/carousel_icons.dart';
-import 'package:checkapp_plugin_example/presentation/home/carousel_slider.dart';
+import 'package:checkapp_plugin_example/presentation/home/schedule_template_carousel.dart';
 import 'package:checkapp_plugin_example/presentation/home/endless_scrolling_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gap/gap.dart';
 
 /// The home screen
 class HomeScreen extends StatelessWidget {
   /// Constructs a [HomeScreen]
-  HomeScreen({super.key});
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -99,14 +101,34 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ),
                       const Gap(20),
-                      const Padding(
-                        padding: EdgeInsets.only(left: 8.0),
-                        child: Text(
-                          "Schedule",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 24.0),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Row(
+                          children: [
+                            const Text(
+                              "Schedule",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 24.0),
+                            ),
+                            const Spacer(),
+                            ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xff5094F5),
+                    
+                              ),
+                              onPressed: () {
+                                context.go('/create-block');
+                              },
+                              icon: const Icon(Icons.add,
+                                  color: Colors.white, size: 24),
+                              label: const Text(
+                                'Create Schedule',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       const Gap(12),
@@ -117,8 +139,9 @@ class HomeScreen extends StatelessWidget {
                             Radius.circular(8),
                           ),
                         ),
-                        child:  Padding(
-                          padding: const EdgeInsets.all(16.0),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 32.0),
                           child: Column(
                             children: [
                               const Text(
@@ -127,7 +150,7 @@ class HomeScreen extends StatelessWidget {
                                     color: Colors.grey, fontSize: 16.0),
                                 textAlign: TextAlign.center,
                               ),
-                              const Gap(20),
+                              const Gap(32),
                               EndlessScrollingWidget(
                                   gap: 20,
                                   widgetWidth: 48,
@@ -139,8 +162,8 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ),
                       const Gap(20),
-                      AccordionPage(
-                        content: CarouselWithIndicatorDemo(),
+                      const AccordionPage(
+                        content: ScheduleTemplateCarousel(),
                         header: "Schedule Templates",
                       ),
                     ],

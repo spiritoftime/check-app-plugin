@@ -31,7 +31,7 @@ final List<Template> templateList = [
       content: 'Strict blocking',
       quote: '"Anti-doomscroll all the way!"'),
   const Template(
-      icon: Icon(Icons.schedule, size: 48,color:Colors.blue),
+      icon: Icon(Icons.calendar_today, size: 48,color:Colors.blue),
       content: 'Scheduled blocking',
       quote: '"Block at specific times of the day!"'),
 ];
