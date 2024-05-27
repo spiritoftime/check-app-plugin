@@ -1,6 +1,8 @@
 import 'dart:ui';
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:checkapp_plugin_example/presentation/home/accordion.dart';
+import 'package:checkapp_plugin_example/presentation/home/carousel_icons.dart';
 import 'package:checkapp_plugin_example/presentation/home/endless_scrolling_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -135,61 +137,22 @@ class HomeScreen extends StatelessWidget {
                                 TextStyle(color: Colors.grey, fontSize: 16.0),
                             textAlign: TextAlign.center,
                           ),
+                          Gap(20),
                           EndlessScrollingWidget(
                               gap: 20,
                               widgetWidth: 48,
                               scrollDuration: Duration(seconds: 8),
                               widgetHeight: 48,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(right: 20.0),
-                                  child: Icon(
-                                    Icons.access_time, // app limit
-                                    size: 48,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                Padding(
-                                    padding: EdgeInsets.only(right: 20.0),
-                                    child: Icon(Icons.home,
-                                        size: 48,
-                                        color: Colors.red)), // location based
-
-                                Padding(
-                                    padding: EdgeInsets.only(right: 20.0),
-                                    child: Icon(Icons.traffic,
-                                        size: 48, color: Colors.red)),
-                                Padding(
-                                    padding: EdgeInsets.only(right: 20.0),
-                                    child: Icon(Icons.snooze,
-                                        size: 48, color: Colors.yellow)),
-                                Padding(
-                                  padding: EdgeInsets.only(right: 20.0),
-                                  child: Icon(
-                                    Icons.access_time, // app limit
-                                    size: 48,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                Padding(
-                                    padding: EdgeInsets.only(right: 20.0),
-                                    child: Icon(Icons.home,
-                                        size: 48,
-                                        color: Colors.red)), // location based
-
-                                Padding(
-                                    padding: EdgeInsets.only(right: 20.0),
-                                    child: Icon(Icons.traffic,
-                                        size: 48, color: Colors.red)),
-                                Padding(
-                                    padding: EdgeInsets.only(right: 20.0),
-                                    child: Icon(Icons.snooze,
-                                        size: 48, color: Colors.yellow)),
-                              ])
+                              children: carouselIcons)
                         ],
                       ),
                     ),
-                  )
+                  ),
+                  const Gap(20),
+
+
+                      AccordionPage(),
+
                 ],
               )
             ],
