@@ -117,21 +117,21 @@ class HomeScreen extends StatelessWidget {
                             Radius.circular(8),
                           ),
                         ),
-                        child: const Padding(
-                          padding: EdgeInsets.all(16.0),
+                        child:  Padding(
+                          padding: const EdgeInsets.all(16.0),
                           child: Column(
                             children: [
-                              Text(
+                              const Text(
                                 "Plan your everyday blocking by time,\n location and more.",
                                 style: TextStyle(
                                     color: Colors.grey, fontSize: 16.0),
                                 textAlign: TextAlign.center,
                               ),
-                              Gap(20),
+                              const Gap(20),
                               EndlessScrollingWidget(
                                   gap: 20,
                                   widgetWidth: 48,
-                                  scrollDuration: Duration(seconds: 8),
+                                  scrollDuration: const Duration(seconds: 8),
                                   widgetHeight: 48,
                                   children: carouselIcons)
                             ],

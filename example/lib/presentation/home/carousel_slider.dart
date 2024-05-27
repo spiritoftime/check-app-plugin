@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:checkapp_plugin_example/presentation/home/carousel_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -90,33 +91,3 @@ final List<Widget> templateSliders = templateList.map((item) {
     ),
   );
 }).toList();
-
-final List<Template> templateList = [
-  const Template(
-      icon: Icon(
-        Icons.access_time,
-        size: 48,
-      ),
-      content: 'Limited Use',
-      quote: '"30 minutes of doomscrolling per day"'),
-  const Template(
-      icon: Icon(Icons.home, size: 48),
-      content: 'Location blocking',
-      quote: '"continue doomscrolling while outside!"'),
-  const Template(
-      icon: Icon(Icons.block, size: 48),
-      content: 'Strict blocking',
-      quote: '"Anti-doomscroll all the way!"'),
-  const Template(
-      icon: Icon(Icons.schedule, size: 48),
-      content: 'Scheduled blocking',
-      quote: '"Block at specific times of the day!"'),
-];
-
-class Template {
-  final Icon icon;
-  final String content;
-  final String quote;
-  const Template(
-      {required this.icon, required this.content, required this.quote});
-}
