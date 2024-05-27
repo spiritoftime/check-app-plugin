@@ -11,11 +11,11 @@ const List<Widget> carouselIcons = [
   ),
   Padding(
       padding: EdgeInsets.only(right: 20.0),
-      child: Icon(Icons.home, size: 48, color: Colors.red)), // location based
+      child: Icon(Icons.home, size: 48, color: Colors.brown)), // location based
 
   Padding(
       padding: EdgeInsets.only(right: 20.0),
-      child: Icon(Icons.traffic, size: 48, color: Colors.red)),
+      child: Icon(Icons.block, size: 48, color: Colors.red)),
   Padding(
       padding: EdgeInsets.only(right: 20.0),
       child: Icon(Icons.snooze, size: 48, color: Colors.yellow)),

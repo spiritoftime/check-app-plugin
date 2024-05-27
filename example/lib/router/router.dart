@@ -39,7 +39,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
         routerConfig: _router,
         theme: ThemeData(
-          scaffoldBackgroundColor: const Color(0xff000000),
+          brightness: Brightness.dark,
+          scaffoldBackgroundColor: Colors.black,
         ));
   }
 }

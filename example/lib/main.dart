@@ -13,7 +13,10 @@ Future<void> main() async {
 
   // overlayPopUp();
   // await initializeService();
-  runApp(  const MyApp());
+    SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp,DeviceOrientation.portraitDown])
+      .then((_) => runApp(MyApp()),
+  );
 }
 
 // /
