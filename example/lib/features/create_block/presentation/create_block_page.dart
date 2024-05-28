@@ -85,7 +85,16 @@ class CreateBlockPage extends StatelessWidget {
                             Expanded(
                               child: TabBarView(
                                 children: [
-                                  Text("HI"),
+                                  SingleChildScrollView(
+                                    child: SizedBox(
+                                      height: 2000,
+                                      child: Column(
+                                        children: [
+                                          Text("HI"),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
                                   Text("HI"),
                                   Text("HI"),
                                 ],
