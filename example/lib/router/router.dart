@@ -29,7 +29,7 @@ final GoRouter _router = GoRouter(
         GoRoute(
             path: 'create-block',
             builder: (BuildContext context, GoRouterState state) {
-              return const CreateBlockPage();
+              return  CreateBlockPage();
             }),
       ],
     ),
