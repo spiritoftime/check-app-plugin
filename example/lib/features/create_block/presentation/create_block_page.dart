@@ -1,14 +1,24 @@
+import 'dart:convert';
+
 import 'package:buttons_tabbar/buttons_tabbar.dart';
+import 'package:checkapp_plugin/checkapp_plugin.dart';
+import 'package:checkapp_plugin/checkapp_plugin_method_channel.dart';
+import 'package:checkapp_plugin_example/features/create_block/bloc/app_bloc.dart';
+import 'package:checkapp_plugin_example/features/create_block/bloc/app_event.dart';
+import 'package:checkapp_plugin_example/features/create_block/bloc/app_state.dart';
 import 'package:checkapp_plugin_example/features/create_block/cubit/tab_cubit.dart';
+import 'package:checkapp_plugin_example/features/create_block/repository/app_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gap/gap.dart';
 
 class CreateBlockPage extends StatelessWidget {
-  final TabCubit tabCubit = TabCubit(0);
+  final _checkAppPlugin = CheckappPlugin();
+
   CreateBlockPage({super.key});
   List<String> _tabs = ["Apps", "Websites", "Keywords"];
   @override
@@ -86,13 +96,50 @@ class CreateBlockPage extends StatelessWidget {
                               child: TabBarView(
                                 children: [
                                   SingleChildScrollView(
-                                    child: SizedBox(
-                                      height: 2000,
-                                      child: Column(
-                                        children: [
-                                          Text("HI"),
-                                        ],
-                                      ),
+                                    child: Column(
+                                      children: [
+                                        BlocProvider(
+                                          create: (_) =>
+                                              AppsBloc(AppRepository())
+                                                ..add(const LoadApp()),
+                                          child: BlocBuilder<AppsBloc,
+                                              AppsState>(
+                                            builder: (context, state) {
+                                              if (state is AppsLoading) {
+                                                return const CircularProgressIndicator();
+                                              }
+                                              if (state is AppsLoaded) {
+                                                return Column(
+                                                  children: state.apps
+                                                      .map(
+                                                        (app) => Row(
+                                                          children: [
+                                                            Image.memory(
+                                                              const Base64Decoder().convert(app
+                                                                  .iconBase64String
+                                                                  .replaceAll(
+                                                                      RegExp(
+                                                                          r'\s+'),
+                                                                      '')),
+                                                              width: 50,
+                                                              height: 50,
+                                                            ),
+                                                            Text(app.appName),
+                                                            // Text(app
+                                                            //     .packageName),
+                                                          ],
+                                                        ),
+                                                      )
+                                                      .toList(),
+                                                );
+                                              } else {
+                                                return const Text(
+                                                    'No App Found');
+                                              }
+                                            },
+                                          ),
+                                        )
+                                      ],
                                     ),
                                   ),
                                   Text("HI"),
