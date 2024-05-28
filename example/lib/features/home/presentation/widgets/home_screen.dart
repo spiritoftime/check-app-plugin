@@ -1,11 +1,11 @@
 import 'dart:ui';
 
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:checkapp_plugin_example/presentation/home/accordion.dart';
-import 'package:checkapp_plugin_example/presentation/home/home_page.dart';
-import 'package:checkapp_plugin_example/presentation/home/carousel_icons.dart';
-import 'package:checkapp_plugin_example/presentation/home/schedule_template_carousel.dart';
-import 'package:checkapp_plugin_example/presentation/home/endless_scrolling_widget.dart';
+import 'package:checkapp_plugin_example/features/home/presentation/widgets/accordion.dart';
+import 'package:checkapp_plugin_example/features/home/presentation/home_page.dart';
+import 'package:checkapp_plugin_example/features/home/presentation/widgets/carousel_icons.dart';
+import 'package:checkapp_plugin_example/features/home/presentation/widgets/schedule_template_carousel.dart';
+import 'package:checkapp_plugin_example/features/home/presentation/widgets/endless_scrolling_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';

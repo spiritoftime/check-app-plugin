@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:checkapp_plugin/checkapp_plugin.dart';
-import 'package:checkapp_plugin_example/presentation/overlay/usecases/overlay_usecase.dart';
+import 'package:checkapp_plugin_example/features/overlay/usecases/overlay_usecase.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';

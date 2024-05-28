@@ -1,6 +1,6 @@
 import 'package:checkapp_plugin_example/background_service/background_service.dart';
-import 'package:checkapp_plugin_example/presentation/basic/basic_screen.dart';
-import 'package:checkapp_plugin_example/presentation/overlay/presentation/screens/overlay_popup.dart';
+import 'package:checkapp_plugin_example/features/basic/presentation/basic_screen.dart';
+import 'package:checkapp_plugin_example/features/overlay/presentation/overlay_popup.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
