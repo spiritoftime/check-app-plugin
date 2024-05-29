@@ -1,10 +1,10 @@
+import 'dart:convert';
 
 import 'package:checkapp_plugin/checkapp_plugin_constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import 'checkapp_plugin_platform_interface.dart';
-
 
 /// An implementation of [CheckappPluginPlatform] that uses method channels.
 class MethodChannelCheckappPlugin extends CheckappPluginPlatform {
@@ -43,10 +43,20 @@ class MethodChannelCheckappPlugin extends CheckappPluginPlatform {
     final isPermissionEnabled =
         await methodChannel.invokeMethod<bool>(REQUEST_NOTIFICATION_PERMISSION);
   }
+
   @override
   Future<void> requestBackgroundPermission() async {
     final isPermissionEnabled =
         await methodChannel.invokeMethod<bool>(REQUEST_BACKGROUND_PERMISSION);
   }
-  
+
+  @override
+  Future<List<dynamic>> getLaunchableApplications() async {
+    final List<dynamic>? launchableApplications = await methodChannel
+        .invokeMethod<List<dynamic>>(GET_LAUNCHABLE_APPLICATIONS);
+
+    return launchableApplications ?? [];
+
+  }
 }
+

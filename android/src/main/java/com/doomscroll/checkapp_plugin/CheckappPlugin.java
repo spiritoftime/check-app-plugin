@@ -1,8 +1,6 @@
 package com.doomscroll.checkapp_plugin;
 
-import static com.doomscroll.checkapp_plugin.AppService.NOTIFICATION_CHANNEL;
 import static com.doomscroll.checkapp_plugin.AppService.REDIRECT_HOME;
-import static com.doomscroll.checkapp_plugin.AppService.START;
 
 import static com.doomscroll.checkapp_plugin.AppService.createIntentForService;
 import static com.doomscroll.checkapp_plugin.AppService.initializeServiceAtFlutter;
@@ -11,30 +9,35 @@ import static com.doomscroll.checkapp_plugin.Permissions.requestNotificationPerm
 import static com.doomscroll.checkapp_plugin.Permissions.requestOverlayPermission;
 import static com.doomscroll.checkapp_plugin.Permissions.requestUsagePermission;
 
-import android.Manifest;
 import android.app.Activity;
-import android.app.AppOpsManager;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
+
 import android.app.usage.UsageEvents;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
+import android.content.pm.ResolveInfo;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.PictureDrawable;
 import android.os.Build;
-import android.provider.Settings;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationManagerCompat;
 
+
+import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import android.util.Base64;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import io.flutter.embedding.android.FlutterActivity;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
@@ -57,7 +60,7 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
     private static final String GET_PLATFORM_VERSION = "getPlatformVersion";
     private static final String REQUEST_BACKGROUND_PERMISSION = "REQUEST_BACKGROUND_PERMISSION";
 
-
+    private static final String GET_LAUNCHABLE_APPLICATIONS = "GET_LAUNCHABLE_APPLICATIONS";
     private MethodChannel channel;
     private Context context;
     @Nullable
@@ -74,6 +77,9 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
         switch (call.method) {
+            case GET_LAUNCHABLE_APPLICATIONS:
+                List<Map<String, Object>> appList = getInstalledApplications();
+                result.success(appList);
             case CHANNEL_DETECT_METHOD:
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -161,6 +167,77 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
         channel.setMethodCallHandler(null);
+    }
+
+    private List<Map<String, Object>> getInstalledApplications() {
+        // searching main activities labeled to be launchers of the apps
+        PackageManager pm = context.getPackageManager();
+        Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+        List<ResolveInfo> resolveInfoList = pm.queryIntentActivities(mainIntent, PackageManager.GET_META_DATA);
+        List<Map<String, Object>> appList = new ArrayList<>();
+
+        for (ResolveInfo resolveInfo : resolveInfoList) {
+            String packageName = resolveInfo.activityInfo.packageName;
+            Drawable icon = resolveInfo.loadIcon(pm);
+            Bitmap iconBitMap = drawableToBitmap(icon);
+            String iconBase64String = bitmapToBase64(iconBitMap);
+            String appName = "";
+            if (resolveInfo.activityInfo.labelRes != 0) {
+                try {
+                    Resources resources = pm.getResourcesForApplication(resolveInfo.activityInfo.applicationInfo);
+                    appName = resources.getString(resolveInfo.activityInfo.labelRes);
+
+                } catch (PackageManager.NameNotFoundException e) {
+
+                    Log.d("getInstalledApplication", e.toString());
+
+                }
+            } else {
+                appName = resolveInfo.activityInfo.applicationInfo.loadLabel(pm).toString();
+
+            }
+            appList.add(new AppService.AppInfo(packageName, iconBase64String,appName).toMap());
+        }
+
+        return appList;
+    }
+
+
+    public static Bitmap drawableToBitmap (Drawable drawable) {
+        Bitmap bitmap = null;
+
+        if (drawable instanceof BitmapDrawable) {
+            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+            if(bitmapDrawable.getBitmap() != null) {
+                return bitmapDrawable.getBitmap();
+            }
+        }
+        if(drawable instanceof PictureDrawable){
+            Bitmap bmp = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bmp);
+            canvas.drawPicture(((PictureDrawable) drawable).getPicture());
+            return bmp;
+        }
+
+        if(drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
+            bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
+        } else {
+            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        }
+
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bitmap;
+    }
+
+//    might be inefficient - see https://stackoverflow.com/questions/9224056/android-bitmap-to-base64-string
+    public static String bitmapToBase64(Bitmap bitmap){
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+
+        return Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT);
     }
 
 }

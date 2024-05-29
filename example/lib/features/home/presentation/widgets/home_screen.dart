@@ -1,6 +1,10 @@
 import 'dart:ui';
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:checkapp_plugin_example/features/create_block/bloc/app_bloc.dart';
+import 'package:checkapp_plugin_example/features/create_block/bloc/app_event.dart';
+import 'package:checkapp_plugin_example/features/create_block/presentation/create_block_page.dart';
+import 'package:checkapp_plugin_example/features/create_block/repository/app_repository.dart';
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/accordion.dart';
 import 'package:checkapp_plugin_example/features/home/presentation/home_page.dart';
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/carousel_icons.dart';
@@ -8,6 +12,7 @@ import 'package:checkapp_plugin_example/features/home/presentation/widgets/sched
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/endless_scrolling_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gap/gap.dart';
 
@@ -21,7 +26,8 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+          padding:
+              const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
           child: Column(
             children: [
               Expanded(
@@ -82,7 +88,8 @@ class HomeScreen extends StatelessWidget {
                                   print('hi');
                                 },
                                 child: const Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.center,
                                   children: [
                                     Icon(
                                       Icons.block,
@@ -116,7 +123,6 @@ class HomeScreen extends StatelessWidget {
                             ElevatedButton.icon(
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xff5094F5),
-                    
                               ),
                               onPressed: () {
                                 context.go('/create-block');
@@ -154,7 +160,8 @@ class HomeScreen extends StatelessWidget {
                               EndlessScrollingWidget(
                                   gap: 20,
                                   widgetWidth: 48,
-                                  scrollDuration: const Duration(seconds: 8),
+                                  scrollDuration:
+                                      const Duration(seconds: 8),
                                   widgetHeight: 48,
                                   children: carouselIcons)
                             ],

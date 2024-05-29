@@ -1,3 +1,5 @@
+import 'package:checkapp_plugin/checkapp_plugin_method_channel.dart';
+
 import 'checkapp_plugin_platform_interface.dart';
 
 class CheckappPlugin {
@@ -23,5 +25,8 @@ class CheckappPlugin {
 
   Future<void> requestBackgroundPermission() {
     return CheckappPluginPlatform.instance.requestBackgroundPermission();
+  }
+  Future<List<dynamic>> getLaunchableApplications() {
+    return CheckappPluginPlatform.instance.getLaunchableApplications();
   }
 }

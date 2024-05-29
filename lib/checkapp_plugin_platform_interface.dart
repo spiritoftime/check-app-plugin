@@ -49,6 +49,9 @@ abstract class CheckappPluginPlatform extends PlatformInterface {
     throw UnimplementedError(
         'requestNotificationPermission() has not been implemented.');
   }
-
+    Future<List<dynamic>>getLaunchableApplications() {
+    throw UnimplementedError(
+        'requestNotificationPermission() has not been implemented.');
+  }
   
 }

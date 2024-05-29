@@ -12,15 +12,9 @@ abstract class AppEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class GetApps extends AppEvent {}
 
-class LoadApp extends AppEvent {
-  final List<App> apps;
+class LoadApps extends AppEvent {
 
-  const LoadApp({this.apps = const <App>[]});
-
-  @override
-  List<Object> get props => [apps];
 }
 
 // class AddTask extends TaskEvent {

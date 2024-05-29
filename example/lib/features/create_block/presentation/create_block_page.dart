@@ -6,7 +6,6 @@ import 'package:checkapp_plugin/checkapp_plugin_method_channel.dart';
 import 'package:checkapp_plugin_example/features/create_block/bloc/app_bloc.dart';
 import 'package:checkapp_plugin_example/features/create_block/bloc/app_event.dart';
 import 'package:checkapp_plugin_example/features/create_block/bloc/app_state.dart';
-import 'package:checkapp_plugin_example/features/create_block/cubit/tab_cubit.dart';
 import 'package:checkapp_plugin_example/features/create_block/repository/app_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,13 +19,13 @@ class CreateBlockPage extends StatelessWidget {
   final _checkAppPlugin = CheckappPlugin();
 
   CreateBlockPage({super.key});
-  List<String> _tabs = ["Apps", "Websites", "Keywords"];
+  final List<String> _tabs = ["Apps", "Websites", "Keywords"];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -34,7 +33,7 @@ class CreateBlockPage extends StatelessWidget {
                 children: [
                   IconButton(
                     padding: EdgeInsets.zero,
-                    constraints: BoxConstraints(),
+                    constraints: const BoxConstraints(),
                     style: const ButtonStyle(
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
@@ -98,46 +97,41 @@ class CreateBlockPage extends StatelessWidget {
                                   SingleChildScrollView(
                                     child: Column(
                                       children: [
-                                        BlocProvider(
-                                          create: (_) =>
-                                              AppsBloc(AppRepository())
-                                                ..add(const LoadApp()),
-                                          child: BlocBuilder<AppsBloc,
-                                              AppsState>(
-                                            builder: (context, state) {
-                                              if (state is AppsLoading) {
-                                                return const CircularProgressIndicator();
-                                              }
-                                              if (state is AppsLoaded) {
-                                                return Column(
-                                                  children: state.apps
-                                                      .map(
-                                                        (app) => Row(
-                                                          children: [
-                                                            Image.memory(
-                                                              const Base64Decoder().convert(app
-                                                                  .iconBase64String
-                                                                  .replaceAll(
-                                                                      RegExp(
-                                                                          r'\s+'),
-                                                                      '')),
-                                                              width: 50,
-                                                              height: 50,
-                                                            ),
-                                                            Text(app.appName),
-                                                            // Text(app
-                                                            //     .packageName),
-                                                          ],
-                                                        ),
-                                                      )
-                                                      .toList(),
-                                                );
-                                              } else {
-                                                return const Text(
-                                                    'No App Found');
-                                              }
-                                            },
-                                          ),
+                                        BlocBuilder<AppsBloc,
+                                            AppsState>(
+                                          builder: (context, state) {
+                                            if (state is AppsLoading) {
+                                              return const CircularProgressIndicator();
+                                            }
+                                            if (state is AppsLoaded) {
+                                              return Column(
+                                                children: state.apps
+                                                    .map(
+                                                      (app) => Row(
+                                                        children: [
+                                                          Image.memory(
+                                                            const Base64Decoder().convert(app
+                                                                .iconBase64String
+                                                                .replaceAll(
+                                                                    RegExp(
+                                                                        r'\s+'),
+                                                                    '')),
+                                                            width: 50,
+                                                            height: 50,
+                                                          ),
+                                                          Text(app.appName),
+                                                          // Text(app
+                                                          //     .packageName),
+                                                        ],
+                                                      ),
+                                                    )
+                                                    .toList(),
+                                              );
+                                            } else {
+                                              return const Text(
+                                                  'No App Found');
+                                            }
+                                          },
                                         )
                                       ],
                                     ),

@@ -9,14 +9,14 @@ import 'package:checkapp_plugin_example/features/create_block/repository/app_rep
 class AppsBloc extends Bloc<AppEvent, AppsState> {
   final AppRepository _appRepository;
 
-  AppsBloc(this._appRepository) : super(const AppsLoaded()) {
-    on<LoadApp>(_onLoadApp);
+  AppsBloc(this._appRepository) : super(const AppsLoaded()) { // initializes state with AppsLoaded - empty list. AppsBloc(this._appRepository) means this.appRepository = _appRepository
+    on<LoadApps>(_onLoadApp); // register events - on loadApp event call _onLoadApp
     // on<AddTask>(_onAddTask);
     // on<DeleteTask>(_onDeleteTask);
     // on<UpdateTask>(_onUpdateTask);
   }
 
-  Future<void> _onLoadApp(LoadApp event, Emitter<AppsState> emit) async {
+  Future<void> _onLoadApp(LoadApps event, Emitter<AppsState> emit) async {
     emit(AppsLoading());
     try {
       final apps = await _appRepository.getApp();
