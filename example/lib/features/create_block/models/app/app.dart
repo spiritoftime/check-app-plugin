@@ -27,6 +27,6 @@ class App {
         );
   }
 
-  factory App.fromJson(Map<dynamic, dynamic> json) => _$AppFromJson(json);
-  Map<dynamic, dynamic> toJson() => _$AppToJson(this);
+  factory App.fromJson(Map<String, dynamic> json) => _$AppFromJson(json);
+  Map<String, dynamic> toJson() => _$AppToJson(this);
 }

@@ -1,6 +1,6 @@
 
 
-import 'package:checkapp_plugin_example/features/create_block/models/app.dart';
+import 'package:checkapp_plugin_example/features/create_block/models/app/app.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 

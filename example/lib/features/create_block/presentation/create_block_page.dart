@@ -6,6 +6,7 @@ import 'package:checkapp_plugin/checkapp_plugin_method_channel.dart';
 import 'package:checkapp_plugin_example/features/create_block/bloc/app_bloc.dart';
 import 'package:checkapp_plugin_example/features/create_block/bloc/app_event.dart';
 import 'package:checkapp_plugin_example/features/create_block/bloc/app_state.dart';
+import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/checkbox.dart';
 import 'package:checkapp_plugin_example/features/create_block/repository/app_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -97,8 +98,7 @@ class CreateBlockPage extends StatelessWidget {
                                   SingleChildScrollView(
                                     child: Column(
                                       children: [
-                                        BlocBuilder<AppsBloc,
-                                            AppsState>(
+                                        BlocBuilder<AppsBloc, AppsState>(
                                           builder: (context, state) {
                                             if (state is AppsLoading) {
                                               return const CircularProgressIndicator();
@@ -107,29 +107,49 @@ class CreateBlockPage extends StatelessWidget {
                                               return Column(
                                                 children: state.apps
                                                     .map(
-                                                      (app) => Row(
-                                                        children: [
-                                                          Image.memory(
-                                                            const Base64Decoder().convert(app
-                                                                .iconBase64String
-                                                                .replaceAll(
-                                                                    RegExp(
-                                                                        r'\s+'),
-                                                                    '')),
-                                                            width: 50,
-                                                            height: 50,
-                                                          ),
-                                                          Text(app.appName),
-                                                          // Text(app
-                                                          //     .packageName),
-                                                        ],
+                                                      (app) => Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: Row(
+                                                          children: [
+                                                            ClipRRect(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          8.0),
+                                                              child:
+                                                                  Image.memory(
+                                                                const Base64Decoder().convert(app
+                                                                    .iconBase64String
+                                                                    .replaceAll(
+                                                                        RegExp(
+                                                                            r'\s+'),
+                                                                        '')),
+                                                                width: 50,
+                                                                height: 50,
+                                                              ),
+                                                            ),
+                                                            const Gap(16),
+                                                            Text(
+                                                              app.appName,
+                                                              style: const TextStyle(
+                                                                  fontSize: 16,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500),
+                                                            ),
+                                                            const Spacer(),
+                                                             CheckBoxWidget(app: app,)
+                                              
+                                                          ],
+                                                        ),
                                                       ),
                                                     )
                                                     .toList(),
                                               );
                                             } else {
-                                              return const Text(
-                                                  'No App Found');
+                                              return const Text('No App Found');
                                             }
                                           },
                                         )
