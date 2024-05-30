@@ -24,9 +24,9 @@ class Schedule {
     return Schedule(block: block ?? this.block, timing: timing ?? this.timing);
   }
 
-  factory Schedule.fromJson(Map<String, dynamic> json) =>
+  factory Schedule.fromJson(Map<dynamic, dynamic> json) =>
       _$ScheduleFromJson(json);
-  Map<String, dynamic> toJson() => _$ScheduleToJson(this);
+  Map<dynamic, dynamic> toJson() => _$ScheduleToJson(this);
 }
 
 

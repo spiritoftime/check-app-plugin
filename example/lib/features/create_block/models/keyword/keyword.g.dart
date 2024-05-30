@@ -6,10 +6,10 @@ part of 'keyword.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Keyword _$KeywordFromJson(Map<String, dynamic> json) => Keyword(
+Keyword _$KeywordFromJson(Map<dynamic, dynamic> json) => Keyword(
       keyword: json['keyword'] as String,
     );
 
-Map<String, dynamic> _$KeywordToJson(Keyword instance) => <String, dynamic>{
+Map<dynamic, dynamic> _$KeywordToJson(Keyword instance) => <dynamic, dynamic>{
       'keyword': instance.keyword,
     };

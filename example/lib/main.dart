@@ -1,7 +1,7 @@
 import 'package:checkapp_plugin_example/background_service/background_service.dart';
 import 'package:checkapp_plugin_example/features/basic/presentation/basic_screen.dart';
-import 'package:checkapp_plugin_example/features/create_block/bloc/app_bloc.dart';
-import 'package:checkapp_plugin_example/features/create_block/bloc/app_event.dart';
+import 'package:checkapp_plugin_example/features/create_block/bloc/app/app_bloc.dart';
+import 'package:checkapp_plugin_example/features/create_block/bloc/app/app_event.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/create_block_page.dart';
 import 'package:checkapp_plugin_example/features/create_block/repository/app_repository.dart';
 import 'package:checkapp_plugin_example/features/overlay/presentation/overlay_popup.dart';
@@ -26,7 +26,7 @@ Future<void> main() async {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-            lazy:false,child:CreateBlockPage(),
+            lazy:true,child:CreateBlockPage(),
               create: (context) =>
                   AppsBloc(RepositoryProvider.of<AppRepository>(context))
                     ..add(LoadApps()))

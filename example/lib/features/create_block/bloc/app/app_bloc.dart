@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
-import 'package:checkapp_plugin_example/features/create_block/bloc/app_event.dart';
-import 'package:checkapp_plugin_example/features/create_block/bloc/app_state.dart';
+import 'package:checkapp_plugin_example/features/create_block/bloc/app/app_event.dart';
+import 'package:checkapp_plugin_example/features/create_block/bloc/app/app_state.dart';
 import 'package:checkapp_plugin_example/features/create_block/repository/app_repository.dart';
 
 
@@ -23,9 +23,10 @@ class AppsBloc extends Bloc<AppEvent, AppsState> {
       emit(AppsLoaded(apps: apps));
     } catch (e) {
       emit(AppsError(e.toString()));
+      print(e.toString());
     }
   }
-
+  
   // void _onAddTask(AddTask event, Emitter<TasksState> emit) {
   //   final state = this.state;
   //   if (state is TasksLoaded) {

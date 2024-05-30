@@ -6,11 +6,11 @@ part of 'day.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Day _$DayFromJson(Map<String, dynamic> json) => Day(
+Day _$DayFromJson(Map<dynamic, dynamic> json) => Day(
       name: $enumDecode(_$DaysEnumMap, json['name']),
     );
 
-Map<String, dynamic> _$DayToJson(Day instance) => <String, dynamic>{
+Map<dynamic, dynamic> _$DayToJson(Day instance) => <dynamic, dynamic>{
       'name': _$DaysEnumMap[instance.name]!,
     };
 

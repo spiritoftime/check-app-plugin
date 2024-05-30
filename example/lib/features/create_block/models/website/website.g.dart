@@ -6,12 +6,12 @@ part of 'website.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Website _$WebsiteFromJson(Map<String, dynamic> json) => Website(
+Website _$WebsiteFromJson(Map<dynamic, dynamic> json) => Website(
       url: json['url'] as String,
       title: json['title'] as String,
     );
 
-Map<String, dynamic> _$WebsiteToJson(Website instance) => <String, dynamic>{
+Map<dynamic, dynamic> _$WebsiteToJson(Website instance) => <dynamic, dynamic>{
       'url': instance.url,
       'title': instance.title,
     };

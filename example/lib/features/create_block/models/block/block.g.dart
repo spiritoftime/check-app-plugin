@@ -6,7 +6,7 @@ part of 'block.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Block _$BlockFromJson(Map<String, dynamic> json) => Block(
+Block _$BlockFromJson(Map<dynamic, dynamic> json) => Block(
       apps: (json['apps'] as List<dynamic>)
           .map((e) => App.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -18,7 +18,7 @@ Block _$BlockFromJson(Map<String, dynamic> json) => Block(
           .toList(),
     );
 
-Map<String, dynamic> _$BlockToJson(Block instance) => <String, dynamic>{
+Map<dynamic, dynamic> _$BlockToJson(Block instance) => <dynamic, dynamic>{
       'apps': instance.apps,
       'websites': instance.websites,
       'keywords': instance.keywords,

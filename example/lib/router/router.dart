@@ -1,5 +1,5 @@
 import 'package:checkapp_plugin_example/features/basic/presentation/basic_screen.dart';
-import 'package:checkapp_plugin_example/features/create_block/bloc/app_bloc.dart';
+import 'package:checkapp_plugin_example/features/create_block/bloc/app/app_bloc.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/create_block_page.dart';
 import 'package:checkapp_plugin_example/features/details/presentation/details_screen.dart';
 import 'package:checkapp_plugin_example/features/home/presentation/home_page.dart';

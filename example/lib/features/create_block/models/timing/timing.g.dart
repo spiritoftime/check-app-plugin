@@ -6,12 +6,12 @@ part of 'timing.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Timing _$TimingFromJson(Map<String, dynamic> json) => Timing(
+Timing _$TimingFromJson(Map<dynamic, dynamic> json) => Timing(
       start: json['start'] as String,
       end: json['end'] as String,
     );
 
-Map<String, dynamic> _$TimingToJson(Timing instance) => <String, dynamic>{
+Map<dynamic, dynamic> _$TimingToJson(Timing instance) => <dynamic, dynamic>{
       'start': instance.start,
       'end': instance.end,
     };

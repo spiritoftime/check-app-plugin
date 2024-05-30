@@ -12,6 +12,7 @@ class Website {
     required this.title,
   });
 
-  factory Website.fromJson(Map<String, dynamic> json) => _$WebsiteFromJson(json);
-  Map<String, dynamic> toJson() => _$WebsiteToJson(this);
+  factory Website.fromJson(Map<dynamic, dynamic> json) =>
+      _$WebsiteFromJson(json);
+  Map<dynamic, dynamic> toJson() => _$WebsiteToJson(this);
 }

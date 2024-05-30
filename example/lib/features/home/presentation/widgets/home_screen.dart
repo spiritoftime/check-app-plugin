@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:checkapp_plugin_example/features/create_block/bloc/app_bloc.dart';
-import 'package:checkapp_plugin_example/features/create_block/bloc/app_event.dart';
+import 'package:checkapp_plugin_example/features/create_block/bloc/app/app_bloc.dart';
+import 'package:checkapp_plugin_example/features/create_block/bloc/app/app_event.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/create_block_page.dart';
 import 'package:checkapp_plugin_example/features/create_block/repository/app_repository.dart';
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/accordion.dart';

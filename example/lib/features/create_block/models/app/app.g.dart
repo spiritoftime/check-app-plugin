@@ -6,13 +6,13 @@ part of 'app.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-App _$AppFromJson(Map<String, dynamic> json) => App(
+App _$AppFromJson(Map<dynamic, dynamic> json) => App(
       packageName: json['packageName'] as String,
       iconBase64String: json['iconBase64String'] as String,
       appName: json['appName'] as String,
     );
 
-Map<String, dynamic> _$AppToJson(App instance) => <String, dynamic>{
+Map<dynamic, dynamic> _$AppToJson(App instance) => <dynamic, dynamic>{
       'packageName': instance.packageName,
       'iconBase64String': instance.iconBase64String,
       'appName': instance.appName,

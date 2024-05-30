@@ -6,7 +6,7 @@ part of 'time.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Time _$TimeFromJson(Map<String, dynamic> json) => Time(
+Time _$TimeFromJson(Map<dynamic, dynamic> json) => Time(
       days: (json['days'] as List<dynamic>)
           .map((e) => Day.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -15,7 +15,7 @@ Time _$TimeFromJson(Map<String, dynamic> json) => Time(
           .toList(),
     );
 
-Map<String, dynamic> _$TimeToJson(Time instance) => <String, dynamic>{
+Map<dynamic, dynamic> _$TimeToJson(Time instance) => <dynamic, dynamic>{
       'days': instance.days,
       'timings': instance.timings,
     };

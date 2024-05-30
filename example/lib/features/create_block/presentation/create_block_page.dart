@@ -3,9 +3,12 @@ import 'dart:convert';
 import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:checkapp_plugin/checkapp_plugin.dart';
 import 'package:checkapp_plugin/checkapp_plugin_method_channel.dart';
-import 'package:checkapp_plugin_example/features/create_block/bloc/app_bloc.dart';
-import 'package:checkapp_plugin_example/features/create_block/bloc/app_event.dart';
-import 'package:checkapp_plugin_example/features/create_block/bloc/app_state.dart';
+import 'package:checkapp_plugin_example/features/create_block/bloc/app/app_bloc.dart';
+import 'package:checkapp_plugin_example/features/create_block/bloc/app/app_event.dart';
+import 'package:checkapp_plugin_example/features/create_block/bloc/app/app_state.dart';
+import 'package:checkapp_plugin_example/features/create_block/cubit/cubit/block_cubit.dart';
+import 'package:checkapp_plugin_example/features/create_block/models/app/app.dart';
+import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/app_row.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/checkbox.dart';
 import 'package:checkapp_plugin_example/features/create_block/repository/app_repository.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,14 +16,32 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gap/gap.dart';
 
-class CreateBlockPage extends StatelessWidget {
-  final _checkAppPlugin = CheckappPlugin();
+class CreateBlockPage extends StatefulWidget {
+  const CreateBlockPage({super.key});
+  @override
+  State<CreateBlockPage> createState() => _CreateBlockPageState();
+}
 
-  CreateBlockPage({super.key});
+class _CreateBlockPageState extends State<CreateBlockPage> {
+  final blockCubit = BlockCubit();
+
+  final _checkAppPlugin = CheckappPlugin();
+  void _onChanged(dynamic val) {
+    // blockCubit.updateBlock(
+    //     apps: val?.apps, websites: val?.websites, keywords: val?.keywords);
+    print("_onchanged:$val");
+
+// blockCubit.updateBlock(apps:val)
+  }
+
+  final _formKey = GlobalKey<FormBuilderState>();
+
   final List<String> _tabs = ["Apps", "Websites", "Keywords"];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,64 +117,71 @@ class CreateBlockPage extends StatelessWidget {
                               child: TabBarView(
                                 children: [
                                   SingleChildScrollView(
-                                    child: Column(
-                                      children: [
-                                        BlocBuilder<AppsBloc, AppsState>(
-                                          builder: (context, state) {
-                                            if (state is AppsLoading) {
-                                              return const CircularProgressIndicator();
-                                            }
-                                            if (state is AppsLoaded) {
-                                              return Column(
-                                                children: state.apps
-                                                    .map(
-                                                      (app) => Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(8.0),
-                                                        child: Row(
-                                                          children: [
-                                                            ClipRRect(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          8.0),
-                                                              child:
-                                                                  Image.memory(
-                                                                const Base64Decoder().convert(app
-                                                                    .iconBase64String
-                                                                    .replaceAll(
-                                                                        RegExp(
-                                                                            r'\s+'),
-                                                                        '')),
-                                                                width: 50,
-                                                                height: 50,
-                                                              ),
-                                                            ),
-                                                            const Gap(16),
-                                                            Text(
-                                                              app.appName,
-                                                              style: const TextStyle(
-                                                                  fontSize: 16,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w500),
-                                                            ),
-                                                            const Spacer(),
-                                                             CheckBoxWidget(app: app,)
-                                              
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    )
-                                                    .toList(),
-                                              );
-                                            } else {
-                                              return const Text('No App Found');
-                                            }
-                                          },
-                                        )
-                                      ],
+                                    child: FormBuilder(
+                                      onChanged: () {
+                                        final val =
+                                            _formKey.currentState!.value;
+                                        _formKey.currentState!.save();
+                                        debugPrint(
+                                            "------formbuilder onchanged ------");
+                                        debugPrint(_formKey.currentState!.value
+                                            .toString());
+                                        blockCubit.updateBlock(
+                                            apps: val['apps'] ?? [],
+                                            websites: val['websites'] ?? [],
+                                            keywords: val['keywords'] ?? []);
+                                        print(
+                                            "cubit state: ${blockCubit.state.apps}");
+                                      },
+                                      autovalidateMode:
+                                          AutovalidateMode.disabled,
+                                      key: _formKey,
+                                      child: Column(
+                                        children: [
+                                          BlocBuilder<AppsBloc, AppsState>(
+                                            builder: (context, state) {
+                                              if (state is AppsLoading) {
+                                                return const CircularProgressIndicator();
+                                              }
+                                              if (state is AppsLoaded) {
+                                                return FormBuilderCheckboxGroup<
+                                                        App>(
+                                                    orientation:
+                                                        OptionsOrientation
+                                                            .vertical,
+                                                    controlAffinity:
+                                                        ControlAffinity
+                                                            .trailing,
+                                                    autovalidateMode:
+                                                        AutovalidateMode
+                                                            .disabled,
+                                                    name: 'apps',
+                                                    options: state.apps
+                                                        .map((app) =>
+                                                            FormBuilderFieldOption<
+                                                                App>(
+                                                              value: app,
+                                                              child: AppRow(
+                                                                  app: app),
+                                                            ))
+                                                        .toList(),
+                                                    onChanged: _onChanged);
+
+                                                // return Column(
+                                                //   children: state.apps
+                                                //       .map(
+                                                //         (app) => AppRow(app: app),
+                                                //       )
+                                                //       .toList(),
+                                                // );
+                                              } else {
+                                                return const Text(
+                                                    'No App Found');
+                                              }
+                                            },
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
                                   Text("HI"),

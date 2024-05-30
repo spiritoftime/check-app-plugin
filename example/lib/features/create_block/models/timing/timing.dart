@@ -12,6 +12,6 @@ class Timing {
     required this.end,
   });
 
-  factory Timing.fromJson(Map<String, dynamic> json) => _$TimingFromJson(json);
-  Map<String, dynamic> toJson() => _$TimingToJson(this);
+  factory Timing.fromJson(Map<dynamic, dynamic> json) => _$TimingFromJson(json);
+  Map<dynamic, dynamic> toJson() => _$TimingToJson(this);
 }
