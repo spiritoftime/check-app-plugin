@@ -50,13 +50,12 @@ class MethodChannelCheckappPlugin extends CheckappPluginPlatform {
         await methodChannel.invokeMethod<bool>(REQUEST_BACKGROUND_PERMISSION);
   }
 
+// TODO: to add isolate as it is taking too long
   @override
   Future<List<dynamic>> getLaunchableApplications() async {
-    final List<dynamic>? launchableApplications = await methodChannel
-        .invokeMethod<List<dynamic>>(GET_LAUNCHABLE_APPLICATIONS);
+    var launchableApplications = await methodChannel
+        .invokeListMethod<Map<dynamic, dynamic>>(GET_LAUNCHABLE_APPLICATIONS);
 
     return launchableApplications ?? [];
-
   }
 }
-

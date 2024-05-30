@@ -14,7 +14,7 @@ class AppRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(horizontal:8.0,vertical: 2.0),
       child: Row(
         children: [
           ClipRRect(
@@ -26,10 +26,16 @@ class AppRow extends StatelessWidget {
               height: 50,
             ),
           ),
-          const Gap(16),
-          Text(
-            app.appName,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+          const Gap(12),
+          Expanded(
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerLeft,
+              child: Text(
+                app.appName,softWrap: true,
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              ),
+            ),
           ),
         ],
       ),

@@ -9,7 +9,7 @@ import 'package:checkapp_plugin_example/features/create_block/bloc/app/app_state
 import 'package:checkapp_plugin_example/features/create_block/cubit/cubit/block_cubit.dart';
 import 'package:checkapp_plugin_example/features/create_block/models/app/app.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/app_row.dart';
-import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/checkbox.dart';
+import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/custom_checkbox_group.dart';
 import 'package:checkapp_plugin_example/features/create_block/repository/app_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -107,7 +107,7 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 32.0)),
-                    const Gap(24),
+                    const Gap(16),
                     DefaultTabController(
                       length: _tabs.length,
                       child: Expanded(
@@ -133,7 +133,7 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
                               radius: 20,
                               tabs: _tabs.map((e) => Tab(text: e)).toList(),
                             ),
-                            const Gap(20),
+                            // const Gap(6),
                             Expanded(
                               child: TabBarView(
                                 children: [
@@ -176,6 +176,7 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
 
   SingleChildScrollView AppScreen() {
     return SingleChildScrollView(
+      physics: const ScrollPhysics(),
       child: FormBuilder(
         onChanged: () {
           _formKey.currentState!.save();
@@ -202,33 +203,14 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
                   return const CircularProgressIndicator();
                 }
                 if (state is AppsLoaded) {
-                  return FormBuilderCheckboxGroup<App>(
-                      initialValue: blockCubit.state.apps,
-                      orientation: OptionsOrientation.vertical,
-                      controlAffinity: ControlAffinity.trailing,
-                      autovalidateMode: AutovalidateMode.disabled,
-                      name: 'apps',
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                      ),
-                      options: _searchApplicationTerm != null
-                          ? state.apps
-                              .where((app) => app.appName
-                                  .toLowerCase()
-                                  .contains(
-                                      _searchApplicationTerm!.toLowerCase()))
-                              .map((app) => FormBuilderFieldOption<App>(
-                                    value: app,
-                                    child: AppRow(app: app),
-                                  ))
-                              .toList()
-                          : state.apps
-                              .map((app) => FormBuilderFieldOption<App>(
-                                    value: app,
-                                    child: AppRow(app: app),
-                                  ))
-                              .toList(),
-                      onChanged: _onChanged);
+                  return CustomCheckboxGroup(
+                    name: 'apps',
+                    apps: state.apps,
+                    initialValue: blockCubit.state.apps,
+                    searchApplicationTerm: _searchApplicationTerm,
+                    onChanged: _onChanged,
+                  );
+
                 } else {
                   return const Text('No App Found');
                 }
