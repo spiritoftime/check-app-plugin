@@ -35,7 +35,7 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
 
   bool isAppScreen = true;
   bool isSubmitEnabled = false;
-  bool showSearchIcon = true;
+  bool _showSearchIcon = true;
   final _formKey = GlobalKey<FormBuilderState>();
   String? _searchApplicationTerm;
   final List<String> _tabs = ["Apps", "Websites", "Keywords"];
@@ -61,8 +61,8 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
                     icon: const Icon(Icons.arrow_back,
                         color: Colors.blue, size: 24),
                   ),
-                  if (showSearchIcon) const Spacer(),
-                  showSearchIcon
+                  if (_showSearchIcon) const Spacer(),
+                  _showSearchIcon
                       ? IconButton(
                           padding: EdgeInsets.zero,
                           constraints: const BoxConstraints(),
@@ -71,7 +71,7 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
                           ),
                           onPressed: () => {
                             setState(() {
-                              showSearchIcon = false;
+                              _showSearchIcon = false;
                             })
                           },
                           icon: const Icon(Icons.search,
@@ -81,8 +81,7 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
                           child: TextField(
                             decoration: const InputDecoration(
                               alignLabelWithHint: true,
-                              contentPadding: EdgeInsets.only(
-                                  top:12),
+                              contentPadding: EdgeInsets.only(top: 12),
                               hintText: "Filter applications",
                               hintStyle: TextStyle(color: Colors.grey),
                               prefixIcon:
@@ -209,6 +208,9 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
                       controlAffinity: ControlAffinity.trailing,
                       autovalidateMode: AutovalidateMode.disabled,
                       name: 'apps',
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                      ),
                       options: _searchApplicationTerm != null
                           ? state.apps
                               .where((app) => app.appName
