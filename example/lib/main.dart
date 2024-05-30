@@ -26,17 +26,17 @@ Future<void> main() async {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-            lazy:true,child:CreateBlockPage(),
+              lazy: true,
+              child: const CreateBlockPage(),
               create: (context) =>
                   AppsBloc(RepositoryProvider.of<AppRepository>(context))
                     ..add(LoadApps()))
         ],
-        child: MyApp(),
+        child: const MyApp(),
       ),
     )),
   );
 }
-
 
 // /
 // / the name is required to be `overlayPopUp` and has `@pragma("vm:entry-point")`

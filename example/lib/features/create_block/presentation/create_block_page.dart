@@ -9,7 +9,9 @@ import 'package:checkapp_plugin_example/features/create_block/bloc/app/app_state
 import 'package:checkapp_plugin_example/features/create_block/cubit/cubit/block_cubit.dart';
 import 'package:checkapp_plugin_example/features/create_block/models/app/app.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/app_row.dart';
+import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/app_screen.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/custom_checkbox_group.dart';
+import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/website_screen.dart';
 import 'package:checkapp_plugin_example/features/create_block/repository/app_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,17 +30,65 @@ class CreateBlockPage extends StatefulWidget {
 
 class _CreateBlockPageState extends State<CreateBlockPage> {
   final blockCubit = BlockCubit();
-
-  void _onChanged(dynamic val) {
-    print("_onchanged:$val");
-  }
-
-  bool isAppScreen = true;
+  bool _isWebsiteScreen = false;
+  bool _isAppScreen = true;
   bool isSubmitEnabled = false;
+  bool isAddCheckboxDisabled =
+      false; // disable add checkbox for website, if the user typed something in website, but did not type in a valid website.
   bool _showSearchIcon = true;
   final _formKey = GlobalKey<FormBuilderState>();
+  final _websiteFormKey = GlobalKey<FormBuilderState>();
   String? _searchApplicationTerm;
   final List<String> _tabs = ["Apps", "Websites", "Keywords"];
+
+  void _onScreenChanged(TabController controller) {
+    if (!controller.indexIsChanging) {
+      if (controller.index == 0) {
+        setState(() {
+          _isAppScreen = true;
+        });
+      } else if (controller.index == 1) {
+        setState(() {
+          _isWebsiteScreen = true;
+          _isAppScreen = false;
+        });
+      } else {
+        setState(() {
+          _isAppScreen = false;
+          _searchApplicationTerm = null;
+          _showSearchIcon = true;
+        });
+      }
+    }
+  }
+
+  void _onAddCheckBoxDisabledChanged(bool isDisabled) {
+    setState(() {
+      isAddCheckboxDisabled = isDisabled;
+    });
+  }
+
+  void _onSearchApplicationTermChanged(String? text) {
+    setState(() {
+      _searchApplicationTerm = text;
+    });
+  }
+
+  void _onBlockScreenCheckboxChanged() {
+          _formKey.currentState!.save();
+          final val = _formKey.currentState!.value;
+          debugPrint("------formbuilder onchanged ------");
+          debugPrint(
+              "FORMbuilder state: ${_formKey.currentState!.value.toString()}");
+          blockCubit.updateBlock(
+              apps: val['apps'] ?? [],
+              websites: val['websites'] ?? [],
+              keywords: val['keywords'] ?? []);
+          setState(() {
+            isSubmitEnabled = val['apps'] != null && val['apps'].isNotEmpty;
+          });
+          print("cubit state: ${blockCubit.state.apps}");
+        }
 
   @override
   Widget build(BuildContext context) {
@@ -59,10 +109,10 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
                     ),
                     onPressed: () => context.pop(),
                     icon: const Icon(Icons.arrow_back,
-                        color: Colors.blue, size: 24),
+                        color: Colors.blue, size: 36),
                   ),
-                  if (_showSearchIcon) const Spacer(),
-                  _showSearchIcon
+                  if (_showSearchIcon && _isAppScreen) const Spacer(),
+                  _showSearchIcon && _isAppScreen
                       ? IconButton(
                           padding: EdgeInsets.zero,
                           constraints: const BoxConstraints(),
@@ -75,26 +125,27 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
                             })
                           },
                           icon: const Icon(Icons.search,
-                              color: Colors.blue, size: 24),
+                              color: Colors.blue, size: 36),
                         )
-                      : Expanded(
-                          child: TextField(
-                            decoration: const InputDecoration(
-                              alignLabelWithHint: true,
-                              contentPadding: EdgeInsets.only(top: 12),
-                              hintText: "Filter applications",
-                              hintStyle: TextStyle(color: Colors.grey),
-                              prefixIcon:
-                                  Icon(Icons.search, color: Colors.grey),
-                              border: InputBorder.none,
-                            ),
-                            onChanged: (text) {
-                              setState(() {
-                                _searchApplicationTerm = text;
-                              });
-                            },
-                          ),
-                        ),
+                      : _isAppScreen && !_showSearchIcon
+                          ? Expanded(
+                              child: TextField(
+                                decoration: const InputDecoration(
+                                  alignLabelWithHint: true,
+                                  contentPadding: EdgeInsets.only(top: 12),
+                                  hintText: "Filter applications",
+                                  hintStyle: TextStyle(
+                                    color: Colors.grey,
+                                  ),
+                                  prefixIcon: Icon(Icons.search,
+                                      color: Colors.grey, size: 24),
+                                  border: InputBorder.none,
+                                ),
+                                onChanged: (text) =>
+                                    _onSearchApplicationTermChanged(text),
+                              ),
+                            )
+                          : Container()
                 ],
               ),
               const Gap(16),
@@ -110,42 +161,53 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
                     const Gap(16),
                     DefaultTabController(
                       length: _tabs.length,
-                      child: Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            ButtonsTabBar(
-                              buttonMargin: const EdgeInsets.only(right: 16),
-                              contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 8),
-                              backgroundColor: Colors.blue[600],
-                              unselectedBackgroundColor: Colors.grey[700],
-                              labelStyle: const TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
+                      child: Builder(builder: (BuildContext context) {
+                        final TabController controller =
+                            DefaultTabController.of(context);
+                        controller
+                            .addListener(() => _onScreenChanged(controller));
+                        return Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              ButtonsTabBar(
+                                buttonMargin: const EdgeInsets.only(right: 16),
+                                contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 8),
+                                backgroundColor: Colors.blue[600],
+                                unselectedBackgroundColor: Colors.grey[700],
+                                labelStyle: const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                unselectedLabelStyle: TextStyle(
+                                  color: Colors.white.withOpacity(0.8),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                borderWidth: 1,
+                                radius: 20,
+                                tabs: _tabs.map((e) => Tab(text: e)).toList(),
                               ),
-                              unselectedLabelStyle: TextStyle(
-                                color: Colors.white.withOpacity(0.8),
-                                fontWeight: FontWeight.bold,
+                              Expanded(
+                                child: TabBarView(
+                                  children: [
+                                    AppScreen(
+                                        onBlockScreenCheckboxChanged:
+                                            _onBlockScreenCheckboxChanged,
+                                        formKey: _formKey,
+                                        blockCubit: blockCubit,
+                                        searchApplicationTerm:
+                                            _searchApplicationTerm),
+
+                                    Text("HI"),
+                                    Text("HI"),
+                                  ],
+                                ),
                               ),
-                              borderWidth: 1,
-                              // unselectedBorderColor: Colors.blue[600],
-                              radius: 20,
-                              tabs: _tabs.map((e) => Tab(text: e)).toList(),
-                            ),
-                            // const Gap(6),
-                            Expanded(
-                              child: TabBarView(
-                                children: [
-                                  AppScreen(),
-                                  Text("HI"),
-                                  Text("HI"),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                            ],
+                          ),
+                        );
+                      }),
                     )
                   ],
                 ),
@@ -161,7 +223,7 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
                         // navigate to the next page
                         print("enabled");
                       }
-                    : null,
+                    : null, // null disables the button
                 child: const Text(
                   "Save",
                   style: TextStyle(fontSize: 24, color: Colors.white),
@@ -169,54 +231,6 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
               )
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  SingleChildScrollView AppScreen() {
-    return SingleChildScrollView(
-      physics: const ScrollPhysics(),
-      child: FormBuilder(
-        onChanged: () {
-          _formKey.currentState!.save();
-          final val = _formKey.currentState!.value;
-          debugPrint("------formbuilder onchanged ------");
-          debugPrint(
-              "FORMbuilder state: ${_formKey.currentState!.value.toString()}");
-          blockCubit.updateBlock(
-              apps: val['apps'] ?? [],
-              websites: val['websites'] ?? [],
-              keywords: val['keywords'] ?? []);
-          setState(() {
-            isSubmitEnabled = val['apps'] != null && val['apps'].isNotEmpty;
-          });
-          print("cubit state: ${blockCubit.state.apps}");
-        },
-        autovalidateMode: AutovalidateMode.disabled,
-        key: _formKey,
-        child: Column(
-          children: [
-            BlocBuilder<AppsBloc, AppsState>(
-              builder: (context, state) {
-                if (state is AppsLoading) {
-                  return const CircularProgressIndicator();
-                }
-                if (state is AppsLoaded) {
-                  return CustomCheckboxGroup(
-                    name: 'apps',
-                    apps: state.apps,
-                    initialValue: blockCubit.state.apps,
-                    searchApplicationTerm: _searchApplicationTerm,
-                    onChanged: _onChanged,
-                  );
-
-                } else {
-                  return const Text('No App Found');
-                }
-              },
-            )
-          ],
         ),
       ),
     );
