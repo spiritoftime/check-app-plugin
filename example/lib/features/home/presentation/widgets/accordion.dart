@@ -1,5 +1,4 @@
 import 'package:accordion/accordion.dart';
-import 'package:accordion/controllers.dart';
 import 'package:flutter/material.dart';
 
 class AccordionPage extends StatelessWidget //__

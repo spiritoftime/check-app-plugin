@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:checkapp_plugin_example/features/create_block/bloc/app/app_event.dart';

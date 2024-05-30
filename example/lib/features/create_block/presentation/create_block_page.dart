@@ -1,24 +1,12 @@
-import 'dart:convert';
 
 import 'package:buttons_tabbar/buttons_tabbar.dart';
-import 'package:checkapp_plugin/checkapp_plugin.dart';
-import 'package:checkapp_plugin/checkapp_plugin_method_channel.dart';
-import 'package:checkapp_plugin_example/features/create_block/bloc/app/app_bloc.dart';
-import 'package:checkapp_plugin_example/features/create_block/bloc/app/app_event.dart';
-import 'package:checkapp_plugin_example/features/create_block/bloc/app/app_state.dart';
+
 import 'package:checkapp_plugin_example/features/create_block/cubit/cubit/block_cubit.dart';
-import 'package:checkapp_plugin_example/features/create_block/models/app/app.dart';
-import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/app_row.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/app_screen.dart';
-import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/custom_checkbox_group.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/keyword_screen.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/website_screen.dart';
-import 'package:checkapp_plugin_example/features/create_block/repository/app_repository.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gap/gap.dart';
@@ -31,7 +19,6 @@ class CreateBlockPage extends StatefulWidget {
 
 class _CreateBlockPageState extends State<CreateBlockPage> {
   final blockCubit = BlockCubit();
-  bool _isWebsiteScreen = false;
   bool _isAppScreen = true;
   bool isSubmitEnabled = false;
   bool isAddCheckboxDisabled =
@@ -48,16 +35,10 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
         setState(() {
           _isAppScreen = true;
         });
-      } else if (controller.index == 1) {
-        setState(() {
-          _isWebsiteScreen = true;
-          _isAppScreen = false;
-        });
-      } else {
+      } 
+       else {
         setState(() {
           _isAppScreen = false;
-          _isWebsiteScreen = false;
-
           _searchApplicationTerm = null;
           _showSearchIcon = true;
         });

@@ -3,7 +3,6 @@ import 'package:checkapp_plugin_example/features/profile/presentation/profile.da
 import 'package:checkapp_plugin_example/features/presentation/statistics.dart';
 import 'package:checkapp_plugin_example/strict/presentation/strict_block_page.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

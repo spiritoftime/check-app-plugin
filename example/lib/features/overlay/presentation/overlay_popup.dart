@@ -1,4 +1,3 @@
-import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:overlay_pop_up/overlay_pop_up.dart';

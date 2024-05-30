@@ -5,7 +5,6 @@ import 'package:checkapp_plugin_example/features/create_block/presentation/widge
 import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/custom_checkbox_group.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 class AppScreen extends StatefulWidget {
   final BlockCubit? blockCubit;

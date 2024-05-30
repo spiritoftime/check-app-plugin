@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:checkapp_plugin_example/features/create_block/models/schedule/schedule.dart';
-import 'package:checkapp_plugin_example/features/create_block/models/schedule/schedule.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 

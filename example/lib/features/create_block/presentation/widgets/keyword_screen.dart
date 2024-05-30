@@ -18,6 +18,15 @@ class KeywordScreen extends StatefulWidget {
 }
 
 class _KeywordScreenState extends State<KeywordScreen> {
+  final myController = TextEditingController();
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    myController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     List<Keyword> keywords = widget.blockCubit.state.keywords;
@@ -26,6 +35,7 @@ class _KeywordScreenState extends State<KeywordScreen> {
       child: Column(
         children: [
           TextField(
+            controller: myController,
             onSubmitted: (String value) {
               Keyword newKeyword = Keyword(keyword: value);
               List<Keyword> existingKeywords =
@@ -36,6 +46,7 @@ class _KeywordScreenState extends State<KeywordScreen> {
               setState(() {
                 keywords = newKeywords;
               });
+              myController.clear();
             },
             decoration: const InputDecoration(
               hintText: 'Add Keyword',

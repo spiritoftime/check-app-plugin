@@ -18,6 +18,15 @@ class WebsiteScreen extends StatefulWidget {
 }
 
 class _WebsiteScreenState extends State<WebsiteScreen> {
+  final myController = TextEditingController();
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    myController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     List<Website> websites = widget.blockCubit.state.websites;
@@ -26,20 +35,21 @@ class _WebsiteScreenState extends State<WebsiteScreen> {
       child: Column(
         children: [
           TextField(
-
+            controller: myController,
             onSubmitted: (String value) {
               if (value.isNotEmpty &&
                   value.contains('.com') &&
                   value.split('.')[1] == 'com') {
                 Website newWebsite = Website(url: value);
                 List<Website> existingWebsites =
-                    widget.blockCubit.state.websites ?? [];
+                    widget.blockCubit.state.websites;
                 List<Website> newWebsites = [...existingWebsites, newWebsite];
                 // update cubit
                 widget.blockCubit.updateBlock(websites: newWebsites);
                 setState(() {
                   websites = newWebsites;
                 });
+                myController.clear();
               }
             },
             decoration: const InputDecoration(

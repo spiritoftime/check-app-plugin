@@ -1,18 +1,10 @@
-import 'dart:ui';
 
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:checkapp_plugin_example/features/create_block/bloc/app/app_bloc.dart';
-import 'package:checkapp_plugin_example/features/create_block/bloc/app/app_event.dart';
-import 'package:checkapp_plugin_example/features/create_block/presentation/create_block_page.dart';
-import 'package:checkapp_plugin_example/features/create_block/repository/app_repository.dart';
+
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/accordion.dart';
-import 'package:checkapp_plugin_example/features/home/presentation/home_page.dart';
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/carousel_icons.dart';
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/schedule_template_carousel.dart';
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/endless_scrolling_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gap/gap.dart';
 

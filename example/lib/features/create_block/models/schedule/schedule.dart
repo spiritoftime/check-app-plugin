@@ -1,6 +1,4 @@
-import 'dart:convert';
 
-import 'package:checkapp_plugin_example/features/create_block/models/app/app.dart';
 import 'package:checkapp_plugin_example/features/create_block/models/time/time.dart';
 import 'package:checkapp_plugin_example/features/create_block/models/block/block.dart';
 import 'package:json_annotation/json_annotation.dart';
