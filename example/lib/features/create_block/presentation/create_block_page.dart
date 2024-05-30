@@ -11,6 +11,7 @@ import 'package:checkapp_plugin_example/features/create_block/models/app/app.dar
 import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/app_row.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/app_screen.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/custom_checkbox_group.dart';
+import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/keyword_screen.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/website_screen.dart';
 import 'package:checkapp_plugin_example/features/create_block/repository/app_repository.dart';
 import 'package:flutter/cupertino.dart';
@@ -34,10 +35,10 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
   bool _isAppScreen = true;
   bool isSubmitEnabled = false;
   bool isAddCheckboxDisabled =
-      false; // disable add checkbox for website, if the user typed something in website, but did not type in a valid website.
+      false; // disable add button for website, if the user typed something in website, but did not type in a valid website.
   bool _showSearchIcon = true;
   final _formKey = GlobalKey<FormBuilderState>();
-  final _websiteFormKey = GlobalKey<FormBuilderState>();
+
   String? _searchApplicationTerm;
   final List<String> _tabs = ["Apps", "Websites", "Keywords"];
 
@@ -55,6 +56,8 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
       } else {
         setState(() {
           _isAppScreen = false;
+          _isWebsiteScreen = false;
+
           _searchApplicationTerm = null;
           _showSearchIcon = true;
         });
@@ -75,20 +78,21 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
   }
 
   void _onBlockScreenCheckboxChanged() {
-          _formKey.currentState!.save();
-          final val = _formKey.currentState!.value;
-          debugPrint("------formbuilder onchanged ------");
-          debugPrint(
-              "FORMbuilder state: ${_formKey.currentState!.value.toString()}");
-          blockCubit.updateBlock(
-              apps: val['apps'] ?? [],
-              websites: val['websites'] ?? [],
-              keywords: val['keywords'] ?? []);
-          setState(() {
-            isSubmitEnabled = val['apps'] != null && val['apps'].isNotEmpty;
-          });
-          print("cubit state: ${blockCubit.state.apps}");
-        }
+    _formKey.currentState!.save();
+    final val = _formKey.currentState!.value;
+    debugPrint("------formbuilder onchanged ------");
+    debugPrint("FORMbuilder state: ${_formKey.currentState!.value.toString()}");
+    blockCubit.updateBlock(
+        apps: val['apps'] ?? [],
+        websites: val['websites'] ?? [],
+        keywords: val['keywords'] ?? []);
+    setState(() {
+      isSubmitEnabled = val['apps'] != null && val['apps'].isNotEmpty ||
+          val['websites'] != null && val['websites'].isNotEmpty ||
+          val['keywords'] != null && val['keywords'].isNotEmpty;
+    });
+    print("cubit state: ${blockCubit.state.apps}");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -189,19 +193,27 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
                                 tabs: _tabs.map((e) => Tab(text: e)).toList(),
                               ),
                               Expanded(
-                                child: TabBarView(
-                                  children: [
-                                    AppScreen(
-                                        onBlockScreenCheckboxChanged:
-                                            _onBlockScreenCheckboxChanged,
-                                        formKey: _formKey,
+                                child: FormBuilder(
+                                  onChanged: _onBlockScreenCheckboxChanged,
+                                  autovalidateMode: AutovalidateMode.disabled,
+                                  key: _formKey,
+                                  child: TabBarView(
+                                    children: [
+                                      AppScreen(
+                                          blockCubit: blockCubit,
+                                          searchApplicationTerm:
+                                              _searchApplicationTerm),
+                                      WebsiteScreen(
                                         blockCubit: blockCubit,
-                                        searchApplicationTerm:
-                                            _searchApplicationTerm),
-
-                                    Text("HI"),
-                                    Text("HI"),
-                                  ],
+                                        onAddCheckBoxDisabledChanged:
+                                            _onAddCheckBoxDisabledChanged,
+                                      ),
+                                      KeywordScreen(
+                                          blockCubit: blockCubit,
+                                          onAddCheckBoxDisabledChanged:
+                                              _onAddCheckBoxDisabledChanged)
+                                    ],
+                                  ),
                                 ),
                               ),
                             ],
@@ -225,7 +237,7 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
                       }
                     : null, // null disables the button
                 child: const Text(
-                  "Save",
+                  "Save Blocklist",
                   style: TextStyle(fontSize: 24, color: Colors.white),
                 ),
               )

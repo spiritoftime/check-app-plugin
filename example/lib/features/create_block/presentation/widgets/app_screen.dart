@@ -8,15 +8,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 class AppScreen extends StatefulWidget {
-  final Function()? onBlockScreenCheckboxChanged; // adds the details to Block()
-  final GlobalKey<FormBuilderState>? formKey;
   final BlockCubit? blockCubit;
   final String? searchApplicationTerm;
 
   const AppScreen({
     super.key,
-    required this.onBlockScreenCheckboxChanged,
-    required this.formKey,
     required this.blockCubit,
     required this.searchApplicationTerm,
   });
@@ -30,36 +26,31 @@ class _AppScreenState extends State<AppScreen> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       physics: const ScrollPhysics(),
-      child: FormBuilder(
-        onChanged: widget.onBlockScreenCheckboxChanged,
-        autovalidateMode: AutovalidateMode.disabled,
-        key: widget.formKey,
-        child: Column(
-          children: [
-            BlocBuilder<AppsBloc, AppsState>(
-              builder: (context, state) {
-                if (state is AppsLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                if (state is AppsLoaded) {
-                  final filteredApps = widget.searchApplicationTerm != null
-                      ? state.apps
-                          .where((app) => app.appName.toLowerCase().contains(
-                              widget.searchApplicationTerm!.toLowerCase()))
-                          .toList()
-                      : state.apps;
-                  return CustomCheckboxGroup(
-                      name: 'apps',
-                      items: filteredApps,
-                      content: (app) => AppRow(app: app),
-                      initialValue: widget.blockCubit?.state.apps);
-                } else {
-                  return const Text('No App Found');
-                }
-              },
-            )
-          ],
-        ),
+      child: Column(
+        children: [
+          BlocBuilder<AppsBloc, AppsState>(
+            builder: (context, state) {
+              if (state is AppsLoading) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (state is AppsLoaded) {
+                final filteredApps = widget.searchApplicationTerm != null
+                    ? state.apps
+                        .where((app) => app.appName.toLowerCase().contains(
+                            widget.searchApplicationTerm!.toLowerCase()))
+                        .toList()
+                    : state.apps;
+                return CustomCheckboxGroup(
+                    name: 'apps',
+                    items: filteredApps,
+                    content: (app) => AppRow(app: app),
+                    initialValue: widget.blockCubit?.state.apps);
+              } else {
+                return const Text('No App Found');
+              }
+            },
+          )
+        ],
       ),
     );
   }
