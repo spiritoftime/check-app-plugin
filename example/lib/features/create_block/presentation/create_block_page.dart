@@ -29,18 +29,15 @@ class CreateBlockPage extends StatefulWidget {
 class _CreateBlockPageState extends State<CreateBlockPage> {
   final blockCubit = BlockCubit();
 
-  final _checkAppPlugin = CheckappPlugin();
   void _onChanged(dynamic val) {
-    // blockCubit.updateBlock(
-    //     apps: val?.apps, websites: val?.websites, keywords: val?.keywords);
     print("_onchanged:$val");
-
-// blockCubit.updateBlock(apps:val)
   }
 
+  bool isAppScreen = true;
   bool isSubmitEnabled = false;
+  bool showSearchIcon = true;
   final _formKey = GlobalKey<FormBuilderState>();
-
+  String? _searchApplicationTerm;
   final List<String> _tabs = ["Apps", "Websites", "Keywords"];
 
   @override
@@ -64,17 +61,41 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
                     icon: const Icon(Icons.arrow_back,
                         color: Colors.blue, size: 24),
                   ),
-                  const Spacer(),
-                  IconButton(
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    style: const ButtonStyle(
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    ),
-                    onPressed: () => {},
-                    icon:
-                        const Icon(Icons.search, color: Colors.blue, size: 24),
-                  )
+                  if (showSearchIcon) const Spacer(),
+                  showSearchIcon
+                      ? IconButton(
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
+                          style: const ButtonStyle(
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          ),
+                          onPressed: () => {
+                            setState(() {
+                              showSearchIcon = false;
+                            })
+                          },
+                          icon: const Icon(Icons.search,
+                              color: Colors.blue, size: 24),
+                        )
+                      : Expanded(
+                          child: TextField(
+                            decoration: const InputDecoration(
+                              alignLabelWithHint: true,
+                              contentPadding: EdgeInsets.only(
+                                  top:12),
+                              hintText: "Filter applications",
+                              hintStyle: TextStyle(color: Colors.grey),
+                              prefixIcon:
+                                  Icon(Icons.search, color: Colors.grey),
+                              border: InputBorder.none,
+                            ),
+                            onChanged: (text) {
+                              setState(() {
+                                _searchApplicationTerm = text;
+                              });
+                            },
+                          ),
+                        ),
                 ],
               ),
               const Gap(16),
@@ -117,81 +138,7 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
                             Expanded(
                               child: TabBarView(
                                 children: [
-                                  SingleChildScrollView(
-                                    child: FormBuilder(
-                                      onChanged: () {
-                                        _formKey.currentState!.save();
-                                        final val =
-                                            _formKey.currentState!.value;
-                                        debugPrint(
-                                            "------formbuilder onchanged ------");
-                                        debugPrint(
-                                            "FORMbuilder state: ${_formKey.currentState!.value.toString()}");
-                                        blockCubit.updateBlock(
-                                            apps: val['apps'] ?? [],
-                                            websites: val['websites'] ?? [],
-                                            keywords: val['keywords'] ?? []);
-                                        setState(() {
-                                          isSubmitEnabled =
-                                              val['apps'] != null &&
-                                                  val['apps'].isNotEmpty;
-                                        });
-                                        print(
-                                            "cubit state: ${blockCubit.state.apps}");
-                                      },
-                                      autovalidateMode:
-                                          AutovalidateMode.disabled,
-                                      key: _formKey,
-                                      child: Column(
-                                        children: [
-                                          BlocBuilder<AppsBloc, AppsState>(
-                                            builder: (context, state) {
-                                              if (state is AppsLoading) {
-                                                return const CircularProgressIndicator();
-                                              }
-                                              if (state is AppsLoaded) {
-                                                return FormBuilderCheckboxGroup<
-                                                        App>(
-                                                    initialValue:
-                                                        blockCubit.state.apps,
-                                                    orientation:
-                                                        OptionsOrientation
-                                                            .vertical,
-                                                    controlAffinity:
-                                                        ControlAffinity
-                                                            .trailing,
-                                                    autovalidateMode:
-                                                        AutovalidateMode
-                                                            .disabled,
-                                                    name: 'apps',
-                                                    options: state.apps
-                                                        .map((app) =>
-                                                            FormBuilderFieldOption<
-                                                                App>(
-                                                              value: app,
-                                                              child: AppRow(
-                                                                  app: app),
-                                                            ))
-                                                        .toList(),
-                                                    onChanged: _onChanged);
-
-                                                // return Column(
-                                                //   children: state.apps
-                                                //       .map(
-                                                //         (app) => AppRow(app: app),
-                                                //       )
-                                                //       .toList(),
-                                                // );
-                                              } else {
-                                                return const Text(
-                                                    'No App Found');
-                                              }
-                                            },
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
+                                  AppScreen(),
                                   Text("HI"),
                                   Text("HI"),
                                 ],
@@ -223,6 +170,69 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
               )
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  SingleChildScrollView AppScreen() {
+    return SingleChildScrollView(
+      child: FormBuilder(
+        onChanged: () {
+          _formKey.currentState!.save();
+          final val = _formKey.currentState!.value;
+          debugPrint("------formbuilder onchanged ------");
+          debugPrint(
+              "FORMbuilder state: ${_formKey.currentState!.value.toString()}");
+          blockCubit.updateBlock(
+              apps: val['apps'] ?? [],
+              websites: val['websites'] ?? [],
+              keywords: val['keywords'] ?? []);
+          setState(() {
+            isSubmitEnabled = val['apps'] != null && val['apps'].isNotEmpty;
+          });
+          print("cubit state: ${blockCubit.state.apps}");
+        },
+        autovalidateMode: AutovalidateMode.disabled,
+        key: _formKey,
+        child: Column(
+          children: [
+            BlocBuilder<AppsBloc, AppsState>(
+              builder: (context, state) {
+                if (state is AppsLoading) {
+                  return const CircularProgressIndicator();
+                }
+                if (state is AppsLoaded) {
+                  return FormBuilderCheckboxGroup<App>(
+                      initialValue: blockCubit.state.apps,
+                      orientation: OptionsOrientation.vertical,
+                      controlAffinity: ControlAffinity.trailing,
+                      autovalidateMode: AutovalidateMode.disabled,
+                      name: 'apps',
+                      options: _searchApplicationTerm != null
+                          ? state.apps
+                              .where((app) => app.appName
+                                  .toLowerCase()
+                                  .contains(
+                                      _searchApplicationTerm!.toLowerCase()))
+                              .map((app) => FormBuilderFieldOption<App>(
+                                    value: app,
+                                    child: AppRow(app: app),
+                                  ))
+                              .toList()
+                          : state.apps
+                              .map((app) => FormBuilderFieldOption<App>(
+                                    value: app,
+                                    child: AppRow(app: app),
+                                  ))
+                              .toList(),
+                      onChanged: _onChanged);
+                } else {
+                  return const Text('No App Found');
+                }
+              },
+            )
+          ],
         ),
       ),
     );
