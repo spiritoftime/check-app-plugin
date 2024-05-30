@@ -6,14 +6,14 @@ part 'block.g.dart';
 
 @JsonSerializable()
 class Block {
-  final List<App>? apps;
-  final List<Website>? websites;
-  final List<Keyword>? keywords;
+  final List<App> apps;
+  final List<Website> websites;
+  final List<Keyword> keywords;
 
   Block({
-    this.apps,
-    this.websites,
-    this.keywords,
+    required this.apps,
+    required this.websites,
+    required this.keywords,
   });
   copyWith(
       {List<App>? apps, List<Website>? websites, List<Keyword>? keywords}) {

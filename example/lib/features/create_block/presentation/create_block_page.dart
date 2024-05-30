@@ -38,6 +38,7 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
 // blockCubit.updateBlock(apps:val)
   }
 
+  bool isSubmitEnabled = false;
   final _formKey = GlobalKey<FormBuilderState>();
 
   final List<String> _tabs = ["Apps", "Websites", "Keywords"];
@@ -119,17 +120,22 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
                                   SingleChildScrollView(
                                     child: FormBuilder(
                                       onChanged: () {
+                                        _formKey.currentState!.save();
                                         final val =
                                             _formKey.currentState!.value;
-                                        _formKey.currentState!.save();
                                         debugPrint(
                                             "------formbuilder onchanged ------");
-                                        debugPrint(_formKey.currentState!.value
-                                            .toString());
+                                        debugPrint(
+                                            "FORMbuilder state: ${_formKey.currentState!.value.toString()}");
                                         blockCubit.updateBlock(
                                             apps: val['apps'] ?? [],
                                             websites: val['websites'] ?? [],
                                             keywords: val['keywords'] ?? []);
+                                        setState(() {
+                                          isSubmitEnabled =
+                                              val['apps'] != null &&
+                                                  val['apps'].isNotEmpty;
+                                        });
                                         print(
                                             "cubit state: ${blockCubit.state.apps}");
                                       },
@@ -146,6 +152,8 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
                                               if (state is AppsLoaded) {
                                                 return FormBuilderCheckboxGroup<
                                                         App>(
+                                                    initialValue:
+                                                        blockCubit.state.apps,
                                                     orientation:
                                                         OptionsOrientation
                                                             .vertical,
@@ -198,13 +206,16 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
               ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  padding:
-                      EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+                  backgroundColor: isSubmitEnabled ? Colors.blue : Colors.grey,
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 16.0, horizontal: 16.0),
                 ),
-                onPressed: () {
-                  print('hi');
-                },
+                onPressed: isSubmitEnabled
+                    ? () {
+                        // navigate to the next page
+                        print("enabled");
+                      }
+                    : null,
                 child: const Text(
                   "Save",
                   style: TextStyle(fontSize: 24, color: Colors.white),
