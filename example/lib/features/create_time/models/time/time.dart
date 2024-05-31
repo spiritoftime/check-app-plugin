@@ -1,5 +1,5 @@
-import 'package:checkapp_plugin_example/features/create_block/models/day/day.dart';
-import 'package:checkapp_plugin_example/features/create_block/models/timing/timing.dart';
+import 'package:checkapp_plugin_example/features/create_time/models/day/day.dart';
+import 'package:checkapp_plugin_example/features/create_time/models/timing/timing.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'time.g.dart';
 @JsonSerializable()

@@ -1,3 +1,4 @@
+import 'package:checkapp_plugin_example/features/create_time/models/day/day.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -7,31 +8,8 @@ class DayRow extends StatefulWidget {
   State<DayRow> createState() => _DayRowState();
 }
 
-enum Days { monday, tuesday, wednesday, thursday, friday, saturday, sunday }
-
-extension DaysExtension on Days {
-  String get name {
-    switch (this) {
-      case Days.monday:
-        return 'Monday';
-      case Days.tuesday:
-        return 'Tuesday';
-      case Days.wednesday:
-        return 'Wednesday';
-      case Days.thursday:
-        return 'Thursday';
-      case Days.friday:
-        return 'Friday';
-      case Days.saturday:
-        return 'Saturday';
-      case Days.sunday:
-        return 'Sunday';
-    }
-  }
-}
-
 class _DayRowState extends State<DayRow> {
-  Days selectedDay = Days.friday;
+  List<Days> selectedDays = [Days.friday];
 
   @override
   Widget build(BuildContext context) {
@@ -44,10 +22,14 @@ class _DayRowState extends State<DayRow> {
                 "Days",
                 style: TextStyle(fontSize: 16, color: Colors.grey),
               ),
-              const Spacer(),
-              Text(
-                "Every ${selectedDay.name}",
-                style: const TextStyle(fontSize: 16, color: Colors.grey),
+              const Gap(16),
+              Expanded(
+                child: Wrap(alignment: WrapAlignment.end, children: [
+                  Text(
+                    "Every ${selectedDays.map((day) => day.day).join(", ")}",
+                    style: const TextStyle(fontSize: 16, color: Colors.grey),
+                  ),
+                ]),
               ),
             ],
           ),
@@ -55,10 +37,14 @@ class _DayRowState extends State<DayRow> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: Days.values
-                .map((day) => GestureDetector(
+                .map((Days day) => GestureDetector(
                       onTap: () {
                         setState(() {
-                          selectedDay = day;
+                          selectedDays.contains(day)
+                              ? selectedDays.length == 1
+                                  ? null
+                                  : selectedDays.remove(day)
+                              : selectedDays.add(day);
                         });
                       },
                       child: Container(
@@ -66,15 +52,15 @@ class _DayRowState extends State<DayRow> {
                         height: 40,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: selectedDay == day
+                          color: selectedDays.contains(day)
                               ? Colors.blue
                               : const Color(0xff21222D),
                         ),
                         child: Center(
                           child: Text(
-                            day.name.substring(0, 2),
+                            day.day.substring(0, 2),
                             style: TextStyle(
-                              color: selectedDay == day
+                              color: selectedDays.contains(day)
                                   ? Colors.white
                                   : Colors.grey,
                             ),
