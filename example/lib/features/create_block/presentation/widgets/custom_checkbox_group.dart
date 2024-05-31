@@ -55,7 +55,7 @@ class _CustomCheckboxGroupState extends State<CustomCheckboxGroup> {
                     final isSelected = selectedValues.contains(app);
 
                     return CheckboxListTile(
-                      value: isSelected,
+                      value: isSelected,fillColor: WidgetStateProperty.all(Colors.black),checkColor: Colors.white,
                       contentPadding: EdgeInsets.zero,
                       title: widget.content(app),
                       controlAffinity: ListTileControlAffinity.trailing,

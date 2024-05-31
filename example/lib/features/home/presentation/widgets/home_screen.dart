@@ -1,5 +1,3 @@
-
-
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/accordion.dart';
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/carousel_icons.dart';
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/schedule_template_carousel.dart';
@@ -18,8 +16,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding:
-              const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+          padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
           child: Column(
             children: [
               Expanded(
@@ -80,8 +77,7 @@ class HomeScreen extends StatelessWidget {
                                   print('hi');
                                 },
                                 child: const Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Icon(
                                       Icons.block,
@@ -152,8 +148,7 @@ class HomeScreen extends StatelessWidget {
                               EndlessScrollingWidget(
                                   gap: 20,
                                   widgetWidth: 48,
-                                  scrollDuration:
-                                      const Duration(seconds: 8),
+                                  scrollDuration: const Duration(seconds: 8),
                                   widgetHeight: 48,
                                   children: carouselIcons)
                             ],

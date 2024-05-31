@@ -1,4 +1,3 @@
-import 'package:checkapp_plugin/checkapp_plugin_method_channel.dart';
 
 import 'checkapp_plugin_platform_interface.dart';
 

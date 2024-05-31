@@ -72,7 +72,6 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
           val['websites'] != null && val['websites'].isNotEmpty ||
           val['keywords'] != null && val['keywords'].isNotEmpty;
     });
-    print("cubit state: ${blockCubit.state.apps}");
   }
 
   @override
@@ -213,8 +212,7 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
                 ),
                 onPressed: isSubmitEnabled
                     ? () {
-                        // navigate to the next page
-                        print("enabled");
+                      context.go('/blocking-conditions');
                       }
                     : null, // null disables the button
                 child: const Text(

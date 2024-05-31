@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:checkapp_plugin/checkapp_plugin_constants.dart';
 import 'package:flutter/foundation.dart';

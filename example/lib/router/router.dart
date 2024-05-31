@@ -1,4 +1,5 @@
 import 'package:checkapp_plugin_example/features/basic/presentation/basic_screen.dart';
+import 'package:checkapp_plugin_example/features/blocking_conditions/presentation/blocking_conditions_page.dart';
 import 'package:checkapp_plugin_example/features/create_block/bloc/app/app_bloc.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/create_block_page.dart';
 import 'package:checkapp_plugin_example/features/details/presentation/details_screen.dart';
@@ -34,6 +35,11 @@ final GoRouter _router = GoRouter(
                 value: BlocProvider.of<AppsBloc>(context),
                 child: const CreateBlockPage(),
               );
+            }),
+        GoRoute(
+            path: 'blocking-conditions',
+            builder: (BuildContext context, GoRouterState state) {
+              return BlockingConditionsPage();
             }),
       ],
     ),

@@ -180,8 +180,8 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
         for (ResolveInfo resolveInfo : resolveInfoList) {
             String packageName = resolveInfo.activityInfo.packageName;
             Drawable icon = resolveInfo.loadIcon(pm);
-            Bitmap iconBitMap = drawableToBitmap(icon);
-            String iconBase64String = bitmapToBase64(iconBitMap);
+            Bitmap iconBitMap = Utils.drawableToBitmap(icon);
+            String iconBase64String = Utils.bitmapToBase64(iconBitMap);
             String appName = "";
             if (resolveInfo.activityInfo.labelRes != 0) {
                 try {
@@ -203,41 +203,5 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
         return appList;
     }
 
-
-    public static Bitmap drawableToBitmap (Drawable drawable) {
-        Bitmap bitmap = null;
-
-        if (drawable instanceof BitmapDrawable) {
-            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
-            if(bitmapDrawable.getBitmap() != null) {
-                return bitmapDrawable.getBitmap();
-            }
-        }
-        if(drawable instanceof PictureDrawable){
-            Bitmap bmp = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-            Canvas canvas = new Canvas(bmp);
-            canvas.drawPicture(((PictureDrawable) drawable).getPicture());
-            return bmp;
-        }
-
-        if(drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
-            bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
-        } else {
-            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        }
-
-        Canvas canvas = new Canvas(bitmap);
-        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        drawable.draw(canvas);
-        return bitmap;
-    }
-
-//    might be inefficient - see https://stackoverflow.com/questions/9224056/android-bitmap-to-base64-string
-    public static String bitmapToBase64(Bitmap bitmap){
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-
-        return Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT);
-    }
 
 }
