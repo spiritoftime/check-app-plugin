@@ -2,6 +2,7 @@ import 'package:checkapp_plugin_example/features/home/presentation/widgets/accor
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/carousel_icons.dart';
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/schedule_template_carousel.dart';
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/endless_scrolling_widget.dart';
+import 'package:checkapp_plugin_example/shared/widgets/grey_container.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gap/gap.dart';
@@ -45,13 +46,7 @@ class HomeScreen extends StatelessWidget {
                         ],
                       ),
                       const Gap(20),
-                      Container(
-                        decoration: const BoxDecoration(
-                          color: Color(0xff21222D),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(8),
-                          ),
-                        ),
+                      GreyContainer(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 16.0, vertical: 16.0),
@@ -126,13 +121,7 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ),
                       const Gap(12),
-                      Container(
-                        decoration: const BoxDecoration(
-                          color: Color(0xff21222D),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(8),
-                          ),
-                        ),
+                      GreyContainer(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 16.0, vertical: 32.0),

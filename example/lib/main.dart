@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:flutter/services.dart';
-import 'package:checkapp_plugin/checkapp_plugin.dart';
 import 'package:checkapp_plugin_example/router/router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

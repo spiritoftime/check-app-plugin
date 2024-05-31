@@ -10,6 +10,6 @@ Keyword _$KeywordFromJson(Map<dynamic, dynamic> json) => Keyword(
       keyword: json['keyword'] as String,
     );
 
-Map<dynamic, dynamic> _$KeywordToJson(Keyword instance) => <dynamic, dynamic>{
+Map<dynamic, dynamic> _$KeywordToJson(Keyword instance) => <String, dynamic>{
       'keyword': instance.keyword,
     };

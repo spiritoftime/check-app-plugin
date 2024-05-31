@@ -8,13 +8,13 @@ part of 'block.dart';
 
 Block _$BlockFromJson(Map<dynamic, dynamic> json) => Block(
       apps: (json['apps'] as List<dynamic>)
-          .map((e) => App.fromJson(e as Map<String, dynamic>))
+          .map((e) => App.fromJson(e as Map<dynamic, dynamic>))
           .toList(),
       websites: (json['websites'] as List<dynamic>)
-          .map((e) => Website.fromJson(e as Map<String, dynamic>))
+          .map((e) => Website.fromJson(e as Map<dynamic, dynamic>))
           .toList(),
       keywords: (json['keywords'] as List<dynamic>)
-          .map((e) => Keyword.fromJson(e as Map<String, dynamic>))
+          .map((e) => Keyword.fromJson(e as Map<dynamic, dynamic>))
           .toList(),
     );
 

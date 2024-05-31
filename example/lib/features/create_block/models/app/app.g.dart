@@ -12,7 +12,7 @@ App _$AppFromJson(Map<dynamic, dynamic> json) => App(
       appName: json['appName'] as String,
     );
 
-Map<dynamic, dynamic> _$AppToJson(App instance) => <dynamic, dynamic>{
+Map<dynamic, dynamic> _$AppToJson(App instance) => <String, dynamic>{
       'packageName': instance.packageName,
       'iconBase64String': instance.iconBase64String,
       'appName': instance.appName,

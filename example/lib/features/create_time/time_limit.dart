@@ -1,4 +1,6 @@
 import 'package:checkapp_plugin_example/features/create_time/widgets/day_row.dart';
+import 'package:checkapp_plugin_example/features/create_time/widgets/all_day_timing_row.dart';
+import 'package:checkapp_plugin_example/features/create_time/widgets/timing_row.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
@@ -35,12 +37,25 @@ class TimeLimit extends StatelessWidget {
                     fontSize: 32.0),
               ),
               const Gap(12),
-              Expanded(
-                child: const Column(
-                  children: [
-                   DayRow(),
-                    Row()
-                  ],
+              const Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      DayRow(),
+                      Gap(32),
+                      const Text(
+                        "Times",
+                        style: TextStyle(color: Colors.grey, fontSize: 16.0),
+                      ),
+                      Gap(16),
+                      AllDayTimingRow(),
+                      Padding(
+                        padding: EdgeInsets.only(top:16.0),
+                        child: TimingRow(),
+                      )
+                    ],
+                  ),
                 ),
               )
             ],

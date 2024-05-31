@@ -27,10 +27,10 @@ extension DaysExtension on Days {
 
 @JsonSerializable()
 class Day {
-  final Days name;
+  final String day;
 
   Day({
-    required this.name,
+    required this.day,
   });
 
   factory Day.fromJson(Map<dynamic, dynamic> json) => _$DayFromJson(json);

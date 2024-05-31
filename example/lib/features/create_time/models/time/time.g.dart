@@ -8,10 +8,10 @@ part of 'time.dart';
 
 Time _$TimeFromJson(Map<dynamic, dynamic> json) => Time(
       days: (json['days'] as List<dynamic>)
-          .map((e) => Day.fromJson(e as Map<String, dynamic>))
+          .map((e) => Day.fromJson(e as Map<dynamic, dynamic>))
           .toList(),
       timings: (json['timings'] as List<dynamic>)
-          .map((e) => Timing.fromJson(e as Map<String, dynamic>))
+          .map((e) => Timing.fromJson(e as Map<dynamic, dynamic>))
           .toList(),
     );
 
