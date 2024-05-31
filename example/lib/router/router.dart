@@ -36,10 +36,11 @@ final GoRouter _router = GoRouter(
         GoRoute(
             path: 'create-block',
             builder: (BuildContext context, GoRouterState state) {
-              return BlocProvider.value(
-                value: BlocProvider.of<AppsBloc>(context),
-                child: const CreateBlockPage(),
-              );
+              return CreateBlockPage();
+              // return BlocProvider.value(
+              //   value: BlocProvider.of<AppsBloc>(context),
+              //   child: const CreateBlockPage(),
+              // );
             }),
         GoRoute(
             path: 'blocking-conditions',
