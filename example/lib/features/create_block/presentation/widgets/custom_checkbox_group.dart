@@ -6,7 +6,8 @@ typedef ContentBuilder = Widget Function(dynamic app);
 
 class CustomCheckboxGroup extends StatefulWidget {
   final List<dynamic> items;
-  final List<dynamic>? initialValue; // needed to preserve checked when switching tabs
+  final List<dynamic>?
+      initialValue; // needed to preserve checked when switching tabs
   final Function(List<dynamic>?)? onChanged;
   final String name;
   final ContentBuilder content;
@@ -47,6 +48,11 @@ class _CustomCheckboxGroupState extends State<CustomCheckboxGroup> {
           ),
           child: widget.items.isNotEmpty
               ? ListView.builder(
+                  prototypeItem: CheckboxListTile(
+                    title: widget.content(widget.items.first),
+                    value: true,
+                    onChanged: (bool? value) {},
+                  ),
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true, // Important to avoid unbounded height error
                   itemCount: widget.items.length,
@@ -55,7 +61,9 @@ class _CustomCheckboxGroupState extends State<CustomCheckboxGroup> {
                     final isSelected = selectedValues.contains(app);
 
                     return CheckboxListTile(
-                      value: isSelected,fillColor: WidgetStateProperty.all(Colors.black),checkColor: Colors.white,
+                      value: isSelected,
+                      fillColor: WidgetStateProperty.all(Colors.black),
+                      checkColor: Colors.white,
                       contentPadding: EdgeInsets.zero,
                       title: widget.content(app),
                       controlAffinity: ListTileControlAffinity.trailing,
@@ -70,7 +78,7 @@ class _CustomCheckboxGroupState extends State<CustomCheckboxGroup> {
                           if (widget.onChanged != null) {
                             widget.onChanged!(selectedValues);
                           }
-                        });
+                        },);
                       },
                     );
                   },

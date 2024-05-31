@@ -2,6 +2,11 @@ import 'package:checkapp_plugin_example/features/basic/presentation/basic_screen
 import 'package:checkapp_plugin_example/features/blocking_conditions/presentation/blocking_conditions_page.dart';
 import 'package:checkapp_plugin_example/features/create_block/bloc/app/app_bloc.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/create_block_page.dart';
+import 'package:checkapp_plugin_example/features/create_launch_count/launch_limit.dart';
+import 'package:checkapp_plugin_example/features/create_location/location_limit.dart';
+import 'package:checkapp_plugin_example/features/create_time/time_limit.dart';
+import 'package:checkapp_plugin_example/features/create_usage_limit/usage_limit.dart';
+import 'package:checkapp_plugin_example/features/create_wifi/wifi_limit.dart';
 import 'package:checkapp_plugin_example/features/details/presentation/details_screen.dart';
 import 'package:checkapp_plugin_example/features/home/presentation/home_page.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +46,35 @@ final GoRouter _router = GoRouter(
             builder: (BuildContext context, GoRouterState state) {
               return BlockingConditionsPage();
             }),
+        GoRoute(
+            path: 'create-schedule-location',
+            builder: (BuildContext context, GoRouterState state) {
+              return const LocationLimit();
+            }),
+        GoRoute(
+          path: 'create-schedule-time',
+          builder: (BuildContext context, GoRouterState state) {
+            return const TimeLimit();
+          },
+        ),
+        GoRoute(
+          path: 'create-schedule-wifi',
+          builder: (BuildContext context, GoRouterState state) {
+            return const WifiLimit();
+          },
+        ),
+        GoRoute(
+          path: 'create-schedule-launch-count',
+          builder: (BuildContext context, GoRouterState state) {
+            return const LaunchLimit();
+          },
+        ),
+        GoRoute(
+          path: 'create-schedule-usage-limit',
+          builder: (BuildContext context, GoRouterState state) {
+            return const UsageLimit();
+          },
+        ),
       ],
     ),
   ],
