@@ -8,12 +8,13 @@ class BlockingCondition extends StatelessWidget {
   final String description;
   final Icon icon;
   final String route;
+  final Map<String,dynamic> extra;
   const BlockingCondition(
       {super.key,
       required this.text,
       required this.description,
       required this.icon,
-      required this.route});
+      required this.route, required this.extra});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,7 @@ class BlockingCondition extends StatelessWidget {
       children: [
         const Gap(12),
         HoverInkWell(
-          onTap: () => context.pushNamed(route),
+          onTap: () => context.pushNamed(route,extra: extra),
           child: Row(
             children: [
               Container(

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class LocationLimit extends StatelessWidget {
-  const LocationLimit({super.key});
+    final Map<String, dynamic> extra;
+
+  const LocationLimit({super.key, required this.extra});
 
   @override
   Widget build(BuildContext context) {

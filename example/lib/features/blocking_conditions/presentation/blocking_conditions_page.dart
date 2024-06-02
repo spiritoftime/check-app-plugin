@@ -1,44 +1,15 @@
+import 'package:checkapp_plugin_example/features/blocking_conditions/presentation/utils.dart';
 import 'package:checkapp_plugin_example/features/blocking_conditions/presentation/widgets/blocking_condition.dart';
+import 'package:checkapp_plugin_example/features/create_block/cubit/cubit/block_cubit.dart';
+import 'package:checkapp_plugin_example/features/create_time/cubit/cubit/time_cubit.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
 class BlockingConditionsPage extends StatelessWidget {
-  BlockingConditionsPage({super.key});
-  final List<Map<String, dynamic>> conditions = [
-    {
-      'text': 'Location',
-      'description': 'Campus, home, work, etc.',
-      'icon': const Icon(Icons.near_me,size: 24,),
-      'route': 'create-location',
-    },
-    {
-      'text': 'Time',
-      'description': 'eg. Working hours, weekend',
-      'icon': const Icon(Icons.schedule, size: 24),
-      'route': 'create-time',
-    },
-    {
-      'text': 'Wi-Fi',
-      'description':
-          'Block only when home!',
-      'icon': const Icon(Icons.wifi, size: 24),
-      'route': 'create-wifi',
-    },
-    {
-      'text': 'Launch Count',
-      'description': 'Max 20 times a day',
-      'icon': const Icon(Icons.power_settings_new, size: 24),
-      'route': 'create-launch-count',
-    },
-    {
-      'text': 'Usage Limit',
-      'description': '30 mins a day',
-      'icon': const Icon(Icons.battery_alert, size: 24),
-      'route': 'create-usage-limit',
-    },
-  ];
+  final Map<String, dynamic> extra;
+
+  const BlockingConditionsPage({super.key, required this.extra});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,6 +53,7 @@ class BlockingConditionsPage extends StatelessWidget {
                         text: conditions[index]['text'],
                         description: conditions[index]['description'],
                         icon: conditions[index]['icon'],
+                        extra: extra,
                         route: conditions[index]['route']);
                   },
                   itemCount: conditions.length,

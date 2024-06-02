@@ -1,4 +1,3 @@
-
 import 'package:buttons_tabbar/buttons_tabbar.dart';
 
 import 'package:checkapp_plugin_example/features/create_block/cubit/cubit/block_cubit.dart';
@@ -12,13 +11,16 @@ import 'package:go_router/go_router.dart';
 import 'package:gap/gap.dart';
 
 class CreateBlockPage extends StatefulWidget {
-  const CreateBlockPage({super.key});
+  final Map<String, dynamic> extra;
+
+  const CreateBlockPage({super.key, required this.extra});
   @override
   State<CreateBlockPage> createState() => _CreateBlockPageState();
 }
 
 class _CreateBlockPageState extends State<CreateBlockPage> {
-  final blockCubit = BlockCubit();
+  BlockCubit blockCubit = BlockCubit();
+
   bool _isAppScreen = true;
   bool isSubmitEnabled = false;
   bool isAddCheckboxDisabled =
@@ -35,8 +37,7 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
         setState(() {
           _isAppScreen = true;
         });
-      } 
-       else {
+      } else {
         setState(() {
           _isAppScreen = false;
           _searchApplicationTerm = null;
@@ -212,10 +213,9 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
                 ),
                 onPressed: isSubmitEnabled
                     ? () {
-                      print("Apps: ${blockCubit.state.apps.toString()}");
-                      print("Websites: ${blockCubit.state.websites.toString()}");
-                      print("Keywords: ${blockCubit.state.keywords.toString()}");
-                      context.goNamed('create-blocking-conditions');
+
+                        context.goNamed('create-blocking-conditions',
+                            extra: {...widget.extra, 'blockCubit': blockCubit});
                       }
                     : null, // null disables the button
                 child: const Text(

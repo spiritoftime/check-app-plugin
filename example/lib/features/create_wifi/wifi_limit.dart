@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class WifiLimit extends StatelessWidget {
-  const WifiLimit({super.key});
+      final Map<String, dynamic> extra;
+
+  const WifiLimit({super.key, required this.extra});
 
   @override
   Widget build(BuildContext context) {

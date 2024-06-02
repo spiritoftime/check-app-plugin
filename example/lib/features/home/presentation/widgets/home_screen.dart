@@ -109,7 +109,8 @@ class HomeScreen extends StatelessWidget {
                                 backgroundColor: const Color(0xff5094F5),
                               ),
                               onPressed: () {
-                                context.goNamed('create-block');
+                                context.goNamed('create-block',
+                                    extra: <String, dynamic>{});
                               },
                               icon: const Icon(Icons.add,
                                   color: Colors.white, size: 24),

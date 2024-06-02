@@ -1,21 +1,19 @@
 import 'package:checkapp_plugin_example/features/create_time/cubit/cubit/time_cubit.dart';
-import 'package:checkapp_plugin_example/features/create_time/models/timing/timing.dart';
 import 'package:checkapp_plugin_example/features/create_time/widgets/day_row.dart';
 import 'package:checkapp_plugin_example/features/create_time/widgets/all_day_timing_row.dart';
 import 'package:checkapp_plugin_example/features/create_time/widgets/timing_row.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
 class TimeLimitPage extends StatefulWidget {
-  const TimeLimitPage({super.key});
+  final Map<String, dynamic> extra;
+
+  const TimeLimitPage({super.key, required this.extra});
 
   @override
   State<TimeLimitPage> createState() => _TimeLimitPageState();
 }
-
 
 class _TimeLimitPageState extends State<TimeLimitPage> {
   final CopyTimeCubit copyTimeCubit = CopyTimeCubit();
@@ -128,9 +126,8 @@ class _TimeLimitPageState extends State<TimeLimitPage> {
                   //  clear timings in cubit first before regrabbing all the new timings to prevent duplicates
                   timeCubit.updateTime(timings: []);
                   copyTimeCubit.copyTime();
-                  // issue: unable to determine when the stream listeners finish copytime
-                  print("timings at time limit page:${timeCubit.state.timings.toString()}");
-                  print("days:${timeCubit.state.days.toString()}");
+                  context.goNamed('confirm-schedule',
+                      extra: {...widget.extra, 'timeCubit': timeCubit});
                 },
                 color: Colors.blue,
                 child: const Text(

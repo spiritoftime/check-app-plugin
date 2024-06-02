@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class LaunchLimit extends StatelessWidget {
-  const LaunchLimit({super.key});
+        final Map<String, dynamic> extra;
+
+  const LaunchLimit({super.key, required this.extra});
 
   @override
   Widget build(BuildContext context) {
