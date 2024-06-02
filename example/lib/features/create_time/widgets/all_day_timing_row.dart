@@ -4,27 +4,37 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 class AllDayTimingRow extends StatefulWidget {
-  const AllDayTimingRow({super.key});
+  final Function clearTimings;
+  final Function addTiming;
+  const AllDayTimingRow(
+      {super.key, required this.clearTimings, required this.addTiming});
 
   @override
   State<AllDayTimingRow> createState() => _AllDayTimingRowState();
 }
 
 class _AllDayTimingRowState extends State<AllDayTimingRow> {
-  bool _isEnabled = false;
+  bool _isEnabled = true;
   @override
   Widget build(BuildContext context) {
     return HoverInkWell(
       onTap: () {
+        bool newState = !_isEnabled;
         setState(() {
-          _isEnabled = !_isEnabled;
+          _isEnabled = newState;
         });
+        if (newState) {
+          widget.clearTimings();
+        } else {
+          widget.addTiming();
+        }
       },
       inkWellPadding: const EdgeInsets.all(0),
       child: GreyContainer(
         child: Row(
           children: [
-            const Icon(Icons.schedule, color: Colors.grey, size: 30),
+            Icon(Icons.schedule,
+                color: _isEnabled ? Colors.blue : Colors.grey, size: 30),
             const Gap(16),
             const Text(
               "All day long",
@@ -42,7 +52,16 @@ class _AllDayTimingRowState extends State<AllDayTimingRow> {
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     value: _isEnabled,
                     trackOutlineWidth: WidgetStateProperty.all(0),
-                    onChanged: (bool isEnabled) {}),
+                    onChanged: (bool isEnabled) {
+                      setState(() {
+                        _isEnabled = isEnabled;
+                      });
+                      if (isEnabled) {
+                        widget.clearTimings();
+                      } else {
+                        widget.addTiming();
+                      }
+                    }),
               ),
             ),
           ],

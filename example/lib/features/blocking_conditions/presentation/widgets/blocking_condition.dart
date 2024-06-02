@@ -21,7 +21,7 @@ class BlockingCondition extends StatelessWidget {
       children: [
         const Gap(12),
         HoverInkWell(
-          onTap: () => context.go(route),
+          onTap: () => context.push(route),
           child: Row(
             children: [
               Container(

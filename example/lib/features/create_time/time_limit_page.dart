@@ -38,6 +38,12 @@ class _TimeLimitPageState extends State<TimeLimitPage> {
     });
   }
 
+  void _clearTimings() {
+    setState(() {
+      timings.clear();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,7 +84,10 @@ class _TimeLimitPageState extends State<TimeLimitPage> {
                         style: TextStyle(color: Colors.grey, fontSize: 16.0),
                       ),
                       const Gap(16),
-                      const AllDayTimingRow(),
+                      AllDayTimingRow(
+                        clearTimings: _clearTimings,
+                        addTiming: _addTiming,
+                      ),
                       ListView.builder(
                           shrinkWrap: true,
                           itemCount: timings.length,
