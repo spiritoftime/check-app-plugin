@@ -1,9 +1,11 @@
 import 'package:checkapp_plugin_example/features/basic/presentation/basic_screen.dart';
 import 'package:checkapp_plugin_example/features/blocking_conditions/presentation/blocking_conditions_page.dart';
 import 'package:checkapp_plugin_example/features/create_block/bloc/app/app_bloc.dart';
+import 'package:checkapp_plugin_example/features/create_block/cubit/cubit/block_cubit.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/create_block_page.dart';
 import 'package:checkapp_plugin_example/features/create_launch_count/launch_limit.dart';
 import 'package:checkapp_plugin_example/features/create_location/location_limit.dart';
+import 'package:checkapp_plugin_example/features/create_time/cubit/cubit/time_cubit.dart';
 import 'package:checkapp_plugin_example/features/create_time/time_limit_page.dart';
 import 'package:checkapp_plugin_example/features/create_usage_limit/usage_limit.dart';
 import 'package:checkapp_plugin_example/features/create_wifi/wifi_limit.dart';
@@ -12,6 +14,69 @@ import 'package:checkapp_plugin_example/features/home/presentation/home_page.dar
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+
+final GoRoute _createScheduleRouter = GoRoute(
+    path: 'create-schedule',
+    routes: <RouteBase>[
+      GoRoute(
+        name: 'create-block',
+        path: 'block',
+        builder: (BuildContext context, GoRouterState state) {
+          return const CreateBlockPage();
+        },
+      ),
+      GoRoute(
+        name: 'create-location',
+        path: 'location',
+        builder: (BuildContext context, GoRouterState state) {
+          return const LocationLimit();
+        },
+      ),
+      GoRoute(
+        name: 'create-time',
+        path: 'time',
+        builder: (BuildContext context, GoRouterState state) {
+          return const TimeLimitPage();
+        },
+      ),
+      GoRoute(
+        name: 'create-wifi',
+        path: 'wifi',
+        builder: (BuildContext context, GoRouterState state) {
+          return const WifiLimit();
+        },
+      ),
+      GoRoute(
+        name: 'create-launch-count',
+        path: 'launch-count',
+        builder: (BuildContext context, GoRouterState state) {
+          return const LaunchLimit();
+        },
+      ),
+      GoRoute(
+        name: 'create-usage-limit',
+        path: 'usage-limit',
+        builder: (BuildContext context, GoRouterState state) {
+          return const UsageLimit();
+        },
+      ),
+      GoRoute(
+        name: 'create-blocking-conditions',
+        path: 'blocking-conditions',
+        builder: (BuildContext context, GoRouterState state) {
+          return BlockingConditionsPage();
+        },
+      ),
+    ],
+    builder: (BuildContext context, GoRouterState state) {
+      return MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (context) => TimeCubit()),
+          BlocProvider(create: (context) => BlockCubit()),
+        ],
+        child: const CreateBlockPage(),
+      );
+    });
 
 /// The route configuration.
 final GoRouter _router = GoRouter(
@@ -33,49 +98,7 @@ final GoRouter _router = GoRouter(
             builder: (BuildContext context, GoRouterState state) {
               return BasicScreen();
             }),
-        GoRoute(
-            path: 'create-block',
-            builder: (BuildContext context, GoRouterState state) {
-              return const CreateBlockPage();
-              // return BlocProvider.value(
-              //   value: BlocProvider.of<AppsBloc>(context),
-              //   child: const CreateBlockPage(),
-              // );
-            }),
-        GoRoute(
-            path: 'blocking-conditions',
-            builder: (BuildContext context, GoRouterState state) {
-              return BlockingConditionsPage();
-            }),
-        GoRoute(
-            path: 'create-schedule-location',
-            builder: (BuildContext context, GoRouterState state) {
-              return const LocationLimit();
-            }),
-        GoRoute(
-          path: 'create-schedule-time',
-          builder: (BuildContext context, GoRouterState state) {
-            return const TimeLimitPage();
-          },
-        ),
-        GoRoute(
-          path: 'create-schedule-wifi',
-          builder: (BuildContext context, GoRouterState state) {
-            return const WifiLimit();
-          },
-        ),
-        GoRoute(
-          path: 'create-schedule-launch-count',
-          builder: (BuildContext context, GoRouterState state) {
-            return const LaunchLimit();
-          },
-        ),
-        GoRoute(
-          path: 'create-schedule-usage-limit',
-          builder: (BuildContext context, GoRouterState state) {
-            return const UsageLimit();
-          },
-        ),
+        _createScheduleRouter
       ],
     ),
   ],

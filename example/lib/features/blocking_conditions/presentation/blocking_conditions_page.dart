@@ -11,32 +11,32 @@ class BlockingConditionsPage extends StatelessWidget {
       'text': 'Location',
       'description': 'Campus, home, work, etc.',
       'icon': const Icon(Icons.near_me,size: 24,),
-      'route': '/create-schedule-location',
+      'route': 'create-location',
     },
     {
       'text': 'Time',
       'description': 'eg. Working hours, weekend',
       'icon': const Icon(Icons.schedule, size: 24),
-      'route': '/create-schedule-time',
+      'route': 'create-time',
     },
     {
       'text': 'Wi-Fi',
       'description':
           'Block only when home!',
       'icon': const Icon(Icons.wifi, size: 24),
-      'route': '/create-schedule-wifi',
+      'route': 'create-wifi',
     },
     {
       'text': 'Launch Count',
       'description': 'Max 20 times a day',
       'icon': const Icon(Icons.power_settings_new, size: 24),
-      'route': '/create-schedule-launch-count',
+      'route': 'create-launch-count',
     },
     {
       'text': 'Usage Limit',
       'description': '30 mins a day',
       'icon': const Icon(Icons.battery_alert, size: 24),
-      'route': '/create-schedule-usage-limit',
+      'route': 'create-usage-limit',
     },
   ];
   @override

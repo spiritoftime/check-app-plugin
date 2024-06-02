@@ -215,7 +215,7 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
                       print("Apps: ${blockCubit.state.apps.toString()}");
                       print("Websites: ${blockCubit.state.websites.toString()}");
                       print("Keywords: ${blockCubit.state.keywords.toString()}");
-                      context.go('/blocking-conditions');
+                      context.goNamed('create-blocking-conditions');
                       }
                     : null, // null disables the button
                 child: const Text(

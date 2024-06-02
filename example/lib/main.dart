@@ -32,7 +32,7 @@ Future<void> main() async {
                   AppsBloc(RepositoryProvider.of<AppRepository>(context))
                     ..add(LoadApps()))
         ],
-        child: const MyApp(),
+        child: const MyApp(), // TODO: currently set to myapp to make it run initially. however, this still blocks the UI. Consider an isolate.
       ),
     )),
   );
