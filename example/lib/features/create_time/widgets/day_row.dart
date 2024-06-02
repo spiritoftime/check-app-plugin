@@ -11,16 +11,17 @@ class DayRow extends StatefulWidget {
 }
 
 class _DayRowState extends State<DayRow> {
-  List<Days> selectedDays = [Days.friday];
+  late List<String?> selectedDays;
   @override
   void initState() {
     super.initState();
-    widget.timeCubit.updateTime(days: [Day(day: Days.friday.day)]);
+
+    selectedDays =
+        widget.timeCubit.state.days.map((d) => daysMap[d.day]).toList();
   }
+
   @override
   Widget build(BuildContext context) {
-
-
     return Column(
       children: [
         Row(
@@ -35,7 +36,7 @@ class _DayRowState extends State<DayRow> {
                 alignment: WrapAlignment.end,
                 children: [
                   Text(
-                    "Every ${selectedDays.map((day) => day.day).join(", ")}",
+                    "Every ${selectedDays.join(", ")}",
                     style: const TextStyle(fontSize: 16, color: Colors.grey),
                   ),
                 ],
@@ -46,8 +47,8 @@ class _DayRowState extends State<DayRow> {
         const Gap(12),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: Days.values
-              .map((Days day) => GestureDetector(
+          children: daysMap.values
+              .map((String day) => GestureDetector(
                     onTap: () {
                       setState(() {
                         selectedDays.contains(day)
@@ -57,7 +58,7 @@ class _DayRowState extends State<DayRow> {
                             : selectedDays.add(day);
                       });
                       widget.timeCubit.updateTime(
-                        days: selectedDays.map((d) => Day(day: d.day)).toList(),
+                        days: selectedDays.map((d) => Day(day: day)).toList(),
                       );
                     },
                     child: Container(
@@ -71,7 +72,7 @@ class _DayRowState extends State<DayRow> {
                       ),
                       child: Center(
                         child: Text(
-                          day.day.substring(0, 2),
+                          day.substring(0, 2),
                           style: TextStyle(
                             color: selectedDays.contains(day)
                                 ? Colors.white

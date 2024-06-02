@@ -1,17 +1,19 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'timing.g.dart';
 
 @JsonSerializable()
-class Timing {
+class Timing extends Equatable {
   final String start;
   final String end;
 
-  Timing({
+  const Timing({
     required this.start,
     required this.end,
   });
-
+  @override
+  List<Object?> get props => [start, end];
   factory Timing.fromJson(Map<dynamic, dynamic> json) => _$TimingFromJson(json);
   Map<dynamic, dynamic> toJson() => _$TimingToJson(this);
 }

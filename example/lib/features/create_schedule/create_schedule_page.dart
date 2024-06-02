@@ -60,31 +60,38 @@ class CreateSchedulePage extends StatelessWidget {
                     ),
                     const Gap(16),
                     HoverInkWell(
-                        inkWellPadding: EdgeInsets.all(0),
-                        child: GreyContainer(
-                          child: Row(
-                            children: [
-                              const Icon(Icons.schedule,
-                                  color: Colors.blue, size: 24),
-                              const Gap(16),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text("Time",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold)),
-                                  Text(timeCubit.state.timings
-                                      .map((e) => '${e.start} to ${e.end}')
-                                      .join(', '))
-                                ],
-                              ),
-                              const Spacer(),
-                              const Icon(Icons.close, size: 24, color: Colors.grey),
-                            ],
-                          ),
-                        ))
+                      onTap: () =>
+                          context.pushNamed('create-time', extra: extra),
+                      inkWellPadding: const EdgeInsets.all(0),
+                      child: GreyContainer(
+                        child: Row(
+                          children: [
+                            const Icon(Icons.schedule,
+                                color: Colors.blue, size: 24),
+                            const Gap(16),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text("Time",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold)),
+                                Text(timeCubit.state.days
+                                    .map((d) => d.day)
+                                    .join(', ')),
+                                Text(timeCubit.state.timings
+                                    .map((e) => '${e.start} to ${e.end}')
+                                    .join(', '))
+                              ],
+                            ),
+                            const Spacer(),
+                            const Icon(Icons.close,
+                                size: 24, color: Colors.grey),
+                          ],
+                        ),
+                      ),
+                    )
                   ],
                 ),
               )

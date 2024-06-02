@@ -26,8 +26,15 @@ class AllDayTimingRow extends StatefulWidget {
 
 class _AllDayTimingRowState extends State<AllDayTimingRow> {
   late StreamSubscription<int> subscription;
+  late bool _isEnabled;
+  @override
+  void initState() {
+    super.initState();
 
-  bool _isEnabled = true;
+    _isEnabled = widget.timeCubit.state.timings
+        .contains(const Timing(start: '00:00', end: '23:59'));
+  }
+
   @override
   void dispose() async {
     super.dispose();
@@ -36,15 +43,12 @@ class _AllDayTimingRowState extends State<AllDayTimingRow> {
 
   @override
   Widget build(BuildContext context) {
-    subscription =
-        widget.copyTimeCubit.stream.listen((int call) async {
-
-        if (_isEnabled) {
-          widget.timeCubit
-              .updateTime(timings: [Timing(start: '00:00', end: '23:59')]);
-          print('updated all day timing ${widget.timeCubit.state.timings}');
-        }
-
+    subscription = widget.copyTimeCubit.stream.listen((int call) async {
+      if (_isEnabled) {
+        widget.timeCubit
+            .updateTime(timings: [Timing(start: '00:00', end: '23:59')]);
+        print('updated all day timing ${widget.timeCubit.state.timings}');
+      }
     });
     return HoverInkWell(
       onTap: () {

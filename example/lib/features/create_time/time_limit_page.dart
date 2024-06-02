@@ -16,8 +16,14 @@ class TimeLimitPage extends StatefulWidget {
 }
 
 class _TimeLimitPageState extends State<TimeLimitPage> {
+  late final TimeCubit timeCubit;
   final CopyTimeCubit copyTimeCubit = CopyTimeCubit();
-  final TimeCubit timeCubit = TimeCubit();
+  @override
+  void initState() {
+    super.initState();
+    timeCubit = widget.extra['timeCubit'] ?? TimeCubit();
+  }
+
   final Map<String, TimingRow> timings = {};
   void _addTiming() {
     setState(() {

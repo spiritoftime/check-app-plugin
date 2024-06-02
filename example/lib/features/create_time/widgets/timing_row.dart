@@ -45,7 +45,7 @@ class _TimingRowState extends State<TimingRow> {
   }
 
   DateTime convertTimeOfDay(TimeOfDay timeOfDay) {
-    return DateTime(timeOfDay.hour, timeOfDay.minute);
+    return DateFormat('HH:mm', 'en_US').parse('${timeOfDay.hour}:${timeOfDay.minute}');
   }
 
   @override
