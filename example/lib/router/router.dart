@@ -4,7 +4,7 @@ import 'package:checkapp_plugin_example/features/create_block/bloc/app/app_bloc.
 import 'package:checkapp_plugin_example/features/create_block/presentation/create_block_page.dart';
 import 'package:checkapp_plugin_example/features/create_launch_count/launch_limit.dart';
 import 'package:checkapp_plugin_example/features/create_location/location_limit.dart';
-import 'package:checkapp_plugin_example/features/create_time/time_limit.dart';
+import 'package:checkapp_plugin_example/features/create_time/time_limit_page.dart';
 import 'package:checkapp_plugin_example/features/create_usage_limit/usage_limit.dart';
 import 'package:checkapp_plugin_example/features/create_wifi/wifi_limit.dart';
 import 'package:checkapp_plugin_example/features/details/presentation/details_screen.dart';
@@ -55,7 +55,7 @@ final GoRouter _router = GoRouter(
         GoRoute(
           path: 'create-schedule-time',
           builder: (BuildContext context, GoRouterState state) {
-            return const TimeLimit();
+            return const TimeLimitPage();
           },
         ),
         GoRoute(

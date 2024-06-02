@@ -15,11 +15,16 @@ class _AllDayTimingRowState extends State<AllDayTimingRow> {
   @override
   Widget build(BuildContext context) {
     return HoverInkWell(
+      onTap: () {
+        setState(() {
+          _isEnabled = !_isEnabled;
+        });
+      },
       inkWellPadding: const EdgeInsets.all(0),
       child: GreyContainer(
         child: Row(
           children: [
-            const Icon(Icons.schedule, color: Colors.grey, size: 24),
+            const Icon(Icons.schedule, color: Colors.grey, size: 30),
             const Gap(16),
             const Text(
               "All day long",
@@ -27,7 +32,7 @@ class _AllDayTimingRowState extends State<AllDayTimingRow> {
             ),
             const Spacer(),
             SizedBox(
-              height: 24,
+              height: 30,
               child: FittedBox(
                 fit: BoxFit.fill,
                 child: Switch(
@@ -37,11 +42,7 @@ class _AllDayTimingRowState extends State<AllDayTimingRow> {
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     value: _isEnabled,
                     trackOutlineWidth: WidgetStateProperty.all(0),
-                    onChanged: (bool isEnabled) {
-                      setState(() {
-                        _isEnabled = isEnabled;
-                      });
-                    }),
+                    onChanged: (bool isEnabled) {}),
               ),
             ),
           ],
