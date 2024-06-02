@@ -1,3 +1,4 @@
+import 'package:checkapp_plugin_example/features/create_time/cubit/cubit/time_cubit.dart';
 import 'package:checkapp_plugin_example/features/create_time/models/timing/timing.dart';
 import 'package:checkapp_plugin_example/features/create_time/widgets/day_row.dart';
 import 'package:checkapp_plugin_example/features/create_time/widgets/all_day_timing_row.dart';
@@ -15,8 +16,10 @@ class TimeLimitPage extends StatefulWidget {
   State<TimeLimitPage> createState() => _TimeLimitPageState();
 }
 
-// TODO: add default timing. need to remove the correct timing row, and add functionality where if all day long chosen, all timing rows are removed and save button. on save should validate that at least one timing row is present
+
 class _TimeLimitPageState extends State<TimeLimitPage> {
+  final CopyTimeCubit copyTimeCubit = CopyTimeCubit();
+  final TimeCubit timeCubit = TimeCubit();
   final Map<String, TimingRow> timings = {};
   void _addTiming() {
     setState(() {
@@ -28,6 +31,8 @@ class _TimeLimitPageState extends State<TimeLimitPage> {
                 deleteRow: () {
                   _deleteTiming(uniqueKey);
                 },
+                timeCubit: timeCubit,
+                copyTimeCubit: copyTimeCubit,
               ));
     });
   }
@@ -77,7 +82,9 @@ class _TimeLimitPageState extends State<TimeLimitPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const DayRow(),
+                      DayRow(
+                        timeCubit: timeCubit,
+                      ),
                       const Gap(32),
                       const Text(
                         "Times",
@@ -87,6 +94,8 @@ class _TimeLimitPageState extends State<TimeLimitPage> {
                       AllDayTimingRow(
                         clearTimings: _clearTimings,
                         addTiming: _addTiming,
+                        timeCubit: timeCubit,
+                        copyTimeCubit: copyTimeCubit,
                       ),
                       ListView.builder(
                           shrinkWrap: true,
@@ -115,7 +124,14 @@ class _TimeLimitPageState extends State<TimeLimitPage> {
                   borderRadius: BorderRadius.circular(15),
                   side: const BorderSide(color: Colors.black),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  //  clear timings in cubit first before regrabbing all the new timings to prevent duplicates
+                  timeCubit.updateTime(timings: []);
+                  copyTimeCubit.copyTime();
+                  // issue: unable to determine when the stream listeners finish copytime
+                  print("timings at time limit page:${timeCubit.state.timings.toString()}");
+                  print("days:${timeCubit.state.days.toString()}");
+                },
                 color: Colors.blue,
                 child: const Text(
                   "Save",

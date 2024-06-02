@@ -212,6 +212,9 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
                 ),
                 onPressed: isSubmitEnabled
                     ? () {
+                      print("Apps: ${blockCubit.state.apps.toString()}");
+                      print("Websites: ${blockCubit.state.websites.toString()}");
+                      print("Keywords: ${blockCubit.state.keywords.toString()}");
                       context.go('/blocking-conditions');
                       }
                     : null, // null disables the button

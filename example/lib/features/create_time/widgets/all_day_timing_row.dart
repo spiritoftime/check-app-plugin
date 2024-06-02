@@ -1,22 +1,51 @@
+import 'dart:async';
+
+import 'package:checkapp_plugin_example/features/create_time/cubit/cubit/time_cubit.dart';
+import 'package:checkapp_plugin_example/features/create_time/models/timing/timing.dart';
 import 'package:checkapp_plugin_example/shared/widgets/grey_container.dart';
 import 'package:checkapp_plugin_example/shared/widgets/hover_ink_well.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:intl/intl.dart';
 
 class AllDayTimingRow extends StatefulWidget {
+  final TimeCubit timeCubit;
+  final CopyTimeCubit copyTimeCubit;
   final Function clearTimings;
   final Function addTiming;
   const AllDayTimingRow(
-      {super.key, required this.clearTimings, required this.addTiming});
+      {super.key,
+      required this.clearTimings,
+      required this.addTiming,
+      required this.timeCubit,
+      required this.copyTimeCubit});
 
   @override
   State<AllDayTimingRow> createState() => _AllDayTimingRowState();
 }
 
 class _AllDayTimingRowState extends State<AllDayTimingRow> {
+  late StreamSubscription<int> subscription;
+
   bool _isEnabled = true;
   @override
+  void dispose() async {
+    super.dispose();
+    await subscription.cancel();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    subscription =
+        widget.copyTimeCubit.stream.listen((int call) async {
+
+        if (_isEnabled) {
+          widget.timeCubit
+              .updateTime(timings: [Timing(start: '00:00', end: '23:59')]);
+          print('updated all day timing ${widget.timeCubit.state.timings}');
+        }
+
+    });
     return HoverInkWell(
       onTap: () {
         bool newState = !_isEnabled;

@@ -4,16 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 class DayRow extends StatefulWidget {
-  const DayRow({super.key});
+  final TimeCubit timeCubit;
+  const DayRow({super.key, required this.timeCubit});
   @override
   State<DayRow> createState() => _DayRowState();
 }
 
 class _DayRowState extends State<DayRow> {
   List<Days> selectedDays = [Days.friday];
-  TimeCubit timeCubit = TimeCubit();
+  @override
+  void initState() {
+    super.initState();
+    widget.timeCubit.updateTime(days: [Day(day: Days.friday.day)]);
+  }
   @override
   Widget build(BuildContext context) {
+
+
     return Column(
       children: [
         Row(
@@ -49,7 +56,7 @@ class _DayRowState extends State<DayRow> {
                                 : selectedDays.remove(day)
                             : selectedDays.add(day);
                       });
-                      timeCubit.updateTime(
+                      widget.timeCubit.updateTime(
                         days: selectedDays.map((d) => Day(day: d.day)).toList(),
                       );
                     },
