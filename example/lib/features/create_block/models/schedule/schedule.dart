@@ -4,7 +4,7 @@ import 'package:checkapp_plugin_example/features/create_block/models/block/block
 import 'package:json_annotation/json_annotation.dart';
 part 'schedule.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class Schedule {
   @JsonKey(name: 'toBlock')
   final Block block;

@@ -1,12 +1,13 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:checkapp_plugin_example/features/create_block/cubit/cubit/block_cubit.dart';
 import 'package:checkapp_plugin_example/features/create_block/models/app/app.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/app_row.dart';
+import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/keyword_row.dart';
+import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/website_row.dart';
+import 'package:checkapp_plugin_example/features/create_schedule/widgets/existing_blocks.dart';
 import 'package:checkapp_plugin_example/features/create_schedule/widgets/existing_condition.dart';
 import 'package:checkapp_plugin_example/features/create_time/cubit/cubit/time_cubit.dart';
 import 'package:checkapp_plugin_example/shared/widgets/grey_container.dart';
 import 'package:checkapp_plugin_example/shared/widgets/hover_ink_well.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -17,6 +18,51 @@ class CreateSchedulePage extends StatelessWidget {
   const CreateSchedulePage({super.key, required this.extra});
   BlockCubit get blockCubit => extra['blockCubit'];
   TimeCubit get timeCubit => extra['timeCubit'];
+
+  List<Widget> appWidgets() {
+    if (blockCubit.state.apps.isNotEmpty) {
+      return blockCubit.state.apps
+          .map((App app) => Container(
+                margin: const EdgeInsets.only(bottom: 8),
+                child: AppRow(app: app, key: Key(app.appName), width: 30),
+              ))
+          .toList();
+    } else {
+      return [Container()];
+    }
+  }
+
+  List<Widget> websiteWidgets() {
+    if (blockCubit.state.websites.isNotEmpty) {
+      return blockCubit.state.websites
+          .map((website) => Container(
+                margin: const EdgeInsets.only(bottom: 8),
+                child: WebsiteRow(
+                  website: website,
+                  key: Key(website.url),
+                ),
+              ))
+          .toList();
+    } else {
+      return [Container()];
+    }
+  }
+
+  List<Widget> keywordWidgets() {
+    if (blockCubit.state.keywords.isNotEmpty) {
+      return blockCubit.state.keywords
+          .map((keyword) => Container(
+                margin: const EdgeInsets.only(bottom: 8),
+                child: KeywordRow(
+                  keyword: keyword,
+                  key: Key(keyword.keyword),
+                ),
+              ))
+          .toList();
+    } else {
+      return [Container()];
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,38 +144,25 @@ class CreateSchedulePage extends StatelessWidget {
                             fontWeight: FontWeight.bold),
                       ),
                       const Gap(16),
-                      HoverInkWell(
-                        onTap: () =>
-                            context.pushNamed('create-block', extra: extra),
-                        inkWellPadding: const EdgeInsets.all(8),
-                        child: GreyContainer(
-                          child: Column(
-                            children: [
-                              const Row(
-                                children: [
-                                  Text(
-                                    "Applications",
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Spacer(),
-                                  Icon(Icons.navigate_next)
-                                ],
-                              ),
-                              const Gap(16),
-                              if (blockCubit.state.apps.isNotEmpty)
-                                ...blockCubit.state.apps.map((App app) =>
-                                    AppRow(
-                                        app: app,
-                                        key: Key(app.appName),
-                                        width: 30))
-                              else
-                                Container(),
-                            ],
-                          ),
-                        ),
+                      ExistingBlocks(
+                        extra: extra,
+                        blockCubit: blockCubit,
+                        blockType: "Applications",
+                        widgets: appWidgets,
+                      ),
+                      const Gap(16),
+                      ExistingBlocks(
+                        extra: extra,
+                        blockCubit: blockCubit,
+                        blockType: "Websites",
+                        widgets: websiteWidgets,
+                      ),
+                      const Gap(16),
+                      ExistingBlocks(
+                        extra: extra,
+                        blockCubit: blockCubit,
+                        blockType: "Keywords",
+                        widgets: keywordWidgets,
                       ),
                     ]),
               )

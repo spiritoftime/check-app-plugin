@@ -4,7 +4,7 @@ import 'package:checkapp_plugin_example/features/create_block/models/website/web
 import 'package:json_annotation/json_annotation.dart';
 part 'block.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class Block {
   final List<App> apps;
   final List<Website> websites;
