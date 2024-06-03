@@ -11,13 +11,13 @@ class DayRow extends StatefulWidget {
 }
 
 class _DayRowState extends State<DayRow> {
-  late List<String?> selectedDays;
+  late List<String> selectedDays;
   @override
   void initState() {
     super.initState();
 
     selectedDays =
-        widget.timeCubit.state.days.map((d) => daysMap[d.day]).toList();
+        widget.timeCubit.state.days.map((d) => daysMap[d.day]!).toList();
   }
 
   @override
@@ -36,7 +36,7 @@ class _DayRowState extends State<DayRow> {
                 alignment: WrapAlignment.end,
                 children: [
                   Text(
-                    "Every ${selectedDays.join(", ")}",
+                    "${selectedDays.isNotEmpty ? "Every" : ''} ${selectedDays.join(", ")}",
                     style: const TextStyle(fontSize: 16, color: Colors.grey),
                   ),
                 ],
@@ -58,7 +58,7 @@ class _DayRowState extends State<DayRow> {
                             : selectedDays.add(day);
                       });
                       widget.timeCubit.updateTime(
-                        days: selectedDays.map((d) => Day(day: day)).toList(),
+                        days: selectedDays.map((d) => Day(day: d)).toList(),
                       );
                     },
                     child: Container(
