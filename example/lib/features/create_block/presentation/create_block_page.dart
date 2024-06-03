@@ -19,10 +19,18 @@ class CreateBlockPage extends StatefulWidget {
 }
 
 class _CreateBlockPageState extends State<CreateBlockPage> {
-  BlockCubit blockCubit = BlockCubit();
+  late BlockCubit blockCubit;
+  late bool isSubmitEnabled;
+  @override
+  void initState() {
+    super.initState();
+    blockCubit = widget.extra['blockCubit'] ?? BlockCubit();
+    isSubmitEnabled = blockCubit.state.apps.isNotEmpty ||
+        blockCubit.state.websites.isNotEmpty ||
+        blockCubit.state.keywords.isNotEmpty;
+  }
 
   bool _isAppScreen = true;
-  bool isSubmitEnabled = false;
   bool isAddCheckboxDisabled =
       false; // disable add button for website, if the user typed something in website, but did not type in a valid website.
   bool _showSearchIcon = true;
@@ -213,9 +221,17 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
                 ),
                 onPressed: isSubmitEnabled
                     ? () {
-
-                        context.goNamed('create-blocking-conditions',
-                            extra: {...widget.extra, 'blockCubit': blockCubit});
+                        if (widget.extra.containsKey('blockCubit')) {
+                          context.goNamed('confirm-schedule', extra: {
+                            ...widget.extra,
+                            'blockCubit': blockCubit
+                          });
+                        } else {
+                          context.goNamed('create-blocking-conditions', extra: {
+                            ...widget.extra,
+                            'blockCubit': blockCubit
+                          });
+                        }
                       }
                     : null, // null disables the button
                 child: const Text(

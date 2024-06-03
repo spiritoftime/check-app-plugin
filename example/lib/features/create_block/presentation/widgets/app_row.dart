@@ -6,9 +6,10 @@ import 'package:flutter/material.dart';
 
 class AppRow extends StatelessWidget {
   final App app;
+  final double? width;
   const AppRow({
     super.key,
-    required this.app,
+    required this.app, this.width,
   });
 
   @override
@@ -22,8 +23,8 @@ class AppRow extends StatelessWidget {
             child: Image.memory(
               const Base64Decoder()
                   .convert(app.iconBase64String.replaceAll(RegExp(r'\s+'), '')),
-              width: 50,
-              height: 50,
+              width:width?? 50,
+              height: width?? 50,
             ),
           ),
           const Gap(12),
