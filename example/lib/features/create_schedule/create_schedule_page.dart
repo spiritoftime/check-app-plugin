@@ -8,10 +8,10 @@ import 'package:checkapp_plugin_example/features/create_schedule/widgets/existin
 import 'package:checkapp_plugin_example/features/create_time/cubit/cubit/time_cubit.dart';
 import 'package:checkapp_plugin_example/shared/widgets/accordion_wrapper.dart';
 import 'package:checkapp_plugin_example/shared/widgets/hover_ink_well.dart';
+import 'package:checkapp_plugin_example/shared/widgets/show_dialog.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
+
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
@@ -21,7 +21,6 @@ class CreateSchedulePage extends StatelessWidget {
   CreateSchedulePage({super.key, required this.extra});
   BlockCubit get blockCubit => extra['blockCubit'];
   TimeCubit get timeCubit => extra['timeCubit'];
-  bool isSubmitEnabled = true;
   List<Widget> appWidgets() {
     if (blockCubit.state.apps.isNotEmpty) {
       return blockCubit.state.apps
@@ -121,25 +120,7 @@ class CreateSchedulePage extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.5,
-                          child: TextField(
-                            controller: _controller,
-                            style: const TextStyle(fontSize: 24),
-                            decoration: const InputDecoration(
-                              alignLabelWithHint: true,
-                              contentPadding: EdgeInsets.only(top: 12),
-                              hintText: "Schedule Name",
-                              hintStyle: TextStyle(
-                                color: Colors.grey,
-                              ),
-                              border: InputBorder.none,
-                            ),
-                          ),
-                        ),
-                      ),
+                      Center(child: ScheduleName(controller: _controller)),
                       const Gap(8),
                       const Divider(height: 1, color: Colors.grey),
                       AccordionWrapper(
@@ -227,18 +208,73 @@ class CreateSchedulePage extends StatelessWidget {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 64),
-                backgroundColor: isSubmitEnabled ? Colors.blue : Colors.grey,
+                backgroundColor: Colors.blue,
                 padding: const EdgeInsets.symmetric(
                     vertical: 16.0, horizontal: 16.0),
               ),
-              onPressed:
-                  isSubmitEnabled ? () {} : null, // null disables the button
+              onPressed: () async {
+                String scheduleName = _controller.text;
+                if (scheduleName.isEmpty) {
+                  await createDialog(context, const Text("Error"),
+                      const Text("Please enter a schedule name"));
+                  return;
+                }
+                if (timeCubit.state.days.isNotEmpty &&
+                        timeCubit.state.timings.isEmpty ||
+                    timeCubit.state.days.isEmpty &&
+                        timeCubit.state.timings.isNotEmpty) {
+                  await createDialog(
+                      context,
+                      const Text("Error"),
+                      const Text(
+                          "Please enter both days and timings if you want to create a schedule with time conditions. Click the add button under conditions and re-edit the time condition"));
+                  return;
+                }
+                //  compile everything to one schedule
+              },
               child: const Text(
                 "Save Schedule",
                 style: TextStyle(fontSize: 24, color: Colors.white),
               ),
             )
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class ScheduleName extends StatefulWidget {
+  const ScheduleName({
+    super.key,
+    required TextEditingController controller,
+  }) : _controller = controller;
+
+  final TextEditingController _controller;
+
+  @override
+  State<ScheduleName> createState() => _ScheduleNameState();
+}
+
+class _ScheduleNameState extends State<ScheduleName> {
+  @override
+  Widget build(BuildContext context) {
+    return IntrinsicWidth(
+      child: TextField(
+        textAlign: TextAlign.center,
+        onChanged: (value) {
+          setState(() {});  // update the width
+        },
+        controller: widget._controller,
+        style: const TextStyle(fontSize: 24),
+        decoration: const InputDecoration(
+          alignLabelWithHint: true,
+          contentPadding: EdgeInsets.only(top: 12),
+          hintText: "Schedule Name",
+          hintStyle: TextStyle(
+            color: Colors.grey,
+          ),
+          border: InputBorder.none,
         ),
       ),
     );

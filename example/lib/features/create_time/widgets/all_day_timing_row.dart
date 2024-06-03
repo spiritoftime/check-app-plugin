@@ -6,7 +6,6 @@ import 'package:checkapp_plugin_example/shared/widgets/grey_container.dart';
 import 'package:checkapp_plugin_example/shared/widgets/hover_ink_well.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:intl/intl.dart';
 
 class AllDayTimingRow extends StatefulWidget {
   final TimeCubit timeCubit;
