@@ -27,19 +27,20 @@ class ExistingCondition extends StatelessWidget {
       inkWellPadding: const EdgeInsets.all(0),
       child: GreyContainer(
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Icon(Icons.schedule, color: Colors.blue, size: 24),
             const Gap(16),
-            Flexible(
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(conditionType,
-                      style: const TextStyle(
-                          fontSize: 16,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold)),
+                  Text(
+                    conditionType,
+                    style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  ),
                   const Gap(4),
                   Text(
                     text1,

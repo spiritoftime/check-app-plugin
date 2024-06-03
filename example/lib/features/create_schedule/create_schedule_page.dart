@@ -9,6 +9,8 @@ import 'package:checkapp_plugin_example/features/create_time/cubit/cubit/time_cu
 import 'package:checkapp_plugin_example/shared/widgets/accordion_wrapper.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
@@ -84,6 +86,47 @@ class CreateSchedulePage extends StatelessWidget {
                     context.pop();
                   },
                 ),
+                Center(
+                  child: Stack(
+                    children: [
+                      const Icon(Icons.schedule, color: Colors.blue, size: 80.0),
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: Colors.black,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Padding(
+                            padding: EdgeInsets.all(4.0),
+                            child:
+                                Icon(Icons.edit, color: Colors.white, size: 24.0),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.center,
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    child: const TextField(
+                      style: TextStyle(fontSize: 24),
+                      decoration: InputDecoration(
+                        alignLabelWithHint: true,
+                        contentPadding: EdgeInsets.only(top: 12),
+                        hintText: "Schedule Name",
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
+                ),
+                const Gap(8),
                 const Divider(height: 1, color: Colors.grey),
                 AccordionWrapper(
                   header: Row(
