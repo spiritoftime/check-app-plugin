@@ -6,12 +6,14 @@ class HoverInkWell extends StatelessWidget {
   final EdgeInsets? inkWellPadding;
   final Widget child;
   final Color? borderColor;
+  final Color? inkColor;
   const HoverInkWell({
     super.key,
     this.onTap,
     required this.child,
     this.inkWellPadding,
     this.borderColor,
+    this.inkColor,
   });
 
   @override
@@ -20,15 +22,17 @@ class HoverInkWell extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Ink(
-          color: const Color(0xff21222D),
+          color: inkColor ?? const Color(0xff21222D),
           child: Container(
               padding: inkWellPadding ?? const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
+                shape:  BoxShape.rectangle,
                 border: Border.all(
                     color: borderColor?.withOpacity(0.4) ??
                         Colors.grey.withOpacity(0.4),
                     width: 2),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius:
+                     BorderRadius.circular(8),
               ),
               child: child),
         ),
