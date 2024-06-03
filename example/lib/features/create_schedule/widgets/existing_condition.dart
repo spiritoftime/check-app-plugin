@@ -27,6 +27,7 @@ class ExistingCondition extends StatelessWidget {
       inkWellPadding: const EdgeInsets.all(0),
       child: GreyContainer(
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Icon(Icons.schedule, color: Colors.blue, size: 24),
             const Gap(16),
@@ -49,7 +50,6 @@ class ExistingCondition extends StatelessWidget {
                 ],
               ),
             ),
-            const Gap(16),
             const Icon(Icons.close, size: 24, color: Colors.grey),
           ],
         ),
@@ -57,4 +57,3 @@ class ExistingCondition extends StatelessWidget {
     );
   }
 }
-          

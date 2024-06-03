@@ -6,8 +6,8 @@ import 'package:checkapp_plugin_example/features/create_block/presentation/widge
 import 'package:checkapp_plugin_example/features/create_schedule/widgets/existing_blocks.dart';
 import 'package:checkapp_plugin_example/features/create_schedule/widgets/existing_condition.dart';
 import 'package:checkapp_plugin_example/features/create_time/cubit/cubit/time_cubit.dart';
-import 'package:checkapp_plugin_example/shared/widgets/grey_container.dart';
-import 'package:checkapp_plugin_example/shared/widgets/hover_ink_well.dart';
+import 'package:checkapp_plugin_example/shared/widgets/accordion_wrapper.dart';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -68,48 +68,48 @@ class CreateSchedulePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              IconButton(
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
-                icon: const Icon(Icons.close, size: 32, color: Colors.blue),
-                onPressed: () {
-                  context.pop();
-                },
-              ),
-              const Divider(height: 1, color: Colors.grey),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Expanded(
-                  child: Column(
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                IconButton(
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                  icon: const Icon(Icons.close, size: 32, color: Colors.blue),
+                  onPressed: () {
+                    context.pop();
+                  },
+                ),
+                const Divider(height: 1, color: Colors.grey),
+                AccordionWrapper(
+                  header: Row(
                     children: [
-                      Row(
-                        children: [
-                          const Text(
-                            "Conditions",
-                            style: TextStyle(
-                                fontSize: 24,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          const Spacer(),
-                          ElevatedButton.icon(
-                            onPressed: () => context.pushNamed(
-                                'create-blocking-conditions',
-                                extra: extra),
-                            icon: const Icon(Icons.add, color: Colors.white),
-                            label: const Text(
-                              "Add",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          )
-                        ],
+                      const Text(
+                        "Conditions",
+                        style: TextStyle(
+                            fontSize: 24,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold),
                       ),
-                      const Gap(16),
+                      const Spacer(),
+                      ElevatedButton.icon(
+                        onPressed: () => context.pushNamed(
+                            'create-blocking-conditions',
+                            extra: extra),
+                        icon: const Icon(Icons.add, color: Colors.white),
+                        label: const Text(
+                          "Add",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      )
+                    ],
+                  ),
+                  content: Column(
+                    children: [
                       timeCubit.state.days.isNotEmpty &&
                               timeCubit.state.timings.isNotEmpty
                           ? ExistingCondition(
@@ -129,44 +129,41 @@ class CreateSchedulePage extends StatelessWidget {
                     ],
                   ),
                 ),
-              ),
-              const Divider(height: 1, color: Colors.grey),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Blocklist",
-                        style: TextStyle(
-                            fontSize: 24,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      const Gap(16),
-                      ExistingBlocks(
-                        extra: extra,
-                        blockCubit: blockCubit,
-                        blockType: "Applications",
-                        widgets: appWidgets,
-                      ),
-                      const Gap(16),
-                      ExistingBlocks(
-                        extra: extra,
-                        blockCubit: blockCubit,
-                        blockType: "Websites",
-                        widgets: websiteWidgets,
-                      ),
-                      const Gap(16),
-                      ExistingBlocks(
-                        extra: extra,
-                        blockCubit: blockCubit,
-                        blockType: "Keywords",
-                        widgets: keywordWidgets,
-                      ),
-                    ]),
-              )
-            ],
+                const Divider(height: 1, color: Colors.grey),
+                AccordionWrapper(
+                    header: const Text(
+                      "Blocklist",
+                      style: TextStyle(
+                          fontSize: 24,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    content: Column(
+                      children: [
+                        ExistingBlocks(
+                          extra: extra,
+                          blockCubit: blockCubit,
+                          blockType: "Applications",
+                          widgets: appWidgets,
+                        ),
+                        const Gap(16),
+                        ExistingBlocks(
+                          extra: extra,
+                          blockCubit: blockCubit,
+                          blockType: "Websites",
+                          widgets: websiteWidgets,
+                        ),
+                        const Gap(16),
+                        ExistingBlocks(
+                          extra: extra,
+                          blockCubit: blockCubit,
+                          blockType: "Keywords",
+                          widgets: keywordWidgets,
+                        ),
+                      ],
+                    )),
+              ],
+            ),
           ),
         ),
       ),
