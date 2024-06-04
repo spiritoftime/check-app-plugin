@@ -5,6 +5,7 @@ import 'package:checkapp_plugin_example/features/create_block/presentation/widge
 import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/website_row.dart';
 import 'package:checkapp_plugin_example/features/create_schedule/widgets/existing_blocks.dart';
 import 'package:checkapp_plugin_example/features/create_schedule/widgets/existing_condition.dart';
+import 'package:checkapp_plugin_example/features/create_schedule/widgets/schedule_name.dart';
 import 'package:checkapp_plugin_example/features/create_time/cubit/cubit/time_cubit.dart';
 import 'package:checkapp_plugin_example/shared/widgets/accordion_wrapper.dart';
 import 'package:checkapp_plugin_example/shared/widgets/hover_ink_well.dart';
@@ -244,39 +245,3 @@ class CreateSchedulePage extends StatelessWidget {
   }
 }
 
-class ScheduleName extends StatefulWidget {
-  const ScheduleName({
-    super.key,
-    required TextEditingController controller,
-  }) : _controller = controller;
-
-  final TextEditingController _controller;
-
-  @override
-  State<ScheduleName> createState() => _ScheduleNameState();
-}
-
-class _ScheduleNameState extends State<ScheduleName> {
-  @override
-  Widget build(BuildContext context) {
-    return IntrinsicWidth(
-      child: TextField(
-        textAlign: TextAlign.center,
-        onChanged: (value) {
-          setState(() {});  // update the width
-        },
-        controller: widget._controller,
-        style: const TextStyle(fontSize: 24),
-        decoration: const InputDecoration(
-          alignLabelWithHint: true,
-          contentPadding: EdgeInsets.only(top: 12),
-          hintText: "Schedule Name",
-          hintStyle: TextStyle(
-            color: Colors.grey,
-          ),
-          border: InputBorder.none,
-        ),
-      ),
-    );
-  }
-}
