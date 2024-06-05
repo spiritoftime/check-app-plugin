@@ -86,7 +86,6 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
                 List<Map<String, Object>> appList = getInstalledApplications();
                 result.success(appList);
             case CHANNEL_DETECT_METHOD:
-
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     requestOverlayPermission(context, activity);
                 }
@@ -98,7 +97,6 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
                         createIntentForService(context, REDIRECT_HOME);
                     }
                     result.success(shouldShowPopUp);
-
                 }
                 break;
             case CHANNEL_OVERLAY_PERMISSION:
@@ -132,8 +130,6 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
             default:
                 result.notImplemented();
                 break;
-
-
         }
     }
 
@@ -206,9 +202,7 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
                     appName = resources.getString(resolveInfo.activityInfo.labelRes);
 
                 } catch (PackageManager.NameNotFoundException e) {
-
                     Log.d("getInstalledApplication", e.toString());
-
                 }
             } else {
                 appName = resolveInfo.activityInfo.applicationInfo.loadLabel(pm).toString();

@@ -1,15 +1,19 @@
 package com.doomscroll.checkapp_plugin;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.IBinder;
 import android.os.Looper;
+import android.provider.Settings;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -90,7 +94,7 @@ public class AppService extends Service {
         startForeground(1, notification);
 
     }
-//        code for starting service
+    //        code for starting service
 
     public static void initializeServiceAtFlutter(Context context) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -111,8 +115,13 @@ public class AppService extends Service {
         locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000)
                 .setMinUpdateIntervalMillis(5000)
                 .build();
-//need to request for gps to be enabled
+        // need to request for gps to be enabled
         locationCallback = new LocationCallback() {
+            LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            boolean isGPSEnabled = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+
+
             @Override
             public void onLocationResult(LocationResult locationResult) {
                 Log.d("hi", String.valueOf(locationResult));
@@ -131,6 +140,25 @@ public class AppService extends Service {
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
     }
 
+    private void showEnableGpsDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(AppService.this);
+        builder.setMessage("GPS is disabled. Please enable GPS to continue.")
+                .setCancelable(false)
+                .setPositiveButton("Enable GPS", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        AppService.this.startActivity(intent);
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
 
 }
 
