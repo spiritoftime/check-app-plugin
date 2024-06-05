@@ -1,4 +1,3 @@
-
 import 'package:checkapp_plugin/checkapp_plugin_constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -56,5 +55,15 @@ class MethodChannelCheckappPlugin extends CheckappPluginPlatform {
         .invokeListMethod<Map<dynamic, dynamic>>(GET_LAUNCHABLE_APPLICATIONS);
 
     return launchableApplications ?? [];
+  }
+
+  Future<void> requestLocationPermission() async {
+    await methodChannel.invokeMethod<void>(REQUEST_LOCATION_PERMISSION);
+  }
+
+  Future<bool> checkLocationPermission() async {
+    bool? isPermissionEnabled =
+        await methodChannel.invokeMethod<bool>(DETECT_LOCATION_PERMISSION);
+    return isPermissionEnabled ?? false;
   }
 }

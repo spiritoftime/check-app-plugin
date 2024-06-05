@@ -1,35 +1,43 @@
 package com.doomscroll.checkapp_plugin;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ComponentInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
+import android.location.Location;
 import android.os.IBinder;
+import android.os.Looper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
-import java.util.ArrayList;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.Priority;
+import com.google.android.gms.location.LocationRequest;
+
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 public class AppService extends Service {
     final static String REDIRECT_HOME = "REDIRECT_HOME";
     final static String NOTIFICATION_CHANNEL = "NOTIFICATION_CHANNEL";
+    final static String REQUEST_LOCATION = "REQUEST_LOCATION";
+    final static String STOP_REQUEST_LOCATION = "STOP_REQUEST_LOCATION";
 
     final static String START = "START";
     final static String STOP = "STOP";
-     static final String GET_LAUNCHABLE_APPLICATIONS = "GET_LAUNCHABLE_APPLICATIONS";
-
+    static final String GET_LAUNCHABLE_APPLICATIONS = "GET_LAUNCHABLE_APPLICATIONS";
+    private static FusedLocationProviderClient fusedLocationClient;
+    private LocationRequest locationRequest;
+    private LocationCallback locationCallback;
 
     @Nullable
     @Override
@@ -45,8 +53,16 @@ public class AppService extends Service {
                 break;
             case START:
                 start();
+                break;
             case STOP:
                 stopSelf();
+                break;
+            case STOP_REQUEST_LOCATION:
+                fusedLocationClient.removeLocationUpdates(locationCallback);
+                break;
+            case REQUEST_LOCATION:
+                startLocationUpdates();
+                break;
 
 
         }
@@ -72,6 +88,7 @@ public class AppService extends Service {
     private void start() {
         Notification notification = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL).build();
         startForeground(1, notification);
+
     }
 //        code for starting service
 
@@ -84,29 +101,36 @@ public class AppService extends Service {
             Intent serviceIntent = new Intent(context, AppService.class);
             serviceIntent.setAction(START);
             context.startService(serviceIntent);
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
+
         }
     }
 
+    @SuppressLint({"MissingPermission", "NewApi"})
+    private void startLocationUpdates() {
+        locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000)
+                .setMinUpdateIntervalMillis(5000)
+                .build();
+//need to request for gps to be enabled
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                Log.d("hi", String.valueOf(locationResult));
+                if (locationResult == null) {
+                    return;
+                }
+                Location lastLocation = locationResult.getLastLocation();
+                if (lastLocation != null) {
+                    double lat = lastLocation.getLatitude();
+                    double lng = lastLocation.getLongitude();
+                    Log.d("coords", "lat: " + lat + " lng: " + lng);
+                }
+            }
+        };
 
-
-    public static class AppInfo {
-        String packageName;
-        String iconBase64String;
-        String appName;
-
-        AppInfo(String packageName, String iconBase64String,String appName) {
-            this.packageName = packageName;
-            this.iconBase64String = iconBase64String;
-            this.appName = appName;
-        }
-        public Map<String, Object> toMap() {
-            Map<String, Object> map = new HashMap<>();
-            map.put("packageName", packageName);
-            map.put("iconBase64String", iconBase64String);
-            map.put("appName",appName);
-            return map;
-        }
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
     }
+
 
 }
 

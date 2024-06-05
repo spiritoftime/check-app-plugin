@@ -45,6 +45,18 @@ class MockCheckappPluginPlatform
     // TODO: implement getLaunchableApplications
     throw UnimplementedError();
   }
+  
+  @override
+  Future<bool> checkLocationPermission() {
+    // TODO: implement checkLocationPermission
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> requestLocationPermission() {
+    // TODO: implement requestLocationPermission
+    throw UnimplementedError();
+  }
 }
 
 void main() {

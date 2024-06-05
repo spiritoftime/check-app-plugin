@@ -1,6 +1,7 @@
 package com.doomscroll.checkapp_plugin;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AppOpsManager;
 import android.content.Context;
@@ -12,11 +13,15 @@ import android.os.Build;
 import android.provider.Settings;
 import android.util.Log;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Locale;
 
 public class Permissions {
@@ -24,6 +29,7 @@ public class Permissions {
     private static final int NOTIFICATION_PERMISSION_REQUEST_CODE = 1002;
     public static final int OP_BACKGROUND_START_ACTIVITY = 10021;
 
+    private static final int LOCATION_PERMISSION_CODE = 1003;
 
     private static int checkUsagePermission(Context context) {
         PackageManager packageManager = context.getPackageManager();
@@ -108,5 +114,30 @@ public class Permissions {
                 activity.startActivity(intent);
             }
         }
+    }
+
+    public static boolean checkLocationPermission(Context context, Activity activity) {
+
+        return ActivityCompat.checkSelfPermission(
+                context,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                context,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED;
+
+
+    }
+    @SuppressLint("InlinedApi")
+    public static void requestLocationPermission(Context context, Activity activity){
+
+
+        if(!checkLocationPermission(context,activity)){
+            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + activity.getPackageName()));
+            activity.startActivityForResult(intent, LOCATION_PERMISSION_CODE);
+
+
+        }
+
     }
 }
