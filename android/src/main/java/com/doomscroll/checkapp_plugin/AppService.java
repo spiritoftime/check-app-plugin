@@ -1,35 +1,31 @@
 package com.doomscroll.checkapp_plugin;
 
-import android.annotation.SuppressLint;
+import static com.doomscroll.checkapp_plugin.LocationChecker.startLocationUpdates;
+
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
+
 import android.app.Service;
 import android.content.Context;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationManager;
-import android.net.Uri;
+
+
 import android.os.IBinder;
-import android.os.Looper;
-import android.provider.Settings;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
+
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationResult;
+
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
 import com.google.android.gms.location.LocationRequest;
 
-import android.R;
 
 import java.util.Objects;
 
@@ -44,9 +40,11 @@ public class AppService extends Service {
     final static String START = "START";
     final static String STOP = "STOP";
     private static FusedLocationProviderClient fusedLocationClient;
-    private LocationRequest locationRequest;
+    private final LocationRequest locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000)
+            .setMinUpdateIntervalMillis(5000)
+            .build();
+    ;
     private LocationCallback locationCallback;
-    private static int ENABLE_GPS_NOTIFICATION_CODE = 20000;
 
     @Nullable
     @Override
@@ -71,7 +69,7 @@ public class AppService extends Service {
                 break;
             case REQUEST_LOCATION:
                 try {
-                    startLocationUpdates();
+                    startLocationUpdates(this,NOTIFICATION_CHANNEL,fusedLocationClient,locationRequest);
                 } catch (PackageManager.NameNotFoundException e) {
                     throw new RuntimeException(e);
                 }
@@ -99,7 +97,7 @@ public class AppService extends Service {
     }
 
     private void start() {
-        Notification notification = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL).setAutoCancel(true).build();
+        Notification notification = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL).setContentText("This service runs in the foreground to check your location/wifi/app usage according to your enabled app blocking schedule").build();
         startForeground(1, notification);
 
     }
@@ -117,58 +115,6 @@ public class AppService extends Service {
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
 
         }
-    }
-
-    private void sendLocationAccessNotification() {
-        int requestID = (int) System.currentTimeMillis();
-        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, requestID, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL).setSmallIcon(R.drawable.ic_menu_mylocation)
-                .setContentTitle("Enable Location Access")
-                .setContentIntent(pendingIntent)
-                .setContentText("Doomscroll needs location access, since you enabled a location appblocking schedule. Please enable it in settings.")
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setAutoCancel(true);
-
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        notificationManager.notify(1001, builder.build());
-    }
-
-
-    @SuppressLint({"MissingPermission", "NewApi"})
-    private void startLocationUpdates() throws PackageManager.NameNotFoundException {
-        locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000)
-                .setMinUpdateIntervalMillis(5000)
-                .build();
-        // need to request for gps to be enabled
-        LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        final boolean isGPSEnabled = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        if (!isGPSEnabled) {
-            sendLocationAccessNotification();
-        }
-        locationCallback = new LocationCallback() {
-
-
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-                Log.d("hi", String.valueOf(locationResult));
-                if (locationResult == null) {
-                    return;
-                }
-                Location lastLocation = locationResult.getLastLocation();
-                if (lastLocation != null) {
-                    double lat = lastLocation.getLatitude();
-                    double lng = lastLocation.getLongitude();
-                    Log.d("coords", "lat: " + lat + " lng: " + lng);
-                }
-            }
-        };
-
-        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
     }
 
 
