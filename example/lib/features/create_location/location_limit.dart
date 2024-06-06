@@ -15,8 +15,7 @@ class _LocationLimitState extends State<LocationLimit> {
   final _checkAppPlugin = CheckappPlugin();
   late bool isPermissionEnabled;
   Future<bool> isLocationPermissionEnabled() async {
-    isPermissionEnabled =
-        await _checkAppPlugin.checkLocationPermission() ?? false;
+    isPermissionEnabled = await _checkAppPlugin.checkLocationPermission();
     return isPermissionEnabled;
   }
 
@@ -35,7 +34,7 @@ class _LocationLimitState extends State<LocationLimit> {
               } else {
                 return Column(
                   children: [
-                    Text(snapshot.hasData
+                    Text(snapshot.hasData && snapshot.data == true
                         ? 'Location permission is enabled'
                         : 'Location permission is not enabled'),
                     ElevatedButton(

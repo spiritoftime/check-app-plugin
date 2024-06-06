@@ -1,28 +1,33 @@
 import 'package:checkapp_plugin_example/shared/widgets/hover_ink_well.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 
 class BlockingCondition extends StatelessWidget {
   final String text;
   final String description;
+  final Function(BuildContext context, Object extra) onTap;
   final Icon icon;
-  final String route;
-  final Map<String,dynamic> extra;
+  final Map<String, dynamic> extra;
   const BlockingCondition(
       {super.key,
       required this.text,
       required this.description,
       required this.icon,
-      required this.route, required this.extra});
-
+      required this.extra,
+      required this.onTap});
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         const Gap(12),
         HoverInkWell(
-          onTap: () => context.pushNamed(route,extra: extra),
+          onTap: () async {
+            if (text == 'location') {
+              await onTap(context, extra);
+            } else {
+              onTap(context,extra);
+            }
+          },
           child: Row(
             children: [
               Container(

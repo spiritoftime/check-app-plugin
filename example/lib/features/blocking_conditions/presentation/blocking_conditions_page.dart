@@ -50,11 +50,12 @@ class BlockingConditionsPage extends StatelessWidget {
                 child: ListView.builder(
                   itemBuilder: (context, index) {
                     return BlockingCondition(
-                        text: conditions[index]['text'],
-                        description: conditions[index]['description'],
-                        icon: conditions[index]['icon'],
-                        extra: extra,
-                        route: conditions[index]['route']);
+                      text: conditions[index]['text'],
+                      description: conditions[index]['description'],
+                      icon: conditions[index]['icon'],
+                      extra: extra,
+                      onTap: conditions[index]['onTap'],
+                    );
                   },
                   itemCount: conditions.length,
                 ),

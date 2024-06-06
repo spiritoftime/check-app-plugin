@@ -63,7 +63,7 @@ class MethodChannelCheckappPlugin extends CheckappPluginPlatform {
 
   Future<bool> checkLocationPermission() async {
     bool? isPermissionEnabled =
-        await methodChannel.invokeMethod<bool>(DETECT_LOCATION_PERMISSION);
+        await methodChannel.invokeMethod<bool>(CHECK_LOCATION_PERMISSION);
     return isPermissionEnabled ?? false;
   }
 }
