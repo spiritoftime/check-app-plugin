@@ -6,11 +6,9 @@ import 'package:flutter/material.dart';
 
 class WebsiteScreen extends StatefulWidget {
   final BlockCubit blockCubit;
-  final Function(bool isDisabled) onAddCheckBoxDisabledChanged;
   const WebsiteScreen({
     super.key,
     required this.blockCubit,
-    required this.onAddCheckBoxDisabledChanged,
   });
 
   @override

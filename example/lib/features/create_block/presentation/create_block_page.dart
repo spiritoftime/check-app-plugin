@@ -31,8 +31,7 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
   }
 
   bool _isAppScreen = true;
-  bool isAddCheckboxDisabled =
-      false; // disable add button for website, if the user typed something in website, but did not type in a valid website.
+
   bool _showSearchIcon = true;
   final _formKey = GlobalKey<FormBuilderState>();
 
@@ -53,12 +52,6 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
         });
       }
     }
-  }
-
-  void _onAddCheckBoxDisabledChanged(bool isDisabled) {
-    setState(() {
-      isAddCheckboxDisabled = isDisabled;
-    });
   }
 
   void _onSearchApplicationTermChanged(String? text) {
@@ -194,13 +187,10 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
                                               _searchApplicationTerm),
                                       WebsiteScreen(
                                         blockCubit: blockCubit,
-                                        onAddCheckBoxDisabledChanged:
-                                            _onAddCheckBoxDisabledChanged,
                                       ),
                                       KeywordScreen(
-                                          blockCubit: blockCubit,
-                                          onAddCheckBoxDisabledChanged:
-                                              _onAddCheckBoxDisabledChanged)
+                                        blockCubit: blockCubit,
+                                      )
                                     ],
                                   ),
                                 ),

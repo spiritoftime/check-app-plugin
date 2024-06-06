@@ -6,11 +6,9 @@ import 'package:flutter/material.dart';
 
 class KeywordScreen extends StatefulWidget {
   final BlockCubit blockCubit;
-  final Function(bool isDisabled) onAddCheckBoxDisabledChanged;
   const KeywordScreen({
     super.key,
     required this.blockCubit,
-    required this.onAddCheckBoxDisabledChanged,
   });
 
   @override
