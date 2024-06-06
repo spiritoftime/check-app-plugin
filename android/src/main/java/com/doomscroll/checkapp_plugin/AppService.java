@@ -1,16 +1,18 @@
 package com.doomscroll.checkapp_plugin;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
-import android.content.DialogInterface;
+
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.IBinder;
 import android.os.Looper;
 import android.provider.Settings;
@@ -18,6 +20,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -26,22 +29,24 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
 import com.google.android.gms.location.LocationRequest;
 
-import java.util.HashMap;
-import java.util.Map;
+import android.R;
+
 import java.util.Objects;
 
 public class AppService extends Service {
     final static String REDIRECT_HOME = "REDIRECT_HOME";
     final static String NOTIFICATION_CHANNEL = "NOTIFICATION_CHANNEL";
+
+
     final static String REQUEST_LOCATION = "REQUEST_LOCATION";
     final static String STOP_REQUEST_LOCATION = "STOP_REQUEST_LOCATION";
 
     final static String START = "START";
     final static String STOP = "STOP";
-    static final String GET_LAUNCHABLE_APPLICATIONS = "GET_LAUNCHABLE_APPLICATIONS";
     private static FusedLocationProviderClient fusedLocationClient;
     private LocationRequest locationRequest;
     private LocationCallback locationCallback;
+    private static int ENABLE_GPS_NOTIFICATION_CODE = 20000;
 
     @Nullable
     @Override
@@ -65,7 +70,11 @@ public class AppService extends Service {
                 fusedLocationClient.removeLocationUpdates(locationCallback);
                 break;
             case REQUEST_LOCATION:
-                startLocationUpdates();
+                try {
+                    startLocationUpdates();
+                } catch (PackageManager.NameNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
                 break;
 
 
@@ -90,7 +99,7 @@ public class AppService extends Service {
     }
 
     private void start() {
-        Notification notification = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL).build();
+        Notification notification = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL).setAutoCancel(true).build();
         startForeground(1, notification);
 
     }
@@ -110,16 +119,38 @@ public class AppService extends Service {
         }
     }
 
+    private void sendLocationAccessNotification() {
+        int requestID = (int) System.currentTimeMillis();
+        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, requestID, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL).setSmallIcon(R.drawable.ic_menu_mylocation)
+                .setContentTitle("Enable Location Access")
+                .setContentIntent(pendingIntent)
+                .setContentText("Doomscroll needs location access, since you enabled a location appblocking schedule. Please enable it in settings.")
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setAutoCancel(true);
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        notificationManager.notify(1001, builder.build());
+    }
+
+
     @SuppressLint({"MissingPermission", "NewApi"})
-    private void startLocationUpdates() {
+    private void startLocationUpdates() throws PackageManager.NameNotFoundException {
         locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000)
                 .setMinUpdateIntervalMillis(5000)
                 .build();
         // need to request for gps to be enabled
+        LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        final boolean isGPSEnabled = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        if (!isGPSEnabled) {
+            sendLocationAccessNotification();
+        }
         locationCallback = new LocationCallback() {
-            LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            boolean isGPSEnabled = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-
 
 
             @Override
@@ -140,25 +171,6 @@ public class AppService extends Service {
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
     }
 
-    private void showEnableGpsDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(AppService.this);
-        builder.setMessage("GPS is disabled. Please enable GPS to continue.")
-                .setCancelable(false)
-                .setPositiveButton("Enable GPS", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        AppService.this.startActivity(intent);
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
 
 }
 
