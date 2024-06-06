@@ -5,6 +5,7 @@ import 'package:checkapp_plugin_example/features/create_block/cubit/cubit/block_
 import 'package:checkapp_plugin_example/features/create_block/presentation/create_block_page.dart';
 import 'package:checkapp_plugin_example/features/create_launch_count/launch_limit.dart';
 import 'package:checkapp_plugin_example/features/create_location/location_limit.dart';
+import 'package:checkapp_plugin_example/features/create_location/set_location_page.dart';
 import 'package:checkapp_plugin_example/features/create_schedule/create_schedule_page.dart';
 import 'package:checkapp_plugin_example/features/create_time/cubit/cubit/time_cubit.dart';
 import 'package:checkapp_plugin_example/features/create_time/time_limit_page.dart';
@@ -25,12 +26,21 @@ final GoRoute _createScheduleRouter = GoRoute(
   },
   routes: <RouteBase>[
     GoRoute(
+      name: 'create-location-permission',
+      path: 'location-permission',
+      builder: (BuildContext context, GoRouterState state) {
+        final extra = state.extra as Map<String, dynamic>;
+
+        return LocationLimit(extra: extra);
+      },
+    ),    
+    GoRoute(
       name: 'create-location',
       path: 'location',
       builder: (BuildContext context, GoRouterState state) {
         final extra = state.extra as Map<String, dynamic>;
 
-        return LocationLimit(extra: extra);
+        return SetLocationPage(extra: extra);
       },
     ),
     GoRoute(
