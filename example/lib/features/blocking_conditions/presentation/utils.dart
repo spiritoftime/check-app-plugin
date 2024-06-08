@@ -38,22 +38,27 @@ final List<Map<String, dynamic>> conditions = [
         _checkappPlugin.checkAboveAPI33(),
         _checkappPlugin.checkLocationPermission()
       ]);
-    
-      if (!wifiPermissionsEnabled[0] &&
-          wifiPermissionsEnabled[1] &&
-          context.mounted) {
-        context.pushNamed('create-wifi-permission',
-            extra: {'wifiPermissionsEnabled': wifiPermissionsEnabled});
-      } else if (wifiPermissionsEnabled[0] &&
-          wifiPermissionsEnabled[1] &&
-          !wifiPermissionsEnabled[2] &&
-          context.mounted) {
-        context.pushNamed('create-wifi-permission',
-            extra: {'wifiPermissionsEnabled': wifiPermissionsEnabled});
-      } else if (context.mounted) {
-        context.pushNamed('create-wifi', extra: extra);
+      final bool isWifiEnabled = wifiPermissionsEnabled[0];
+      final bool isAboveAPI33 = wifiPermissionsEnabled[1];
+      final bool isLocationEnabled = wifiPermissionsEnabled[2];
+      if (!context.mounted) return;
+      if (isAboveAPI33) {
+        if (!isWifiEnabled || !isLocationEnabled) {
+          context.pushNamed('create-wifi-permission',
+              extra: {'wifiPermissionsEnabled': wifiPermissionsEnabled});
+          return;
+        }
       }
-    },
+      if (!isAboveAPI33) {
+        if (!isLocationEnabled) {
+          context.pushNamed('create-wifi-permission',
+              extra: {'wifiPermissionsEnabled': wifiPermissionsEnabled});
+          return;
+        }
+      }
+
+      context.pushNamed('create-wifi', extra: extra);
+    }
   },
   {
     'text': 'Launch Count',

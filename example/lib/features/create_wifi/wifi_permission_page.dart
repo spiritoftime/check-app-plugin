@@ -12,7 +12,7 @@ class WifiPermissionPage extends StatelessWidget {
   final Map<String, dynamic> extra;
 
   const WifiPermissionPage({super.key, required this.extra});
-  List<bool> get wifiPermissions => extra['wifiPermissions'];
+  List<bool> get wifiPermissions => extra['wifiPermissionsEnabled'];
 
   // List<bool> wifiPermissionsEnabled =wifiPermissions?? [];
 
