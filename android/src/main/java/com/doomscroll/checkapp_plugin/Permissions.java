@@ -118,17 +118,18 @@ public class Permissions {
     }
 
     public static boolean checkLocationPermission(Context context, Activity activity) {
-
-        return
-//                ActivityCompat.checkSelfPermission(
-//                context,
-//                android.Manifest.permission.ACCESS_COARSE_LOCATION
-//        ) == PackageManager.PERMISSION_GRANTED
-//                &&
-                ActivityCompat.checkSelfPermission(
+        boolean isPermissionEnabled =  ActivityCompat.checkSelfPermission(
                 context,
-                android.Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED;
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+                &&
+                ActivityCompat.checkSelfPermission(
+                        context,
+                        android.Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED;
+
+        return isPermissionEnabled;
+
 
 
     }
@@ -140,7 +141,8 @@ public class Permissions {
         if (!checkLocationPermission(context, activity)) {
             Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + activity.getPackageName()));
             activity.startActivityForResult(intent, LOCATION_PERMISSION_CODE);
-
+//            ActivityCompat.requestPermissions(activity,
+//                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
 
         }
 
@@ -149,7 +151,6 @@ public class Permissions {
     //    only for api 33 and above
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     public static boolean checkWifiPermission(Context context, Activity activity) {
-
         return ActivityCompat.checkSelfPermission(
                 context,
                 Manifest.permission.NEARBY_WIFI_DEVICES
@@ -165,8 +166,9 @@ public class Permissions {
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     public static void requestWifiPermission(Context context, Activity activity) {
         if (!checkWifiPermission(context, activity)) {
-            Intent intent = new Intent(Manifest.permission.NEARBY_WIFI_DEVICES, Uri.parse("package:" + activity.getPackageName()));
-            activity.startActivityForResult(intent, LOCATION_PERMISSION_CODE);
+            String[] permissions = {Manifest.permission.NEARBY_WIFI_DEVICES};
+
+            ActivityCompat.requestPermissions(activity, permissions, 123456);
         }
 
     }

@@ -41,9 +41,11 @@ final List<Map<String, dynamic>> conditions = [
       final bool isWifiEnabled = wifiPermissionsEnabled[0];
       final bool isAboveAPI33 = wifiPermissionsEnabled[1];
       final bool isLocationEnabled = wifiPermissionsEnabled[2];
+      print(wifiPermissionsEnabled);
       if (!context.mounted) return;
       if (isAboveAPI33) {
-        if (!isWifiEnabled || !isLocationEnabled) {
+        // !isWifiEnabled not needed for our use case https://developer.android.com/develop/connectivity/wifi/wifi-permissions
+        if ( !isLocationEnabled) {
           context.pushNamed('create-wifi-permission',
               extra: {'wifiPermissionsEnabled': wifiPermissionsEnabled});
           return;

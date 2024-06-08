@@ -1,6 +1,7 @@
 package com.doomscroll.checkapp_plugin;
 
 import static com.doomscroll.checkapp_plugin.LocationChecker.startLocationUpdates;
+import static com.doomscroll.checkapp_plugin.WifiScan.initializeWifiScan;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -10,9 +11,11 @@ import android.app.Service;
 import android.content.Context;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 
 
+import android.net.wifi.WifiManager;
 import android.os.IBinder;
 
 import androidx.annotation.Nullable;
@@ -69,7 +72,7 @@ public class AppService extends Service {
                 break;
             case REQUEST_LOCATION:
                 try {
-                    startLocationUpdates(this,NOTIFICATION_CHANNEL,fusedLocationClient,locationRequest);
+                    startLocationUpdates(this, NOTIFICATION_CHANNEL, fusedLocationClient, locationRequest);
                 } catch (PackageManager.NameNotFoundException e) {
                     throw new RuntimeException(e);
                 }
@@ -113,7 +116,7 @@ public class AppService extends Service {
             serviceIntent.setAction(START);
             context.startService(serviceIntent);
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
-
+            initializeWifiScan(context);
         }
     }
 
