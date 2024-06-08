@@ -8,7 +8,6 @@ class ExistingCondition extends StatelessWidget {
   const ExistingCondition({
     super.key,
     required this.extra,
-    required this.timeCubit,
     required this.conditionType,
     required this.onTap,
     required this.text1,
@@ -16,7 +15,6 @@ class ExistingCondition extends StatelessWidget {
   });
   final String conditionType;
   final Map<String, dynamic> extra;
-  final TimeCubit timeCubit;
   final Function() onTap;
   final String text1;
   final String text2;

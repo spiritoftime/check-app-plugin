@@ -24,6 +24,6 @@ class Block {
     );
   }
 
-  factory Block.fromJson(Map<dynamic, dynamic> json) => _$BlockFromJson(json);
-  Map<dynamic, dynamic> toJson() => _$BlockToJson(this);
+  factory Block.fromJson(Map<String, dynamic> json) => _$BlockFromJson(json);
+  Map<String, dynamic> toJson() => _$BlockToJson(this);
 }

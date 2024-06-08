@@ -51,7 +51,7 @@ abstract class CheckappPluginPlatform extends PlatformInterface {
         'requestBackgroundPermission() has not been implemented.');
   }
 
-  Future<List<dynamic>> getLaunchableApplications() {
+  Future<List<Map<String, dynamic>>> getLaunchableApplications() {
     throw UnimplementedError(
         'getLaunchableApplications() has not been implemented.');
   }
@@ -63,5 +63,6 @@ abstract class CheckappPluginPlatform extends PlatformInterface {
 
   Future<bool> checkLocationPermission() {
     throw UnimplementedError(
-        'checkLocationPermission() has not been implemented.');  }
+        'checkLocationPermission() has not been implemented.');
+  }
 }

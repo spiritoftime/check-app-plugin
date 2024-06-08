@@ -6,10 +6,10 @@ part of 'day.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Day _$DayFromJson(Map<dynamic, dynamic> json) => Day(
-      day: json['name'] as String,
+Day _$DayFromJson(Map<String, dynamic> json) => Day(
+      day: json['day'] as String,
     );
 
-Map<dynamic, dynamic> _$DayToJson(Day instance) => <dynamic, dynamic>{
-      'name': instance.day,
+Map<String, dynamic> _$DayToJson(Day instance) => <String, dynamic>{
+      'day': instance.day,
     };

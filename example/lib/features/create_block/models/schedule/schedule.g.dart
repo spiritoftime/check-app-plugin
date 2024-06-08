@@ -6,12 +6,12 @@ part of 'schedule.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Schedule _$ScheduleFromJson(Map<dynamic, dynamic> json) => Schedule(
-      block: Block.fromJson(json['toBlock'] as Map<String, dynamic>),
+Schedule _$ScheduleFromJson(Map<String, dynamic> json) => Schedule(
+      block: Block.fromJson(json['block'] as Map<String, dynamic>),
       timing: Time.fromJson(json['timing'] as Map<String, dynamic>),
     );
 
-Map<dynamic, dynamic> _$ScheduleToJson(Schedule instance) => <dynamic, dynamic>{
-      'toBlock': instance.block,
-      'timing': instance.timing,
+Map<String, dynamic> _$ScheduleToJson(Schedule instance) => <String, dynamic>{
+      'block': instance.block.toJson(),
+      'timing': instance.timing.toJson(),
     };

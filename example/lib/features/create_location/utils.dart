@@ -30,4 +30,12 @@ List<Widget> instructionList = [
       instruction: Text("Click enable all the time"),
     ),
   ),
+  Container(
+    margin: const EdgeInsets.only(bottom: 8.0),
+    child: const Instruction(
+      instructionNumber: '5',
+      instruction: Text(
+          "Note: Should you enable a schedule with location, you will have to enable GPS constantly"),
+    ),
+  ),
 ];

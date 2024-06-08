@@ -41,7 +41,7 @@ class MockCheckappPluginPlatform
   }
 
   @override
-  Future<List<dynamic>> getLaunchableApplications() {
+  Future<List<Map<String,dynamic>>> getLaunchableApplications() {
     // TODO: implement getLaunchableApplications
     throw UnimplementedError();
   }

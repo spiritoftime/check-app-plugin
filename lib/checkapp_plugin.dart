@@ -25,7 +25,7 @@ class CheckappPlugin {
     return CheckappPluginPlatform.instance.requestBackgroundPermission();
   }
 
-  Future<List<dynamic>> getLaunchableApplications() {
+  Future<List<Map<String,dynamic>>> getLaunchableApplications() {
     return CheckappPluginPlatform.instance.getLaunchableApplications();
   }
 

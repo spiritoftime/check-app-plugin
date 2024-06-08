@@ -4,8 +4,8 @@ import 'package:checkapp_plugin_example/features/create_block/bloc/app/app_bloc.
 import 'package:checkapp_plugin_example/features/create_block/cubit/cubit/block_cubit.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/create_block_page.dart';
 import 'package:checkapp_plugin_example/features/create_launch_count/launch_limit.dart';
-import 'package:checkapp_plugin_example/features/create_location/location_permission.dart';
-import 'package:checkapp_plugin_example/features/create_location/set_location_page.dart';
+import 'package:checkapp_plugin_example/features/create_location/widgets/location_permission.dart';
+import 'package:checkapp_plugin_example/features/create_location/widgets/set_location_page.dart';
 import 'package:checkapp_plugin_example/features/create_schedule/create_schedule_page.dart';
 import 'package:checkapp_plugin_example/features/create_time/cubit/cubit/time_cubit.dart';
 import 'package:checkapp_plugin_example/features/create_time/time_limit_page.dart';

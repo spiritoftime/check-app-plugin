@@ -44,6 +44,6 @@ class Day {
     required this.day,
   });
 
-  factory Day.fromJson(Map<dynamic, dynamic> json) => _$DayFromJson(json);
-  Map<dynamic, dynamic> toJson() => _$DayToJson(this);
+  factory Day.fromJson(Map<String, dynamic> json) => _$DayFromJson(json);
+  Map<String, dynamic> toJson() => _$DayToJson(this);
 }

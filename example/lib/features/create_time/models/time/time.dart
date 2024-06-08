@@ -22,6 +22,6 @@ class Time {
     );
   }
 
-  factory Time.fromJson(Map<dynamic, dynamic> json) => _$TimeFromJson(json);
-  Map<dynamic, dynamic> toJson() => _$TimeToJson(this);
+  factory Time.fromJson(Map<String, dynamic> json) => _$TimeFromJson(json);
+  Map<String, dynamic> toJson() => _$TimeToJson(this);
 }

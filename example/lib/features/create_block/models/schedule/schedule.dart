@@ -6,9 +6,7 @@ part 'schedule.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class Schedule {
-  @JsonKey(name: 'toBlock')
   final Block block;
-  @JsonKey(name: 'timing')
   final Time timing;
   Schedule({
     required this.block,
@@ -22,9 +20,9 @@ class Schedule {
     return Schedule(block: block ?? this.block, timing: timing ?? this.timing);
   }
 
-  factory Schedule.fromJson(Map<dynamic, dynamic> json) =>
+  factory Schedule.fromJson(Map<String, dynamic> json) =>
       _$ScheduleFromJson(json);
-  Map<dynamic, dynamic> toJson() => _$ScheduleToJson(this);
+  Map<String, dynamic> toJson() => _$ScheduleToJson(this);
 }
 
 

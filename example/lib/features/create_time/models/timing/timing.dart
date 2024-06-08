@@ -14,6 +14,6 @@ class Timing extends Equatable {
   });
   @override
   List<Object?> get props => [start, end];
-  factory Timing.fromJson(Map<dynamic, dynamic> json) => _$TimingFromJson(json);
-  Map<dynamic, dynamic> toJson() => _$TimingToJson(this);
+  factory Timing.fromJson(Map<String, dynamic> json) => _$TimingFromJson(json);
+  Map<String, dynamic> toJson() => _$TimingToJson(this);
 }

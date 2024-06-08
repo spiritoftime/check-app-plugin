@@ -3,6 +3,7 @@ import 'package:checkapp_plugin_example/features/create_block/models/app/app.dar
 import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/app_row.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/keyword_row.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/website_row.dart';
+import 'package:checkapp_plugin_example/features/create_location/cubit/location_cubit.dart';
 import 'package:checkapp_plugin_example/features/create_schedule/widgets/existing_blocks.dart';
 import 'package:checkapp_plugin_example/features/create_schedule/widgets/existing_condition.dart';
 import 'package:checkapp_plugin_example/features/create_schedule/widgets/schedule_name.dart';
@@ -21,7 +22,8 @@ class CreateSchedulePage extends StatelessWidget {
 
   CreateSchedulePage({super.key, required this.extra});
   BlockCubit get blockCubit => extra['blockCubit'];
-  TimeCubit get timeCubit => extra['timeCubit'];
+  TimeCubit get timeCubit => extra['timeCubit'] ?? TimeCubit();
+  LocationCubit get locationCubit => extra['locationCubit'] ?? LocationCubit();
   List<Widget> appWidgets() {
     if (blockCubit.state.apps.isNotEmpty) {
       return blockCubit.state.apps
@@ -157,13 +159,23 @@ class CreateSchedulePage extends StatelessWidget {
                                         .map((d) => d.day)
                                         .join(', '),
                                     extra: extra,
-                                    timeCubit: timeCubit,
                                     onTap: () => context
                                         .pushNamed('create-time', extra: extra),
                                     text2: timeCubit.state.timings
                                         .map((e) => '${e.start} to ${e.end}')
                                         .join(', '),
                                   )
+                                : Container(),
+                                const Gap(16),
+                            locationCubit.state.location.isNotEmpty
+                                ? ExistingCondition(
+                                    extra: extra,
+                                    conditionType: 'Location',
+                                    onTap: () => context.pushNamed(
+                                        'create-location',
+                                        extra: extra),
+                                    text1: locationCubit.state.location,
+                                    text2: '')
                                 : Container()
                           ],
                         ),
@@ -244,4 +256,3 @@ class CreateSchedulePage extends StatelessWidget {
     );
   }
 }
-

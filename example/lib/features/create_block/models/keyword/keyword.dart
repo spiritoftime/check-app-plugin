@@ -10,6 +10,6 @@ class Keyword {
     required this.keyword,
   });
 
-  factory Keyword.fromJson(Map<dynamic, dynamic> json) => _$KeywordFromJson(json);
-  Map<dynamic, dynamic> toJson() => _$KeywordToJson(this);
+  factory Keyword.fromJson(Map<String, dynamic> json) => _$KeywordFromJson(json);
+  Map<String, dynamic> toJson() => _$KeywordToJson(this);
 }

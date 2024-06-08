@@ -50,11 +50,16 @@ class MethodChannelCheckappPlugin extends CheckappPluginPlatform {
 
 // TODO: to add isolate as it is taking too long
   @override
-  Future<List<dynamic>> getLaunchableApplications() async {
+  Future<List<Map<String, dynamic>>> getLaunchableApplications() async {
     var launchableApplications = await methodChannel
         .invokeListMethod<Map<dynamic, dynamic>>(GET_LAUNCHABLE_APPLICATIONS);
 
-    return launchableApplications ?? [];
+    final castedData = launchableApplications
+            ?.map((item) => Map<String, dynamic>.from(item))
+            .toList() ??
+        <Map<String, dynamic>>[];
+
+    return castedData;
   }
 
   Future<void> requestLocationPermission() async {
