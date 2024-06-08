@@ -12,6 +12,7 @@ import 'package:checkapp_plugin_example/features/create_time/cubit/cubit/time_cu
 import 'package:checkapp_plugin_example/features/create_time/time_limit_page.dart';
 import 'package:checkapp_plugin_example/features/create_usage_limit/usage_limit.dart';
 import 'package:checkapp_plugin_example/features/create_wifi/wifi_limit.dart';
+import 'package:checkapp_plugin_example/features/create_wifi/wifi_permission_page.dart';
 import 'package:checkapp_plugin_example/features/details/presentation/details_screen.dart';
 import 'package:checkapp_plugin_example/features/home/presentation/home_page.dart';
 import 'package:flutter/material.dart';
@@ -77,6 +78,15 @@ final GoRoute _createScheduleRouter = GoRoute(
         final extra = state.extra as Map<String, dynamic>;
 
         return WifiLimit(extra: extra);
+      },
+    ),
+        GoRoute(
+      name: 'create-wifi-permission',
+      path: 'wifi-permission',
+      builder: (BuildContext context, GoRouterState state) {
+        final extra = state.extra as Map<String, dynamic>;
+
+        return  WifiPermissionPage(extra: extra,);
       },
     ),
     GoRoute(

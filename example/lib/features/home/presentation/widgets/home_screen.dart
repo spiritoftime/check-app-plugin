@@ -119,7 +119,6 @@ class HomeScreen extends StatelessWidget {
                                     checkappPlugin
                                         .checkNotificationPermission(),
                                   ]);
-                                  print(arePermissionsEnabled);
                                   if (arePermissionsEnabled.contains(false) &&
                                       context.mounted) {
                                     context.goNamed('create-block-permission',

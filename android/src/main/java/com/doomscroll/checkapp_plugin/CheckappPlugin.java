@@ -9,12 +9,16 @@ import static com.doomscroll.checkapp_plugin.Permissions.checkLocationPermission
 import static com.doomscroll.checkapp_plugin.Permissions.checkNotificationPermission;
 import static com.doomscroll.checkapp_plugin.Permissions.checkOverlayPermission;
 import static com.doomscroll.checkapp_plugin.Permissions.checkUsagePermission;
+import static com.doomscroll.checkapp_plugin.Permissions.checkWifiPermission;
+import static com.doomscroll.checkapp_plugin.Permissions.isAboveApi33;
 import static com.doomscroll.checkapp_plugin.Permissions.isBackgroundStartActivityPermissionGranted;
 import static com.doomscroll.checkapp_plugin.Permissions.requestBackgroundPermissionForXiaomi;
 import static com.doomscroll.checkapp_plugin.Permissions.requestLocationPermission;
 import static com.doomscroll.checkapp_plugin.Permissions.requestNotificationPermission;
 import static com.doomscroll.checkapp_plugin.Permissions.requestOverlayPermission;
 import static com.doomscroll.checkapp_plugin.Permissions.requestUsagePermission;
+import static com.doomscroll.checkapp_plugin.Permissions.requestWifiPermission;
+import static com.doomscroll.checkapp_plugin.WifiScan.queryWifi;
 
 import android.app.Activity;
 
@@ -73,6 +77,12 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
     private static final String CHECK_USAGE_PERMISSION = "CHECK_USAGE_PERMISSION";
     private static final String CHECK_OVERLAY_PERMISSION = "CHECK_OVERLAY_PERMISSION";
 
+    private static final String CHECK_WIFI_PERMISSION = "CHECK_WIFI_PERMISSION";
+
+    private static final String REQUEST_WIFI_PERMISSION = "REQUEST_WIFI_PERMISSION";
+
+    private static final String CHECK_ABOVE_API_33 = "CHECK_ABOVE_API_33";
+    private static final String GET_WIFI = "GET_WIFI";
 
 
 
@@ -147,6 +157,24 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
                 break;
             case REQUEST_LOCATION_PERMISSION:
                 requestLocationPermission(context, activity);
+                break;
+            case CHECK_WIFI_PERMISSION:
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    result.success(checkWifiPermission(context,activity));
+                    return;
+                }
+                result.success(false);
+                break;
+            case REQUEST_WIFI_PERMISSION:
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    requestWifiPermission(context,activity);
+                }
+                break;
+            case CHECK_ABOVE_API_33:
+                result.success(isAboveApi33());
+                break;
+            case GET_WIFI:
+                queryWifi(context);
                 break;
 
             default:

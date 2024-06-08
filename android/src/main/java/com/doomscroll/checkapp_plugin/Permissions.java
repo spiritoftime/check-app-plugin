@@ -15,6 +15,7 @@ import android.util.Log;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.ChecksSdkIntAtLeast;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -118,25 +119,54 @@ public class Permissions {
 
     public static boolean checkLocationPermission(Context context, Activity activity) {
 
-        return ActivityCompat.checkSelfPermission(
-                context,
-                android.Manifest.permission.ACCESS_COARSE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+        return
+//                ActivityCompat.checkSelfPermission(
+//                context,
+//                android.Manifest.permission.ACCESS_COARSE_LOCATION
+//        ) == PackageManager.PERMISSION_GRANTED
+//                &&
+                ActivityCompat.checkSelfPermission(
                 context,
                 android.Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED;
 
 
     }
+
     @SuppressLint("InlinedApi")
-    public static void requestLocationPermission(Context context, Activity activity){
+    public static void requestLocationPermission(Context context, Activity activity) {
 
 
-        if(!checkLocationPermission(context,activity)){
+        if (!checkLocationPermission(context, activity)) {
             Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + activity.getPackageName()));
             activity.startActivityForResult(intent, LOCATION_PERMISSION_CODE);
 
 
+        }
+
+    }
+
+    //    only for api 33 and above
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
+    public static boolean checkWifiPermission(Context context, Activity activity) {
+
+        return ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.NEARBY_WIFI_DEVICES
+        ) == PackageManager.PERMISSION_GRANTED;
+
+    }
+
+    @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.TIRAMISU)
+    public static boolean isAboveApi33() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
+    public static void requestWifiPermission(Context context, Activity activity) {
+        if (!checkWifiPermission(context, activity)) {
+            Intent intent = new Intent(Manifest.permission.NEARBY_WIFI_DEVICES, Uri.parse("package:" + activity.getPackageName()));
+            activity.startActivityForResult(intent, LOCATION_PERMISSION_CODE);
         }
 
     }

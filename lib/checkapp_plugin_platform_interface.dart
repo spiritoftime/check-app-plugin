@@ -85,4 +85,21 @@ abstract class CheckappPluginPlatform extends PlatformInterface {
     throw UnimplementedError(
         'checkLocationPermission() has not been implemented.');
   }
+
+  Future<bool> checkWifiPermission() {
+    throw UnimplementedError('checkWifiPermission() has not been implemented.');
+  }
+
+  Future<void> requestWifiPermission() {
+    throw UnimplementedError(
+        'requestWifiPermission() has not been implemented.');
+  }
+
+  Future<bool> checkAboveAPI33() {
+    throw UnimplementedError('checkAboveAPI33() has not been implemented.');
+  }
+
+  Future<List<Map<String, dynamic>>> getNearbyWifi() {
+    throw UnimplementedError('getNearbyWifi() has not been implemented.');
+  }
 }

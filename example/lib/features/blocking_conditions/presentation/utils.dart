@@ -12,7 +12,6 @@ final List<Map<String, dynamic>> conditions = [
       Icons.near_me,
       size: 24,
     ),
-    'successRoute': 'create-location',
     'onTap': (BuildContext context, extra) async {
       bool isLocationEnabled = await _checkappPlugin.checkLocationPermission();
       if (!isLocationEnabled && context.mounted) {
@@ -33,8 +32,28 @@ final List<Map<String, dynamic>> conditions = [
     'text': 'Wi-Fi',
     'description': 'Block only when home!',
     'icon': const Icon(Icons.wifi, size: 24),
-    'onTap': (BuildContext context, extra) =>
-        context.pushNamed('create-wifi', extra: extra),
+    'onTap': (BuildContext context, extra) async {
+      List<bool> wifiPermissionsEnabled = await Future.wait([
+        _checkappPlugin.checkWifiPermission(),
+        _checkappPlugin.checkAboveAPI33(),
+        _checkappPlugin.checkLocationPermission()
+      ]);
+    
+      if (!wifiPermissionsEnabled[0] &&
+          wifiPermissionsEnabled[1] &&
+          context.mounted) {
+        context.pushNamed('create-wifi-permission',
+            extra: {'wifiPermissionsEnabled': wifiPermissionsEnabled});
+      } else if (wifiPermissionsEnabled[0] &&
+          wifiPermissionsEnabled[1] &&
+          !wifiPermissionsEnabled[2] &&
+          context.mounted) {
+        context.pushNamed('create-wifi-permission',
+            extra: {'wifiPermissionsEnabled': wifiPermissionsEnabled});
+      } else if (context.mounted) {
+        context.pushNamed('create-wifi', extra: extra);
+      }
+    },
   },
   {
     'text': 'Launch Count',

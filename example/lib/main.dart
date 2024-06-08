@@ -26,13 +26,16 @@ Future<void> main() async {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-              lazy: true,
-              child: const CreateBlockPage(
-                extra: {},
-              ),
-              create: (context) =>
-                  AppsBloc(RepositoryProvider.of<AppRepository>(context))
-                    ..add(LoadApps()))
+            lazy: true,
+            child: const CreateBlockPage(
+              extra: {},
+            ),
+            create: (context) =>
+                AppsBloc(RepositoryProvider.of<AppRepository>(context))
+                  ..add(
+                    LoadApps(),
+                  ),
+          )
         ],
         child:
             const MyApp(), // TODO: currently set to myapp to make it run initially. however, this still blocks the UI. Consider an isolate.

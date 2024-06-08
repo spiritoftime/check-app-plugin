@@ -22,7 +22,7 @@ class BlockingCondition extends StatelessWidget {
         const Gap(12),
         HoverInkWell(
           onTap: () async {
-            if (text == 'location') {
+            if (text == 'Location' || text == 'Wi-Fi') {
               await onTap(context, extra);
             } else {
               onTap(context,extra);

@@ -40,7 +40,6 @@ public class LocationChecker {
         notificationManager.notify(1001, builder.build());
     }
 
-    @SuppressLint({"MissingPermission", "NewApi"})
     public static void startLocationUpdates(Context context,String NOTIFICATION_CHANNEL, FusedLocationProviderClient fusedLocationClient,LocationRequest locationRequest) throws PackageManager.NameNotFoundException {
 
         // need to request for gps to be enabled

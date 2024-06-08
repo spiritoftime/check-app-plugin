@@ -8,32 +8,40 @@ class CheckappPlugin {
   Future<bool?> detectForbiddenApp() {
     return CheckappPluginPlatform.instance.detectForbiddenApp();
   }
+
   Future<bool> checkOverlayPermission() {
     return CheckappPluginPlatform.instance.checkOverlayPermission();
   }
+
   Future<void> requestOverlayPermission() {
     return CheckappPluginPlatform.instance.requestOverlayPermission();
   }
+
   Future<bool> checkUsagePermission() {
     return CheckappPluginPlatform.instance.checkUsagePermission();
   }
+
   Future<void> requestUsagePermission() {
     return CheckappPluginPlatform.instance.requestUsagePermission();
   }
+
   Future<bool> checkNotificationPermission() {
     return CheckappPluginPlatform.instance.checkNotificationPermission();
   }
+
   Future<void> requestNotificationPermission() {
     return CheckappPluginPlatform.instance.requestNotificationPermission();
   }
+
   Future<bool> checkBackgroundPermission() {
     return CheckappPluginPlatform.instance.checkBackgroundPermission();
   }
+
   Future<void> requestBackgroundPermission() {
     return CheckappPluginPlatform.instance.requestBackgroundPermission();
   }
 
-  Future<List<Map<String,dynamic>>> getLaunchableApplications() {
+  Future<List<Map<String, dynamic>>> getLaunchableApplications() {
     return CheckappPluginPlatform.instance.getLaunchableApplications();
   }
 
@@ -43,5 +51,21 @@ class CheckappPlugin {
 
   Future<bool> checkLocationPermission() {
     return CheckappPluginPlatform.instance.checkLocationPermission();
+  }
+
+  Future<bool> checkWifiPermission() {
+    return CheckappPluginPlatform.instance.checkWifiPermission();
+  }
+
+  Future<void> requestWifiPermission() {
+    return CheckappPluginPlatform.instance.requestWifiPermission();
+  }
+
+  Future<bool> checkAboveAPI33() {
+    return CheckappPluginPlatform.instance.checkAboveAPI33();
+  }
+
+  Future<List<Map<String, dynamic>>> getNearbyWifi() {
+    return CheckappPluginPlatform.instance.getNearbyWifi();
   }
 }

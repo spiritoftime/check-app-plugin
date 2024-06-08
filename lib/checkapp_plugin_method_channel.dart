@@ -97,4 +97,36 @@ class MethodChannelCheckappPlugin extends CheckappPluginPlatform {
         await methodChannel.invokeMethod<bool>(CHECK_LOCATION_PERMISSION);
     return isPermissionEnabled ?? false;
   }
+
+    @override
+  Future<bool> checkWifiPermission() async {
+    bool? isPermissionEnabled =
+        await methodChannel.invokeMethod<bool>(CHECK_WIFI_PERMISSION);
+    return isPermissionEnabled ?? false;
+  }
+
+      @override
+  Future<void> requestWifiPermission() async {
+        await methodChannel.invokeMethod<void>(REQUEST_WIFI_PERMISSION);
+  }
+
+      @override
+  Future<bool> checkAboveAPI33() async {
+    bool? isPermissionEnabled =
+        await methodChannel.invokeMethod<bool>(CHECK_ABOVE_API_33);
+    return isPermissionEnabled ?? false;
+  }
+    @override
+  Future<List<Map<String, dynamic>>> getNearbyWifi() async {
+    var launchableApplications = await methodChannel
+        .invokeListMethod<Map<dynamic, dynamic>>(GET_NEARBY_WIFI);
+
+    final castedData = launchableApplications
+            ?.map((item) => Map<String, dynamic>.from(item))
+            .toList() ??
+        <Map<String, dynamic>>[];
+
+    return castedData;
+  }
+
 }
