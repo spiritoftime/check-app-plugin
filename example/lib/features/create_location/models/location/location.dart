@@ -1,5 +1,4 @@
-import 'package:checkapp_plugin_example/features/create_time/models/time/time.dart';
-import 'package:checkapp_plugin_example/features/create_block/models/block/block.dart';
+
 import 'package:json_annotation/json_annotation.dart';
 part 'location.g.dart';
 
@@ -8,21 +7,19 @@ class Location {
   final String location;
   final double latitude;
   final double longitude;
-  Location(
-   {required this.longitude,
+  Location({
+    required this.longitude,
     required this.location,
     required this.latitude,
   });
 
   copyWith({
-    final String? location,
-    final double? latitude,
-    final double? longitude,
+    required final String location,
+    required final double latitude,
+    required final double longitude,
   }) {
     return Location(
-        location: location ?? this.location,
-        latitude: latitude ?? this.latitude,
-        longitude: longitude ?? this.longitude);
+        location: location, latitude: latitude, longitude: longitude);
   }
 
   factory Location.fromJson(Map<String, dynamic> json) =>

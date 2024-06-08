@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'keyword.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class Keyword {
   final String keyword;
 

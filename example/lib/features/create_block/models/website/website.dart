@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'website.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class Website {
   final String url;
 

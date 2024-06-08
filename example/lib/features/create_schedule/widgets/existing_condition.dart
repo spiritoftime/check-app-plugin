@@ -1,10 +1,11 @@
+import 'package:checkapp_plugin_example/features/create_location/models/location/location.dart';
 import 'package:checkapp_plugin_example/features/create_time/cubit/cubit/time_cubit.dart';
 import 'package:checkapp_plugin_example/shared/widgets/grey_container.dart';
 import 'package:checkapp_plugin_example/shared/widgets/hover_ink_well.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-class ExistingCondition extends StatelessWidget {
+class ExistingCondition extends StatefulWidget {
   const ExistingCondition({
     super.key,
     required this.extra,
@@ -12,16 +13,24 @@ class ExistingCondition extends StatelessWidget {
     required this.onTap,
     required this.text1,
     required this.text2,
+    required this.updateUI,
   });
   final String conditionType;
   final Map<String, dynamic> extra;
   final Function() onTap;
+  final Function() updateUI;
   final String text1;
   final String text2;
+
+  @override
+  State<ExistingCondition> createState() => _ExistingConditionState();
+}
+
+class _ExistingConditionState extends State<ExistingCondition> {
   @override
   Widget build(BuildContext context) {
     return HoverInkWell(
-      onTap: onTap,
+      onTap: widget.onTap,
       inkWellPadding: const EdgeInsets.all(0),
       child: GreyContainer(
         child: Row(
@@ -33,7 +42,7 @@ class ExistingCondition extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    conditionType,
+                    widget.conditionType,
                     style: const TextStyle(
                         fontSize: 16,
                         color: Colors.white,
@@ -41,15 +50,26 @@ class ExistingCondition extends StatelessWidget {
                   ),
                   const Gap(4),
                   Text(
-                    text1,
+                    widget.text1,
                     softWrap: true,
                   ),
                   const Gap(4),
-                  Text(text2)
+                  Text(widget.text2)
                 ],
               ),
             ),
-            const Icon(Icons.close, size: 24, color: Colors.grey),
+            widget.conditionType != 'Time'
+                ? GestureDetector(
+                    onTap: () {
+                      if (widget.conditionType == 'Location') {
+                        widget.extra['locationCubit'].updateLocation();
+                        widget.updateUI();
+                      }
+                    },
+                    child:
+                        const Icon(Icons.close, size: 24, color: Colors.grey),
+                  )
+                : Container()
           ],
         ),
       ),

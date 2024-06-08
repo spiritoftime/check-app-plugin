@@ -4,6 +4,8 @@ import 'package:checkapp_plugin_example/features/create_block/presentation/widge
 import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/keyword_row.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/website_row.dart';
 import 'package:checkapp_plugin_example/features/create_location/cubit/location_cubit.dart';
+import 'package:checkapp_plugin_example/features/create_schedule/models/schedule/schedule.dart';
+import 'package:checkapp_plugin_example/features/create_schedule/models/schedule_details/schedule_details.dart';
 import 'package:checkapp_plugin_example/features/create_schedule/widgets/existing_blocks.dart';
 import 'package:checkapp_plugin_example/features/create_schedule/widgets/existing_condition.dart';
 import 'package:checkapp_plugin_example/features/create_schedule/widgets/schedule_name.dart';
@@ -17,13 +19,23 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
-class CreateSchedulePage extends StatelessWidget {
+class CreateSchedulePage extends StatefulWidget {
   final Map<String, dynamic> extra;
 
-  CreateSchedulePage({super.key, required this.extra});
-  BlockCubit get blockCubit => extra['blockCubit'];
-  TimeCubit get timeCubit => extra['timeCubit'] ?? TimeCubit();
-  LocationCubit get locationCubit => extra['locationCubit'] ?? LocationCubit();
+  const CreateSchedulePage({super.key, required this.extra});
+
+  @override
+  State<CreateSchedulePage> createState() => _CreateSchedulePageState();
+}
+
+class _CreateSchedulePageState extends State<CreateSchedulePage> {
+  BlockCubit get blockCubit => widget.extra['blockCubit'];
+
+  TimeCubit get timeCubit => widget.extra['timeCubit'] ?? TimeCubit();
+
+  LocationCubit get locationCubit =>
+      widget.extra['locationCubit'] ?? LocationCubit();
+
   List<Widget> appWidgets() {
     if (blockCubit.state.apps.isNotEmpty) {
       return blockCubit.state.apps
@@ -67,6 +79,10 @@ class CreateSchedulePage extends StatelessWidget {
     } else {
       return [Container()];
     }
+  }
+
+  void _updateUI() {
+    setState(() {});
   }
 
   final TextEditingController _controller = TextEditingController();
@@ -140,7 +156,7 @@ class CreateSchedulePage extends StatelessWidget {
                             ElevatedButton.icon(
                               onPressed: () => context.pushNamed(
                                   'create-blocking-conditions',
-                                  extra: extra),
+                                  extra: widget.extra),
                               icon: const Icon(Icons.add, color: Colors.white),
                               label: const Text(
                                 "Add",
@@ -158,24 +174,28 @@ class CreateSchedulePage extends StatelessWidget {
                                     text1: timeCubit.state.days
                                         .map((d) => d.day)
                                         .join(', '),
-                                    extra: extra,
-                                    onTap: () => context
-                                        .pushNamed('create-time', extra: extra),
+                                    extra: widget.extra,
+                                    onTap: () => context.pushNamed(
+                                        'create-time',
+                                        extra: widget.extra),
                                     text2: timeCubit.state.timings
                                         .map((e) => '${e.start} to ${e.end}')
                                         .join(', '),
+                                    updateUI: _updateUI,
                                   )
                                 : Container(),
                             const Gap(16),
-                            locationCubit.state.location.isNotEmpty
+                            locationCubit.state != null
                                 ? ExistingCondition(
-                                    extra: extra,
+                                    extra: widget.extra,
                                     conditionType: 'Location',
                                     onTap: () => context.pushNamed(
                                         'create-location',
-                                        extra: extra),
-                                    text1: locationCubit.state.location,
-                                    text2: '')
+                                        extra: widget.extra),
+                                    text1: locationCubit.state!.location,
+                                    text2: '',
+                                    updateUI: _updateUI,
+                                  )
                                 : Container()
                           ],
                         ),
@@ -192,21 +212,21 @@ class CreateSchedulePage extends StatelessWidget {
                         content: Column(
                           children: [
                             ExistingBlocks(
-                              extra: extra,
+                              extra: widget.extra,
                               blockCubit: blockCubit,
                               blockType: "Applications",
                               widgets: appWidgets,
                             ),
                             const Gap(16),
                             ExistingBlocks(
-                              extra: extra,
+                              extra: widget.extra,
                               blockCubit: blockCubit,
                               blockType: "Websites",
                               widgets: websiteWidgets,
                             ),
                             const Gap(16),
                             ExistingBlocks(
-                              extra: extra,
+                              extra: widget.extra,
                               blockCubit: blockCubit,
                               blockType: "Keywords",
                               widgets: keywordWidgets,
@@ -228,23 +248,44 @@ class CreateSchedulePage extends StatelessWidget {
               ),
               onPressed: () async {
                 String scheduleName = _controller.text;
-                if (scheduleName.isEmpty) {
-                  await createDialog(context, const Text("Error"),
-                      const Text("Please enter a schedule name"));
-                  return;
-                }
+
                 if (timeCubit.state.days.isNotEmpty &&
                         timeCubit.state.timings.isEmpty ||
                     timeCubit.state.days.isEmpty &&
-                        timeCubit.state.timings.isNotEmpty) {
+                        timeCubit.state.timings.isNotEmpty ||
+                    timeCubit.state.days.isEmpty &&
+                        timeCubit.state.timings.isEmpty) {
                   await createDialog(
                       context,
-                      const Text("Error"),
+                      const Text(
+                        "Error",
+                        style: TextStyle(color: Colors.red),
+                      ),
                       const Text(
                           "Please enter both days and timings if you want to create a schedule with time conditions. Click the add button under conditions and re-edit the time condition"));
                   return;
                 }
+                if (scheduleName.isEmpty) {
+                  await createDialog(
+                      context,
+                      const Text(
+                        "Error",
+                        style: TextStyle(color: Colors.red),
+                      ),
+                      const Text("Please enter a schedule name"));
+                  return;
+                }
+
                 //  compile everything to one schedule
+                Schedule schedule = Schedule(
+                    scheduleDetails: ScheduleDetails(
+                      scheduleName: _controller.text,
+                      iconName: 'schedule',
+                    ),
+                    locationCubit.state,
+                    time: timeCubit.state,
+                    block: blockCubit.state);
+                print(schedule.toJson());
               },
               child: const Text(
                 "Save Schedule",

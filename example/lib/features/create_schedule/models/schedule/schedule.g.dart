@@ -7,11 +7,18 @@ part of 'schedule.dart';
 // **************************************************************************
 
 Schedule _$ScheduleFromJson(Map<String, dynamic> json) => Schedule(
+      json['location'] == null
+          ? null
+          : Location.fromJson(json['location'] as Map<String, dynamic>),
+      scheduleDetails: ScheduleDetails.fromJson(
+          json['scheduleDetails'] as Map<String, dynamic>),
       block: Block.fromJson(json['block'] as Map<String, dynamic>),
-      timing: Time.fromJson(json['timing'] as Map<String, dynamic>),
+      time: Time.fromJson(json['time'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ScheduleToJson(Schedule instance) => <String, dynamic>{
       'block': instance.block.toJson(),
-      'timing': instance.timing.toJson(),
+      'time': instance.time.toJson(),
+      'scheduleDetails': instance.scheduleDetails.toJson(),
+      'location': instance.location?.toJson(),
     };

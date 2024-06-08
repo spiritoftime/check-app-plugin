@@ -7,7 +7,6 @@ import 'package:checkapp_plugin_example/shared/widgets/grey_container.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gap/gap.dart';
-import 'package:intl/intl.dart';
 
 /// The home screen
 class HomeScreen extends StatelessWidget {

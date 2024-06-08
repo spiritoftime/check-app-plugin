@@ -16,6 +16,6 @@ Time _$TimeFromJson(Map<String, dynamic> json) => Time(
     );
 
 Map<String, dynamic> _$TimeToJson(Time instance) => <String, dynamic>{
-      'days': instance.days,
-      'timings': instance.timings,
+      'days': instance.days.map((e) => e.toJson()).toList(),
+      'timings': instance.timings.map((e) => e.toJson()).toList(),
     };

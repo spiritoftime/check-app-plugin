@@ -3,7 +3,7 @@ import 'package:checkapp_plugin_example/features/create_time/models/timing/timin
 import 'package:json_annotation/json_annotation.dart';
 part 'time.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class Time {
   final List<Day> days;
   final List<Timing> timings;
