@@ -1,13 +1,17 @@
 import 'package:checkapp_plugin_example/features/create_block/presentation/utils.dart';
 import 'package:checkapp_plugin_example/shared/widgets/accordion_wrapper.dart';
+import 'package:checkapp_plugin_example/shared/widgets/instruction.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
 class BlockPermissionsPage extends StatelessWidget {
-  const BlockPermissionsPage({super.key});
+  final Map<String, dynamic> extra;
 
- @override
+  const BlockPermissionsPage({super.key, required this.extra});
+  List<bool> get blockPermissions => extra['blockPermissions'];
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
@@ -35,18 +39,9 @@ class BlockPermissionsPage extends StatelessWidget {
                           child: Icon(Icons.settings,
                               size: 200, color: Colors.yellow)),
                       const Gap(16),
-                      const Text(
-                        "Permission Missing",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 30.0),
-                      ),
-                      const Gap(16),
-                      const Text(
-                        'Location permission required',
-                        style: TextStyle(color: Colors.red, fontSize: 16.0),
-                      ),
+                      NumberPermissions(blockPermissions: blockPermissions),
+
+
                       const Gap(16),
                       const Text(
                         "Please follow these instructions:",
@@ -58,8 +53,8 @@ class BlockPermissionsPage extends StatelessWidget {
                         physics: const NeverScrollableScrollPhysics(),
                         children: instructionList.map((i) => i).toList(),
                       ),
-                      const AccordionWrapper(
-                        header: Row(
+                      AccordionWrapper(
+                        header: const Row(
                           children: [
                             Icon(Icons.quiz, color: Colors.blue, size: 24),
                             Gap(16),
@@ -68,8 +63,37 @@ class BlockPermissionsPage extends StatelessWidget {
                         ),
                         content: Column(
                           children: [
-                            Text(
-                                "We need your location at all times so that we can block your app usage based on your location.")
+                            Container(
+                                margin: const EdgeInsets.only(bottom: 8),
+                                child: const Instruction(
+                                  instructionNumber: '1',
+                                  instruction: Text(
+                                      "Usage Permission is required to monitor your app usage"),
+                                )),
+                            Container(
+                              margin: const EdgeInsets.only(bottom: 8),
+                              child: const Instruction(
+                                instructionNumber: '2',
+                                instruction: Text(
+                                    "Overlay permission is needed to display the overlay when we exit a forbidden app"),
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(bottom: 8),
+                              child: const Instruction(
+                                instructionNumber: '3',
+                                instruction: Text(
+                                    "Notification permission is needed to prompt you to enable needed settings (eg. gps for location tracking) or to notify you that Doomscroll is running in the foreground."),
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(bottom: 8),
+                              child: const Instruction(
+                                instructionNumber: '4',
+                                instruction: Text(
+                                    "Background permission is needed to actually be able to run this app in the background to check if forbidden apps are running based on your schedule."),
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -77,19 +101,29 @@ class BlockPermissionsPage extends StatelessWidget {
                   ),
                 ),
               ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(double.infinity, 64),
-                ),
-                onPressed: () async {
-                  // await _checkAppPlugin.requestLocationPermission();
-                },
-                child: const Text('Enable location permission'),
-              )
+
             ],
           ),
         ),
       ),
     );
+  }
 }
+
+class NumberPermissions extends StatelessWidget {
+  const NumberPermissions({
+    super.key,
+    required this.blockPermissions,
+  });
+
+  final List<bool> blockPermissions;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      "${blockPermissions.length} Permission${blockPermissions.length > 1 ? 's' : ''} Missing",
+      style: const TextStyle(
+          color: Colors.red, fontWeight: FontWeight.bold, fontSize: 30.0),
+    );
+  }
 }

@@ -13,7 +13,7 @@ import 'package:intl/intl.dart';
 class HomeScreen extends StatelessWidget {
   /// Constructs a [HomeScreen]
   HomeScreen({super.key});
-  CheckappPlugin checkappPlugin = CheckappPlugin();
+  final CheckappPlugin checkappPlugin = CheckappPlugin();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,7 +72,7 @@ class HomeScreen extends StatelessWidget {
                                   backgroundColor: const Color(0xff5094F5),
                                 ),
                                 onPressed: () {
-                                  print('hi');
+                                  context.go('/basic');
                                 },
                                 child: const Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -120,10 +120,14 @@ class HomeScreen extends StatelessWidget {
                                     checkappPlugin
                                         .checkNotificationPermission(),
                                   ]);
-                                  print("wtf: $arePermissionsEnabled");
+                                  print(arePermissionsEnabled);
                                   if (arePermissionsEnabled.contains(false) &&
                                       context.mounted) {
-                                    context.goNamed('block-permissions');
+                                    context.goNamed('create-block-permission',
+                                        extra: <String, dynamic>{
+                                          'blockPermissions':
+                                              arePermissionsEnabled
+                                        });
                                   } else if (context.mounted) {
                                     context.goNamed('create-block',
                                         extra: <String, dynamic>{});

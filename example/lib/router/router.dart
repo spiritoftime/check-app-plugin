@@ -30,8 +30,9 @@ final GoRoute _createScheduleRouter = GoRoute(
       name: 'create-block-permission',
       path: 'block-permission',
       builder: (BuildContext context, GoRouterState state) {
+        final extra = state.extra as Map<String, dynamic>;
 
-        return const BlockPermissionsPage();
+        return  BlockPermissionsPage(extra:extra);
       },
     ),
     GoRoute(
