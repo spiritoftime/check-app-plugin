@@ -31,9 +31,19 @@ abstract class CheckappPluginPlatform extends PlatformInterface {
     throw UnimplementedError('detectForbiddenApp() has not been implemented.');
   }
 
+  Future<bool> checkOverlayPermission() {
+    throw UnimplementedError(
+        'checkOverlayPermission() has not been implemented.');
+  }
+
   Future<void> requestOverlayPermission() {
     throw UnimplementedError(
         'requestOverlayPermission() has not been implemented.');
+  }
+
+  Future<bool> checkUsagePermission() {
+    throw UnimplementedError(
+        'checkUsagePermission() has not been implemented.');
   }
 
   Future<void> requestUsagePermission() {
@@ -41,9 +51,19 @@ abstract class CheckappPluginPlatform extends PlatformInterface {
         'requestUsagePermission() has not been implemented.');
   }
 
+  Future<bool> checkNotificationPermission() {
+    throw UnimplementedError(
+        'checkNotificationPermission() has not been implemented.');
+  }
+
   Future<void> requestNotificationPermission() {
     throw UnimplementedError(
         'requestNotificationPermission() has not been implemented.');
+  }
+
+  Future<bool> checkBackgroundPermission() {
+    throw UnimplementedError(
+        'checkBackgroundPermission() has not been implemented.');
   }
 
   Future<void> requestBackgroundPermission() {

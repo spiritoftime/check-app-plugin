@@ -1,3 +1,4 @@
+import 'package:checkapp_plugin/checkapp_plugin.dart';
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/accordion.dart';
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/carousel_icons.dart';
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/schedule_template_carousel.dart';
@@ -11,8 +12,8 @@ import 'package:intl/intl.dart';
 /// The home screen
 class HomeScreen extends StatelessWidget {
   /// Constructs a [HomeScreen]
-  const HomeScreen({super.key});
-
+  HomeScreen({super.key});
+  CheckappPlugin checkappPlugin = CheckappPlugin();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -109,9 +110,29 @@ class HomeScreen extends StatelessWidget {
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xff5094F5),
                               ),
-                              onPressed: () {
-                                context.goNamed('create-block',
-                                    extra: <String, dynamic>{});
+                              onPressed: () async {
+                                try {
+                                  List<bool> arePermissionsEnabled =
+                                      await Future.wait([
+                                    checkappPlugin.checkBackgroundPermission(),
+                                    checkappPlugin.checkUsagePermission(),
+                                    checkappPlugin.checkOverlayPermission(),
+                                    checkappPlugin
+                                        .checkNotificationPermission(),
+                                  ]);
+                                  print("wtf: $arePermissionsEnabled");
+                                  if (arePermissionsEnabled.contains(false) &&
+                                      context.mounted) {
+                                    context.goNamed('block-permissions');
+                                  } else if (context.mounted) {
+                                    context.goNamed('create-block',
+                                        extra: <String, dynamic>{});
+                                  } else {
+                                    print('context not mounted');
+                                  }
+                                } catch (e) {
+                                  print(e);
+                                }
                               },
                               icon: const Icon(Icons.add,
                                   color: Colors.white, size: 24),

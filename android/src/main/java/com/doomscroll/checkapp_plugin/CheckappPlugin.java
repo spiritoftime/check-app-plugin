@@ -6,6 +6,10 @@ import static com.doomscroll.checkapp_plugin.AppService.REQUEST_LOCATION;
 import static com.doomscroll.checkapp_plugin.AppService.createIntentForService;
 import static com.doomscroll.checkapp_plugin.AppService.initializeServiceAtFlutter;
 import static com.doomscroll.checkapp_plugin.Permissions.checkLocationPermission;
+import static com.doomscroll.checkapp_plugin.Permissions.checkNotificationPermission;
+import static com.doomscroll.checkapp_plugin.Permissions.checkOverlayPermission;
+import static com.doomscroll.checkapp_plugin.Permissions.checkUsagePermission;
+import static com.doomscroll.checkapp_plugin.Permissions.isBackgroundStartActivityPermissionGranted;
 import static com.doomscroll.checkapp_plugin.Permissions.requestBackgroundPermissionForXiaomi;
 import static com.doomscroll.checkapp_plugin.Permissions.requestLocationPermission;
 import static com.doomscroll.checkapp_plugin.Permissions.requestNotificationPermission;
@@ -35,7 +39,9 @@ import androidx.annotation.RequiresApi;
 import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+
 import android.util.Base64;
+
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -54,14 +60,19 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
 
     private static final String FLUTTER_CHANNEL_NAME = "com.doomscroll.checkapp";
     private static final String CHANNEL_DETECT_METHOD = "DETECT_APP";
-    private static final String CHANNEL_OVERLAY_PERMISSION = "REQUEST_OVERLAY_PERMISSION";
+    private static final String REQUEST_OVERLAY_PERMISSION = "REQUEST_OVERLAY_PERMISSION";
     private static final String REQUEST_NOTIFICATION_PERMISSION = "REQUEST_NOTIFICATION_PERMISSION";
 
-    private static final String CHANNEL_USAGE_PERMISSION = "REQUEST_USAGE_PERMISSION";
+    private static final String REQUEST_USAGE_PERMISSION = "REQUEST_USAGE_PERMISSION";
     private static final String GET_PLATFORM_VERSION = "getPlatformVersion";
     private static final String REQUEST_BACKGROUND_PERMISSION = "REQUEST_BACKGROUND_PERMISSION";
     private static final String REQUEST_LOCATION_PERMISSION = "REQUEST_LOCATION_PERMISSION";
     private static final String CHECK_LOCATION_PERMISSION = "CHECK_LOCATION_PERMISSION";
+    private static final String CHECK_BACKGROUND_PERMISSION = "CHECK_BACKGROUND_PERMISSION";
+    private static final String CHECK_NOTIFICATION_PERMISSION = "CHECK_NOTIFICATION_PERMISSION";
+    private static final String CHECK_USAGE_PERMISSION = "CHECK_USAGE_PERMISSION";
+    private static final String CHECK_OVERLAY_PERMISSION = "CHECK_OVERLAY_PERMISSION";
+
 
 
 
@@ -99,32 +110,43 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
                     result.success(shouldShowPopUp);
                 }
                 break;
-            case CHANNEL_OVERLAY_PERMISSION:
+            case CHECK_OVERLAY_PERMISSION:
+                result.success(checkOverlayPermission(context));
+                break;
+            case REQUEST_OVERLAY_PERMISSION:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     requestOverlayPermission(context, activity);
                 }
                 break;
-            case CHANNEL_USAGE_PERMISSION:
+            case CHECK_USAGE_PERMISSION:
+                result.success(checkUsagePermission(context)); //NOTE: returns int. 0 = mode_allowed
+                break;
+            case REQUEST_USAGE_PERMISSION:
                 requestUsagePermission(context, activity);
                 break;
             case GET_PLATFORM_VERSION:
                 result.success(getPlatformVersion());
+                break;
+            case CHECK_NOTIFICATION_PERMISSION:
+                result.success(checkNotificationPermission(context));
                 break;
             case REQUEST_NOTIFICATION_PERMISSION:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     requestNotificationPermission(context, activity);
                 }
                 break;
-
+            case CHECK_BACKGROUND_PERMISSION:
+                result.success(isBackgroundStartActivityPermissionGranted(context));
+                break;
             case REQUEST_BACKGROUND_PERMISSION:
                 requestBackgroundPermissionForXiaomi(context, activity);
                 break;
             case CHECK_LOCATION_PERMISSION:
-              boolean isPermissionEnabled=  checkLocationPermission(context,activity);
+                boolean isPermissionEnabled = checkLocationPermission(context, activity);
                 result.success(isPermissionEnabled);
                 break;
             case REQUEST_LOCATION_PERMISSION:
-                requestLocationPermission(context,activity);
+                requestLocationPermission(context, activity);
                 break;
 
             default:
@@ -159,7 +181,7 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
     @Override
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
         activity = binding.getActivity();
-        createIntentForService(context,REQUEST_LOCATION);
+        createIntentForService(context, REQUEST_LOCATION);
     }
 
     @Override
@@ -208,7 +230,7 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
                 appName = resolveInfo.activityInfo.applicationInfo.loadLabel(pm).toString();
 
             }
-            appList.add(new AppInfo(packageName, iconBase64String,appName).toMap());
+            appList.add(new AppInfo(packageName, iconBase64String, appName).toMap());
         }
 
         return appList;

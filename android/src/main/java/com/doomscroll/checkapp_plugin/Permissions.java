@@ -31,7 +31,7 @@ public class Permissions {
 
     private static final int LOCATION_PERMISSION_CODE = 1003;
 
-    private static int checkUsagePermission(Context context) {
+    public static int checkUsagePermission(Context context) {
         PackageManager packageManager = context.getPackageManager();
         ApplicationInfo applicationInfo;
         try {
@@ -54,7 +54,7 @@ public class Permissions {
         }
     }
 
-    private static boolean checkOverlayPermission(Context context) {
+    public static boolean checkOverlayPermission(Context context) {
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(context);
     }
 
@@ -68,7 +68,7 @@ public class Permissions {
     }
 
     //    needed to run foreground service
-    private static boolean checkNotificationPermission(Context context) {
+    public static boolean checkNotificationPermission(Context context) {
         return NotificationManagerCompat.from(context).areNotificationsEnabled();
     }
 
@@ -92,7 +92,7 @@ public class Permissions {
 //     see https://stackoverflow.com/questions/59645936/displaying-popup-windows-while-running-in-the-background
 
     @SuppressWarnings("JavaReflectionMemberAccess")
-    private static boolean isBackgroundStartActivityPermissionGranted(Context context) {
+    public static boolean isBackgroundStartActivityPermissionGranted(Context context) {
         try {
             AppOpsManager mgr = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
             Method m = AppOpsManager.class.getMethod("checkOpNoThrow", int.class, int.class, String.class);

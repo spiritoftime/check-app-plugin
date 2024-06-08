@@ -25,27 +25,51 @@ class MethodChannelCheckappPlugin extends CheckappPluginPlatform {
   }
 
   @override
-  Future<void> requestOverlayPermission() async {
+  Future<bool> checkOverlayPermission() async {
     final isPermissionEnabled =
-        await methodChannel.invokeMethod<bool>(CHANNEL_OVERLAY_PERMISSION);
+        await methodChannel.invokeMethod<bool>(CHECK_OVERLAY_PERMISSION);
+    return isPermissionEnabled ?? false;
+  }
+
+  @override
+  Future<void> requestOverlayPermission() async {
+    await methodChannel.invokeMethod<void>(REQUEST_OVERLAY_PERMISSION);
+  }
+
+  @override
+  Future<bool> checkUsagePermission() async {
+    final isPermissionEnabled =
+        await methodChannel.invokeMethod<int>(CHECK_USAGE_PERMISSION);
+    return isPermissionEnabled == 0 ? true : false;
   }
 
   @override
   Future<void> requestUsagePermission() async {
+    await methodChannel.invokeMethod<bool>(REQUEST_USAGE_PERMISSION);
+  }
+
+  @override
+  Future<bool> checkNotificationPermission() async {
     final isPermissionEnabled =
-        await methodChannel.invokeMethod<bool>(CHANNEL_USAGE_PERMISSION);
+        await methodChannel.invokeMethod<bool>(CHECK_NOTIFICATION_PERMISSION);
+    return isPermissionEnabled ?? false;
   }
 
   @override
   Future<void> requestNotificationPermission() async {
+    await methodChannel.invokeMethod<void>(REQUEST_NOTIFICATION_PERMISSION);
+  }
+
+  @override
+  Future<bool> checkBackgroundPermission() async {
     final isPermissionEnabled =
-        await methodChannel.invokeMethod<bool>(REQUEST_NOTIFICATION_PERMISSION);
+        await methodChannel.invokeMethod<bool>(CHECK_BACKGROUND_PERMISSION);
+    return isPermissionEnabled ?? false;
   }
 
   @override
   Future<void> requestBackgroundPermission() async {
-    final isPermissionEnabled =
-        await methodChannel.invokeMethod<bool>(REQUEST_BACKGROUND_PERMISSION);
+    await methodChannel.invokeMethod<bool>(REQUEST_BACKGROUND_PERMISSION);
   }
 
 // TODO: to add isolate as it is taking too long
@@ -62,10 +86,12 @@ class MethodChannelCheckappPlugin extends CheckappPluginPlatform {
     return castedData;
   }
 
+  @override
   Future<void> requestLocationPermission() async {
     await methodChannel.invokeMethod<void>(REQUEST_LOCATION_PERMISSION);
   }
 
+  @override
   Future<bool> checkLocationPermission() async {
     bool? isPermissionEnabled =
         await methodChannel.invokeMethod<bool>(CHECK_LOCATION_PERMISSION);

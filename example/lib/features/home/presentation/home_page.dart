@@ -14,7 +14,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 final List<Widget> _children = [
-     const HomeScreen(),
+      HomeScreen(),
     const StrictBlockScreen(),
     const StatisticsScreen(),
     const ProfileScreen(),

@@ -4,10 +4,12 @@ import 'package:gap/gap.dart';
 class Instruction extends StatelessWidget {
   final String instructionNumber;
   final Text instruction;
+  final Widget? actionButton;
   const Instruction({
     super.key,
     required this.instructionNumber,
     required this.instruction,
+    this.actionButton,
   });
 
   @override
@@ -19,11 +21,15 @@ class Instruction extends StatelessWidget {
               const BoxDecoration(shape: BoxShape.circle, color: Colors.blue),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(instructionNumber),
+            child: Text(
+              instructionNumber,
+              softWrap: true,
+            ),
           ),
         ),
         const Gap(16),
-        instruction
+        Expanded(child: instruction),
+        actionButton ?? Container(),
       ],
     );
   }

@@ -57,6 +57,30 @@ class MockCheckappPluginPlatform
     // TODO: implement requestLocationPermission
     throw UnimplementedError();
   }
+  
+  @override
+  Future<bool> checkBackgroundPermission() {
+    // TODO: implement checkBackgroundPermission
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<bool> checkNotificationPermission() {
+    // TODO: implement checkNotificationPermission
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<bool> checkOverlayPermission() {
+    // TODO: implement checkOverlayPermission
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<bool> checkUsagePermission() {
+    // TODO: implement checkUsagePermission
+    throw UnimplementedError();
+  }
 }
 
 void main() {

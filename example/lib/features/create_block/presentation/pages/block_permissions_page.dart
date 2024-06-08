@@ -1,29 +1,13 @@
-import 'package:accordion/accordion.dart';
-import 'package:checkapp_plugin_example/features/create_location/utils.dart';
+import 'package:checkapp_plugin_example/features/create_block/presentation/utils.dart';
 import 'package:checkapp_plugin_example/shared/widgets/accordion_wrapper.dart';
-import 'package:checkapp_plugin_example/shared/widgets/instruction.dart';
 import 'package:flutter/material.dart';
-import 'package:checkapp_plugin/checkapp_plugin.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
-class LocationPermission extends StatefulWidget {
+class BlockPermissionsPage extends StatelessWidget {
+  const BlockPermissionsPage({super.key});
 
-  const LocationPermission({super.key});
-
-  @override
-  State<LocationPermission> createState() => _LocationPermissionState();
-}
-
-class _LocationPermissionState extends State<LocationPermission> {
-  final _checkAppPlugin = CheckappPlugin();
-  late bool isPermissionEnabled;
-  Future<bool> isLocationPermissionEnabled() async {
-    isPermissionEnabled = await _checkAppPlugin.checkLocationPermission();
-    return isPermissionEnabled;
-  }
-
-  @override
+ @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
@@ -98,7 +82,7 @@ class _LocationPermissionState extends State<LocationPermission> {
                   minimumSize: const Size(double.infinity, 64),
                 ),
                 onPressed: () async {
-                  await _checkAppPlugin.requestLocationPermission();
+                  // await _checkAppPlugin.requestLocationPermission();
                 },
                 child: const Text('Enable location permission'),
               )
@@ -107,34 +91,5 @@ class _LocationPermissionState extends State<LocationPermission> {
         ),
       ),
     );
-  }
-
-  Padding futurebuilder() {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: FutureBuilder(
-        future: isLocationPermissionEnabled(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.done) {
-            // Future hasn't finished yet, return a placeholder
-            return Text('Checking location permission...');
-          } else {
-            return Column(
-              children: [
-                Text(snapshot.hasData && snapshot.data == true
-                    ? 'Location permission is enabled'
-                    : 'Location permission is not enabled'),
-                ElevatedButton(
-                  onPressed: () async {
-                    await _checkAppPlugin.requestLocationPermission();
-                  },
-                  child: Text('Request location permission'),
-                )
-              ],
-            );
-          }
-        },
-      ),
-    );
-  }
+}
 }

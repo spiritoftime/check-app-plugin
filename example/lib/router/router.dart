@@ -2,7 +2,8 @@ import 'package:checkapp_plugin_example/features/basic/presentation/basic_screen
 import 'package:checkapp_plugin_example/features/blocking_conditions/presentation/blocking_conditions_page.dart';
 import 'package:checkapp_plugin_example/features/create_block/bloc/app/app_bloc.dart';
 import 'package:checkapp_plugin_example/features/create_block/cubit/cubit/block_cubit.dart';
-import 'package:checkapp_plugin_example/features/create_block/presentation/create_block_page.dart';
+import 'package:checkapp_plugin_example/features/create_block/presentation/pages/block_permissions_page.dart';
+import 'package:checkapp_plugin_example/features/create_block/presentation/pages/create_block_page.dart';
 import 'package:checkapp_plugin_example/features/create_launch_count/launch_limit.dart';
 import 'package:checkapp_plugin_example/features/create_location/widgets/location_permission.dart';
 import 'package:checkapp_plugin_example/features/create_location/widgets/set_location_page.dart';
@@ -25,13 +26,20 @@ final GoRoute _createScheduleRouter = GoRoute(
     return CreateBlockPage(extra: extra);
   },
   routes: <RouteBase>[
+        GoRoute(
+      name: 'create-block-permission',
+      path: 'block-permission',
+      builder: (BuildContext context, GoRouterState state) {
+
+        return const BlockPermissionsPage();
+      },
+    ),
     GoRoute(
       name: 'create-location-permission',
       path: 'location-permission',
       builder: (BuildContext context, GoRouterState state) {
-        final extra = state.extra as Map<String, dynamic>;
 
-        return LocationPermission(extra: extra);
+        return const LocationPermission();
       },
     ),
     GoRoute(
@@ -100,7 +108,7 @@ final GoRoute _createScheduleRouter = GoRoute(
 );
 
 /// The route configuration.
-final GoRouter _router = GoRouter(
+final GoRouter _router = GoRouter(  
   routes: <RouteBase>[
     GoRoute(
       path: '/',
@@ -133,6 +141,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      
         routerConfig: _router,
         theme: ThemeData(
           brightness: Brightness.dark,

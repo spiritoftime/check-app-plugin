@@ -166,7 +166,7 @@ class CreateSchedulePage extends StatelessWidget {
                                         .join(', '),
                                   )
                                 : Container(),
-                                const Gap(16),
+                            const Gap(16),
                             locationCubit.state.location.isNotEmpty
                                 ? ExistingCondition(
                                     extra: extra,
@@ -182,37 +182,38 @@ class CreateSchedulePage extends StatelessWidget {
                       ),
                       const Divider(height: 1, color: Colors.grey),
                       AccordionWrapper(
-                          header: const Text(
-                            "Blocklist",
-                            style: TextStyle(
-                                fontSize: 24,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          content: Column(
-                            children: [
-                              ExistingBlocks(
-                                extra: extra,
-                                blockCubit: blockCubit,
-                                blockType: "Applications",
-                                widgets: appWidgets,
-                              ),
-                              const Gap(16),
-                              ExistingBlocks(
-                                extra: extra,
-                                blockCubit: blockCubit,
-                                blockType: "Websites",
-                                widgets: websiteWidgets,
-                              ),
-                              const Gap(16),
-                              ExistingBlocks(
-                                extra: extra,
-                                blockCubit: blockCubit,
-                                blockType: "Keywords",
-                                widgets: keywordWidgets,
-                              ),
-                            ],
-                          )),
+                        header: const Text(
+                          "Blocklist",
+                          style: TextStyle(
+                              fontSize: 24,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        content: Column(
+                          children: [
+                            ExistingBlocks(
+                              extra: extra,
+                              blockCubit: blockCubit,
+                              blockType: "Applications",
+                              widgets: appWidgets,
+                            ),
+                            const Gap(16),
+                            ExistingBlocks(
+                              extra: extra,
+                              blockCubit: blockCubit,
+                              blockType: "Websites",
+                              widgets: websiteWidgets,
+                            ),
+                            const Gap(16),
+                            ExistingBlocks(
+                              extra: extra,
+                              blockCubit: blockCubit,
+                              blockType: "Keywords",
+                              widgets: keywordWidgets,
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
