@@ -2,14 +2,15 @@ import 'package:accordion/accordion.dart';
 import 'package:checkapp_plugin_example/features/create_location/utils.dart';
 import 'package:checkapp_plugin_example/shared/widgets/accordion_wrapper.dart';
 import 'package:checkapp_plugin_example/shared/widgets/instruction.dart';
+import 'package:checkapp_plugin_example/shared/widgets/lifecycle_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:checkapp_plugin/checkapp_plugin.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
 class LocationPermission extends StatefulWidget {
-
-  const LocationPermission({super.key});
+  const LocationPermission({super.key, required this.extra});
+  final Map<String, dynamic> extra;
 
   @override
   State<LocationPermission> createState() => _LocationPermissionState();
@@ -21,6 +22,21 @@ class _LocationPermissionState extends State<LocationPermission> {
   Future<bool> isLocationPermissionEnabled() async {
     isPermissionEnabled = await _checkAppPlugin.checkLocationPermission();
     return isPermissionEnabled;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(
+      LifecycleEventHandler(
+        resumeCallBack: () async {
+          isPermissionEnabled = await isLocationPermissionEnabled();
+          if (mounted && isPermissionEnabled) {
+            context.goNamed('create-location', extra: widget.extra);
+          }
+        },
+      ),
+    );
   }
 
   @override

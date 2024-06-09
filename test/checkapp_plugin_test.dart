@@ -105,6 +105,18 @@ class MockCheckappPluginPlatform
     // TODO: implement requestWifiPermission
     throw UnimplementedError();
   }
+  
+  @override
+  Future<bool> checkGPSEnabled() {
+    // TODO: implement checkGPSEnabled
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> requestEnableGPS() {
+    // TODO: implement requestEnableGPS
+    throw UnimplementedError();
+  }
 }
 
 void main() {

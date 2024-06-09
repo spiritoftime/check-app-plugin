@@ -5,6 +5,7 @@ import static com.doomscroll.checkapp_plugin.AppService.REDIRECT_HOME;
 import static com.doomscroll.checkapp_plugin.AppService.REQUEST_LOCATION;
 import static com.doomscroll.checkapp_plugin.AppService.createIntentForService;
 import static com.doomscroll.checkapp_plugin.AppService.initializeServiceAtFlutter;
+import static com.doomscroll.checkapp_plugin.Permissions.checkGPSEnabled;
 import static com.doomscroll.checkapp_plugin.Permissions.checkLocationPermission;
 import static com.doomscroll.checkapp_plugin.Permissions.checkNotificationPermission;
 import static com.doomscroll.checkapp_plugin.Permissions.checkOverlayPermission;
@@ -13,6 +14,7 @@ import static com.doomscroll.checkapp_plugin.Permissions.checkWifiPermission;
 import static com.doomscroll.checkapp_plugin.Permissions.isAboveApi33;
 import static com.doomscroll.checkapp_plugin.Permissions.isBackgroundStartActivityPermissionGranted;
 import static com.doomscroll.checkapp_plugin.Permissions.requestBackgroundPermissionForXiaomi;
+import static com.doomscroll.checkapp_plugin.Permissions.requestEnableGPS;
 import static com.doomscroll.checkapp_plugin.Permissions.requestLocationPermission;
 import static com.doomscroll.checkapp_plugin.Permissions.requestNotificationPermission;
 import static com.doomscroll.checkapp_plugin.Permissions.requestOverlayPermission;
@@ -83,6 +85,8 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
 
     private static final String CHECK_ABOVE_API_33 = "CHECK_ABOVE_API_33";
     private static final String GET_NEARBY_WIFI = "GET_NEARBY_WIFI";
+    private static final String CHECK_GPS_ENABLED = "CHECK_GPS_ENABLED";
+    private static final String REQUEST_ENABLE_GPS = "REQUEST_ENABLE_GPS";
 
 
     private static final String GET_LAUNCHABLE_APPLICATIONS = "GET_LAUNCHABLE_APPLICATIONS";
@@ -177,7 +181,12 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
                 getNearbyWifi(result);
 
                 break;
-
+            case CHECK_GPS_ENABLED:
+                result.success(checkGPSEnabled(context));
+                break;
+            case REQUEST_ENABLE_GPS:
+                requestEnableGPS(context, activity);
+                break;
             default:
                 result.notImplemented();
                 break;

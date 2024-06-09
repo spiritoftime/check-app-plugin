@@ -27,21 +27,22 @@ final GoRoute _createScheduleRouter = GoRoute(
     return CreateBlockPage(extra: extra);
   },
   routes: <RouteBase>[
-        GoRoute(
+    GoRoute(
       name: 'create-block-permission',
       path: 'block-permission',
       builder: (BuildContext context, GoRouterState state) {
         final extra = state.extra as Map<String, dynamic>;
 
-        return  BlockPermissionsPage(extra:extra);
+        return BlockPermissionsPage(extra: extra);
       },
     ),
     GoRoute(
       name: 'create-location-permission',
       path: 'location-permission',
       builder: (BuildContext context, GoRouterState state) {
+        final extra = state.extra as Map<String, dynamic>;
 
-        return const LocationPermission();
+        return LocationPermission(extra: extra);
       },
     ),
     GoRoute(
@@ -80,13 +81,15 @@ final GoRoute _createScheduleRouter = GoRoute(
         return WifiLimit(extra: extra);
       },
     ),
-        GoRoute(
+    GoRoute(
       name: 'create-wifi-permission',
       path: 'wifi-permission',
       builder: (BuildContext context, GoRouterState state) {
-        final extra = state.extra as Map<String, dynamic>;
+        final extra = (state.extra as Map<String, dynamic>);
 
-        return  WifiPermissionPage(extra: extra,);
+        return WifiPermissionPage(
+          extra: extra,
+        );
       },
     ),
     GoRoute(
@@ -119,7 +122,7 @@ final GoRoute _createScheduleRouter = GoRoute(
 );
 
 /// The route configuration.
-final GoRouter _router = GoRouter(  
+final GoRouter _router = GoRouter(
   routes: <RouteBase>[
     GoRoute(
       path: '/',
@@ -152,7 +155,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      
         routerConfig: _router,
         theme: ThemeData(
           brightness: Brightness.dark,

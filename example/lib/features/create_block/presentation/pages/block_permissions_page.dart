@@ -117,11 +117,12 @@ class NumberPermissions extends StatelessWidget {
   });
 
   final List<bool> blockPermissions;
-
   @override
   Widget build(BuildContext context) {
+    final int disabledPermissions = blockPermissions.where((e) => !e).length;
+
     return Text(
-      "${blockPermissions.length} Permission${blockPermissions.length > 1 ? 's' : ''} Missing",
+      "$disabledPermissions Permission${disabledPermissions > 1 ? 's' : ''} Missing",
       style: const TextStyle(
           color: Colors.red, fontWeight: FontWeight.bold, fontSize: 30.0),
     );

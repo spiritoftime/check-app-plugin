@@ -102,4 +102,13 @@ abstract class CheckappPluginPlatform extends PlatformInterface {
   Future<List<Map<String, dynamic>>> getNearbyWifi() {
     throw UnimplementedError('getNearbyWifi() has not been implemented.');
   }
+
+   Future<bool> checkGPSEnabled() {
+    throw UnimplementedError('checkGPSEnabled() has not been implemented.');
+  }
+
+  Future<void> requestEnableGPS() {
+    throw UnimplementedError(
+        'requestEnableGPS() has not been implemented.');
+  }
 }

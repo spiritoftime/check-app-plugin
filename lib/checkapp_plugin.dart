@@ -68,4 +68,12 @@ class CheckappPlugin {
   Future<List<Map<String, dynamic>>> getNearbyWifi() {
     return CheckappPluginPlatform.instance.getNearbyWifi();
   }
+
+    Future<bool> checkGPSEnabled() {
+    return CheckappPluginPlatform.instance.checkGPSEnabled();
+  }
+
+  Future<void> requestEnableGPS() {
+    return CheckappPluginPlatform.instance.requestEnableGPS();
+  }
 }

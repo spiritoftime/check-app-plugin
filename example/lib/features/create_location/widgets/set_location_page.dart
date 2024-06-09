@@ -41,7 +41,7 @@ class _SetLocationPageState extends State<SetLocationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Choose your Location"),
+        title: const Text("Choose your Location"),
       ),
       body: SingleChildScrollView(
         child: Column(

@@ -34,31 +34,23 @@ final List<Map<String, dynamic>> conditions = [
     'icon': const Icon(Icons.wifi, size: 24),
     'onTap': (BuildContext context, extra) async {
       List<bool> wifiPermissionsEnabled = await Future.wait([
-        _checkappPlugin.checkWifiPermission(),
-        _checkappPlugin.checkAboveAPI33(),
+        _checkappPlugin.checkGPSEnabled(),
         _checkappPlugin.checkLocationPermission()
       ]);
-      final bool isWifiEnabled = wifiPermissionsEnabled[0];
-      final bool isAboveAPI33 = wifiPermissionsEnabled[1];
-      final bool isLocationEnabled = wifiPermissionsEnabled[2];
-      print(wifiPermissionsEnabled);
+      final bool isGPSEnabled = wifiPermissionsEnabled[0];
+      final bool isLocationEnabled = wifiPermissionsEnabled[1];
       if (!context.mounted) return;
-      if (isAboveAPI33) {
-        // !isWifiEnabled not needed for our use case https://developer.android.com/develop/connectivity/wifi/wifi-permissions
-        if ( !isLocationEnabled) {
-          context.pushNamed('create-wifi-permission',
-              extra: {'wifiPermissionsEnabled': wifiPermissionsEnabled});
-          return;
-        }
-      }
-      if (!isAboveAPI33) {
-        if (!isLocationEnabled) {
-          context.pushNamed('create-wifi-permission',
-              extra: {'wifiPermissionsEnabled': wifiPermissionsEnabled});
-          return;
-        }
-      }
 
+      if (!isLocationEnabled || !isGPSEnabled) {
+        context.pushNamed(
+          'create-wifi-permission',
+          extra: {
+            ...extra as Map<String, dynamic>,
+            'wifiPermissionsEnabled': wifiPermissionsEnabled
+          },
+        );
+        return;
+      }
       context.pushNamed('create-wifi', extra: extra);
     }
   },

@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
@@ -118,7 +119,7 @@ public class Permissions {
     }
 
     public static boolean checkLocationPermission(Context context, Activity activity) {
-        boolean isPermissionEnabled =  ActivityCompat.checkSelfPermission(
+        boolean isPermissionEnabled = ActivityCompat.checkSelfPermission(
                 context,
                 android.Manifest.permission.ACCESS_COARSE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
@@ -131,7 +132,20 @@ public class Permissions {
         return isPermissionEnabled;
 
 
+    }
 
+    public static boolean checkGPSEnabled(Context context) {
+        LocationManager manager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        final boolean isGPSEnabled = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        return isGPSEnabled;
+    }
+
+    public static void requestEnableGPS(Context context, Activity activity) {
+        if (!checkGPSEnabled(context)) {
+            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            activity.startActivityForResult(intent, 123456);
+
+        }
     }
 
     @SuppressLint("InlinedApi")
