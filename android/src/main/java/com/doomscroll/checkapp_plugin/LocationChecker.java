@@ -53,7 +53,7 @@ public class LocationChecker {
 
             @Override
             public void onLocationResult(LocationResult locationResult) {
-                Log.d("hi", String.valueOf(locationResult));
+//                Log.d("hi", String.valueOf(locationResult));
                 if (locationResult == null) {
                     return;
                 }
@@ -61,7 +61,7 @@ public class LocationChecker {
                 if (lastLocation != null) {
                     double lat = lastLocation.getLatitude();
                     double lng = lastLocation.getLongitude();
-                    Log.d("coords", "lat: " + lat + " lng: " + lng);
+//                    Log.d("coords", "lat: " + lat + " lng: " + lng);
                 }
             }
         };

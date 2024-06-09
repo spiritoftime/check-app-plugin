@@ -10,6 +10,7 @@ import 'package:checkapp_plugin_example/features/create_schedule/widgets/existin
 import 'package:checkapp_plugin_example/features/create_schedule/widgets/existing_condition.dart';
 import 'package:checkapp_plugin_example/features/create_schedule/widgets/schedule_name.dart';
 import 'package:checkapp_plugin_example/features/create_time/cubit/cubit/time_cubit.dart';
+import 'package:checkapp_plugin_example/features/create_wifi/cubit/cubit/wifi_cubit.dart';
 import 'package:checkapp_plugin_example/shared/widgets/accordion_wrapper.dart';
 import 'package:checkapp_plugin_example/shared/widgets/hover_ink_well.dart';
 import 'package:checkapp_plugin_example/shared/widgets/show_dialog.dart';
@@ -35,6 +36,7 @@ class _CreateSchedulePageState extends State<CreateSchedulePage> {
 
   LocationCubit get locationCubit =>
       widget.extra['locationCubit'] ?? LocationCubit();
+  WifiCubit get wifiCubit => widget.extra['wifiCubit'] ?? WifiCubit();
 
   List<Widget> appWidgets() {
     if (blockCubit.state.apps.isNotEmpty) {
@@ -196,7 +198,22 @@ class _CreateSchedulePageState extends State<CreateSchedulePage> {
                                     text2: '',
                                     updateUI: _updateUI,
                                   )
-                                : Container()
+                                : Container(),
+                            const Gap(16),
+                            wifiCubit.state.isNotEmpty
+                                ? ExistingCondition(
+                                    extra: widget.extra,
+                                    conditionType: 'Wifi',
+                                    onTap: () => context.pushNamed(
+                                        'create-wifi',
+                                        extra: widget.extra),
+                                    text1: wifiCubit.state
+                                        .map((w) => w.wifiName)
+                                        .join(', '),
+                                    text2: '',
+                                    updateUI: _updateUI,
+                                  )
+                                : Container(),
                           ],
                         ),
                       ),

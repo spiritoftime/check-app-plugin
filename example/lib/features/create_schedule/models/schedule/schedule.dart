@@ -11,6 +11,7 @@ class Schedule {
   final Time time;
   final ScheduleDetails scheduleDetails;
   final Location? location;
+  
   Schedule(
     this.location, {
     required this.scheduleDetails,

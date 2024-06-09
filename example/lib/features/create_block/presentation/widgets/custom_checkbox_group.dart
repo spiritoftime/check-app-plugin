@@ -25,16 +25,12 @@ class CustomCheckboxGroup extends StatefulWidget {
 }
 
 class _CustomCheckboxGroupState extends State<CustomCheckboxGroup> {
-  List<dynamic> selectedValues = [];
-
-  @override
-  void initState() {
-    super.initState();
-    selectedValues = widget.initialValue ?? [];
-  }
+  late List<dynamic> selectedValues;
 
   @override
   Widget build(BuildContext context) {
+    selectedValues = widget.initialValue ?? [];
+
     return FormBuilderField<List<dynamic>>(
       name: widget.name,
       initialValue: selectedValues,
