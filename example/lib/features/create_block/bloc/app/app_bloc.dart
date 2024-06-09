@@ -21,8 +21,8 @@ class AppsBloc extends Bloc<AppEvent, AppsState> {
       final apps = await _appRepository.getApp();
       emit(AppsLoaded(apps: apps));
     } catch (e) {
+    
       emit(AppsError(e.toString()));
-      print(e.toString());
     }
   }
   

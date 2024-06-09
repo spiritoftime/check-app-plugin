@@ -18,6 +18,7 @@ import static com.doomscroll.checkapp_plugin.Permissions.requestNotificationPerm
 import static com.doomscroll.checkapp_plugin.Permissions.requestOverlayPermission;
 import static com.doomscroll.checkapp_plugin.Permissions.requestUsagePermission;
 import static com.doomscroll.checkapp_plugin.Permissions.requestWifiPermission;
+import static com.doomscroll.checkapp_plugin.WifiScan.getNearbyWifi;
 
 import android.app.Activity;
 
@@ -82,7 +83,6 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
 
     private static final String CHECK_ABOVE_API_33 = "CHECK_ABOVE_API_33";
     private static final String GET_NEARBY_WIFI = "GET_NEARBY_WIFI";
-
 
 
     private static final String GET_LAUNCHABLE_APPLICATIONS = "GET_LAUNCHABLE_APPLICATIONS";
@@ -160,22 +160,22 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
             case CHECK_WIFI_PERMISSION:
                 boolean isWifiEnabled = false;
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
-                    isWifiEnabled = checkWifiPermission(context,activity);
+                    isWifiEnabled = checkWifiPermission(context, activity);
                 }
                 result.success(isWifiEnabled);
 
-//                result.success(false);
                 break;
             case REQUEST_WIFI_PERMISSION:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    requestWifiPermission(context,activity);
+                    requestWifiPermission(context, activity);
                 }
                 break;
             case CHECK_ABOVE_API_33:
                 result.success(isAboveApi33());
                 break;
             case GET_NEARBY_WIFI:
-//                result.success(queryWifi(context));
+                getNearbyWifi(result);
+
                 break;
 
             default:

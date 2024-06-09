@@ -16,30 +16,53 @@ import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
-public class WifiScan {
-public static void initializeWifiScan(Context context){
-    WifiManager mWifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+import io.flutter.plugin.common.MethodChannel;
 
-    final BroadcastReceiver mWifiScanReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context c, Intent intent) {
-            Log.d("intent", String.valueOf(intent));
-            if (Objects.equals(intent.getAction(), WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)) {
-                List<ScanResult> mScanResults = mWifiManager.getScanResults();
-                Log.d("scan results", mScanResults.toString());
-                for(ScanResult result: mScanResults){
-                    Log.d("scan result:",result.SSID);
+public class WifiScan {
+    static List<ScanResult> scanResults;
+
+    public static void initializeWifiScan(Context context) {
+        WifiManager mWifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        final BroadcastReceiver mWifiScanReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context c, Intent intent) {
+                if (Objects.equals(intent.getAction(), WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)) {
+                    scanResults = mWifiManager.getScanResults();
+                    for (ScanResult result : scanResults) {
+                        Log.d("scan result:", result.SSID);
+                    }
+                    // add your logic here
                 }
-                // add your logic here
             }
+        };
+        context.registerReceiver(mWifiScanReceiver,
+                new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+        mWifiManager.startScan();
+    }
+
+    public static void getNearbyWifi(MethodChannel.Result result) {
+        if (scanResults.isEmpty())
+            result.error("MISSING PERMISSIONS", "Location Services not turned on", null);
+        result.success(scanResultToMap());
+    }
+
+    private static List<Map<String,Object>> scanResultToMap(){
+        List<Map<String,Object>> wifiList = new ArrayList<>();
+        for (ScanResult scanResult : scanResults) {
+            Map<String, Object> resultMap = new HashMap<>();
+            if(!scanResult.SSID.isEmpty()){
+                resultMap.put("wifiName", scanResult.SSID);
+                wifiList.add(resultMap);
+            }
+
         }
-    };
-    context.registerReceiver(mWifiScanReceiver,
-            new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
-    mWifiManager.startScan();
-}
+        return wifiList;
+    }
 
 }
