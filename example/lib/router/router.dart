@@ -2,7 +2,7 @@ import 'package:checkapp_plugin_example/features/basic/presentation/basic_screen
 import 'package:checkapp_plugin_example/features/blocking_conditions/presentation/blocking_conditions_page.dart';
 import 'package:checkapp_plugin_example/features/create_block/bloc/app/app_bloc.dart';
 import 'package:checkapp_plugin_example/features/create_block/cubit/cubit/block_cubit.dart';
-import 'package:checkapp_plugin_example/features/create_block/presentation/pages/block_permissions_page.dart';
+import 'package:checkapp_plugin_example/features/create_block/presentation/permissions/block_permissions_page.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/pages/create_block_page.dart';
 import 'package:checkapp_plugin_example/features/create_launch_count/launch_limit.dart';
 import 'package:checkapp_plugin_example/features/create_location/widgets/location_permission.dart';

@@ -36,7 +36,7 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
   final _formKey = GlobalKey<FormBuilderState>();
 
   String? _searchApplicationTerm;
-  final List<String> _tabs = ["Apps", "Websites", "Keywords"];
+  final List<String> tabs = ["Apps", "Websites", "Keywords"];
 
   void _onScreenChanged(TabController controller) {
     if (!controller.indexIsChanging) {
@@ -146,7 +146,7 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
                             fontSize: 32.0)),
                     const Gap(16),
                     DefaultTabController(
-                      length: _tabs.length,
+                      length: tabs.length,
                       child: Builder(builder: (BuildContext context) {
                         final TabController controller =
                             DefaultTabController.of(context);
@@ -172,7 +172,7 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
                                 ),
                                 borderWidth: 1,
                                 radius: 20,
-                                tabs: _tabs.map((e) => Tab(text: e)).toList(),
+                                tabs: tabs.map((e) => Tab(key: Key(e),text: e)).toList(),
                               ),
                               Expanded(
                                 child: FormBuilder(

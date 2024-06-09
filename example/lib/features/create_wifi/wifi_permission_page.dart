@@ -1,5 +1,6 @@
 import 'package:checkapp_plugin/checkapp_plugin.dart';
-import 'package:checkapp_plugin_example/features/create_block/presentation/pages/block_permissions_page.dart';
+import 'package:checkapp_plugin_example/features/create_block/presentation/permissions/block_permissions_page.dart';
+import 'package:checkapp_plugin_example/features/create_block/presentation/permissions/widgets/number_permission.dart';
 import 'package:checkapp_plugin_example/features/create_wifi/utils.dart';
 import 'package:checkapp_plugin_example/shared/widgets/accordion_wrapper.dart';
 import 'package:checkapp_plugin_example/shared/widgets/instruction.dart';
@@ -38,6 +39,27 @@ class _WifiPermissionPageState extends State<WifiPermissionPage> {
           if (mounted &&
               wifiPermissionsEnabled.first &&
               wifiPermissionsEnabled[1]) {
+            context.goNamed('create-wifi', extra: widget.extra);
+          }
+        },
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(
+      LifecycleEventHandler(
+        resumeCallBack: () async {
+          List<bool> wifiPermissionsEnabled = await Future.wait([
+            _checkappPlugin.checkGPSEnabled(),
+            _checkappPlugin.checkLocationPermission()
+          ]);
+          setState(() {
+            wifiPermissions = wifiPermissionsEnabled;
+          });
+          if (mounted && wifiPermissionsEnabled.every((e) => e)) {
             context.goNamed('create-wifi', extra: widget.extra);
           }
         },

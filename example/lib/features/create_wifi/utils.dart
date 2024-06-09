@@ -8,22 +8,6 @@ List<Widget> instructionList({required wifiPermissions}) => [
       Container(
         margin: const EdgeInsets.only(bottom: 8.0),
         child: Instruction(
-          instructionNumber: '1',
-          instruction: const Text("Enable Location permission"),
-          actionButton: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: !wifiPermissions[1] ? Colors.blue : Colors.grey,
-            ),
-            onPressed: () async {
-              await _checkappPlugin.requestLocationPermission();
-            },
-            child: const Text("Enable", style: TextStyle(color: Colors.white)),
-          ),
-        ),
-      ),
-      Container(
-        margin: const EdgeInsets.only(bottom: 8.0),
-        child: Instruction(
           instructionNumber: '2',
           instruction: const Text("Enable Location Services"),
           actionButton: ElevatedButton(
@@ -33,8 +17,30 @@ List<Widget> instructionList({required wifiPermissions}) => [
             onPressed: () async {
               await _checkappPlugin.requestEnableGPS();
             },
-            child: const Text("Enable", style: TextStyle(color: Colors.white)),
+            child: Text(
+              "Enable",
+              style: TextStyle(
+                  color: wifiPermissions[0] ? Colors.white70 : Colors.white),
+            ),
           ),
         ),
-      )
+      ),
+      Container(
+        margin: const EdgeInsets.only(bottom: 8.0),
+        child: Instruction(
+          instructionNumber: '1',
+          instruction: const Text("Enable Location permission"),
+          actionButton: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: !wifiPermissions[1] ? Colors.blue : Colors.grey,
+            ),
+            onPressed: () async {
+              await _checkappPlugin.requestLocationPermission();
+            },
+            child: Text("Enable",
+                style: TextStyle(
+                    color: wifiPermissions[0] ? Colors.white70 : Colors.white)),
+          ),
+        ),
+      ),
     ];
