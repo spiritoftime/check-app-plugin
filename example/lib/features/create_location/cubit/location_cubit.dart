@@ -2,19 +2,13 @@ import 'package:checkapp_plugin_example/features/create_location/models/location
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class LocationCubit extends Cubit<Location?> {
+class LocationCubit extends Cubit<List<Location>> {
   LocationCubit()
-      : super(null);
-  void updateLocation({Location? location}) {
-    if (location == null){
+      : super([]);
+  void updateLocation({required List<Location> location}) {
 
-      emit(null);
-    }
-    else {
-      emit(location.copyWith(
-          longitude: location.longitude,
-          location: location.location,
-          latitude: location.latitude));
-    }
+    
+      emit(location);
+    
   }
 }

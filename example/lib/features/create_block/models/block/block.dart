@@ -22,9 +22,8 @@ class Block {
       {List<App>? apps,
       List<Website>? websites,
       List<Keyword>? keywords,
-      int? id}) {
+      }) {
     return Block(
-      id: id ?? this.id,
       apps: apps ?? this.apps,
       websites: websites ?? this.websites,
       keywords: keywords ?? this.keywords,

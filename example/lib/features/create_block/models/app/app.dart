@@ -19,12 +19,11 @@ class App extends Equatable {
 
   copyWith({
     String? packageName,
-    int? id,
     String? iconBase64String,
     String? appName,
   }) {
     return App(
-      id: id ?? this.id,
+      id: id ,
       packageName: packageName ?? this.packageName,
       iconBase64String: iconBase64String ?? this.iconBase64String,
       appName: appName ?? this.appName,
