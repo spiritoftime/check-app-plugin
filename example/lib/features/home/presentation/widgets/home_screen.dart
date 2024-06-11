@@ -120,9 +120,9 @@ class HomeScreen extends StatelessWidget {
                                   List<bool> arePermissionsEnabled =
                                       await Future.wait([
                                     checkappPlugin.checkUsagePermission(),
+                                    checkappPlugin.checkOverlayPermission(),
                                     checkappPlugin
                                         .checkNotificationPermission(),
-                                    checkappPlugin.checkOverlayPermission(),
                                     checkappPlugin.checkBackgroundPermission(),
                                   ]);
                                   if (arePermissionsEnabled.contains(false) &&

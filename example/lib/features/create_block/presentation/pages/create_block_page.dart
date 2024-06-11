@@ -61,10 +61,12 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
   }
 
   void _onBlockScreenCheckboxChanged() {
+
     _formKey.currentState!.save();
     final val = _formKey.currentState!.value;
     debugPrint("------formbuilder onchanged ------");
-    debugPrint("FORMbuilder state: ${_formKey.currentState!.value.toString()}");
+    debugPrint(
+        "FORMbuilder state:keyword -  ${_formKey.currentState!.value['keywords'].toString()} websites: ${_formKey.currentState!.value['websites'].toString()} ");
     blockCubit.updateBlock(
         apps: val['apps'] ?? [],
         websites: val['websites'] ?? [],
@@ -172,7 +174,9 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
                                 ),
                                 borderWidth: 1,
                                 radius: 20,
-                                tabs: tabs.map((e) => Tab(key: Key(e),text: e)).toList(),
+                                tabs: tabs
+                                    .map((e) => Tab(key: Key(e), text: e))
+                                    .toList(),
                               ),
                               Expanded(
                                 child: FormBuilder(

@@ -16,6 +16,8 @@ class LocationPermission extends StatefulWidget {
 
 class _LocationPermissionState extends State<LocationPermission> {
   final _checkAppPlugin = CheckappPlugin();
+      late final LifecycleEventHandler _lifecycleEventHandler;
+
   late bool isPermissionEnabled;
   Future<bool> isLocationPermissionEnabled() async {
     isPermissionEnabled = await _checkAppPlugin.checkLocationPermission();
@@ -25,15 +27,16 @@ class _LocationPermissionState extends State<LocationPermission> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(
-      LifecycleEventHandler(
+    _lifecycleEventHandler = LifecycleEventHandler(
         resumeCallBack: () async {
           isPermissionEnabled = await isLocationPermissionEnabled();
           if (mounted && isPermissionEnabled) {
             context.goNamed('create-location', extra: widget.extra);
           }
         },
-      ),
+      );
+    WidgetsBinding.instance.addObserver(
+      _lifecycleEventHandler
     );
   }
 
@@ -41,14 +44,7 @@ class _LocationPermissionState extends State<LocationPermission> {
   void dispose() {
     super.dispose();
     WidgetsBinding.instance.removeObserver(
-      LifecycleEventHandler(
-        resumeCallBack: () async {
-          isPermissionEnabled = await isLocationPermissionEnabled();
-          if (mounted && isPermissionEnabled) {
-            context.goNamed('create-location', extra: widget.extra);
-          }
-        },
-      ),
+      _lifecycleEventHandler
     );
   }
 

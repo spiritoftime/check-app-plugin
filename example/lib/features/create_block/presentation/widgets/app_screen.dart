@@ -42,7 +42,7 @@ class _AppScreenState extends State<AppScreen> {
                 return CustomCheckboxGroup(
                     name: 'apps',
                     items: filteredApps,
-                    content: (app) => AppRow(app: app,key: Key(app.appName) ,),
+                    content: (app) => AppRow(app: app,key: Key(app.appName) ),
                     initialValue: widget.blockCubit?.state.apps);
               } else {
                 return const Text('No App Found');

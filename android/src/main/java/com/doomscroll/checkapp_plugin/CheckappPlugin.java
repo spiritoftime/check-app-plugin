@@ -109,6 +109,7 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
             case GET_LAUNCHABLE_APPLICATIONS:
                 List<Map<String, Object>> appList = getInstalledApplications();
                 result.success(appList);
+                break;
             case CHANNEL_DETECT_METHOD:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     requestOverlayPermission(context, activity);

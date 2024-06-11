@@ -22,16 +22,17 @@ class _BlockPermissionsPageState extends State<BlockPermissionsPage> {
   set blockPermissions(List<bool> value) =>
       widget.extra['blockPermissions'] = value;
   final CheckappPlugin checkappPlugin = CheckappPlugin();
+    late final LifecycleEventHandler _lifecycleEventHandler;
+
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(
-      LifecycleEventHandler(
+    _lifecycleEventHandler  = LifecycleEventHandler(
         resumeCallBack: () async {
           List<bool> arePermissionsEnabled = await Future.wait([
             checkappPlugin.checkUsagePermission(),
-            checkappPlugin.checkNotificationPermission(),
             checkappPlugin.checkOverlayPermission(),
+            checkappPlugin.checkNotificationPermission(),
             checkappPlugin.checkBackgroundPermission(),
           ]);
           setState(() {
@@ -41,7 +42,9 @@ class _BlockPermissionsPageState extends State<BlockPermissionsPage> {
             context.goNamed('create-block', extra: widget.extra);
           }
         },
-      ),
+      );
+    WidgetsBinding.instance.addObserver(
+      _lifecycleEventHandler
     );
   }
 
@@ -49,22 +52,7 @@ class _BlockPermissionsPageState extends State<BlockPermissionsPage> {
   void dispose() {
     super.dispose();
     WidgetsBinding.instance.removeObserver(
-      LifecycleEventHandler(
-        resumeCallBack: () async {
-          List<bool> arePermissionsEnabled = await Future.wait([
-            checkappPlugin.checkUsagePermission(),
-            checkappPlugin.checkNotificationPermission(),
-            checkappPlugin.checkOverlayPermission(),
-            checkappPlugin.checkBackgroundPermission(),
-          ]);
-          setState(() {
-            blockPermissions = arePermissionsEnabled;
-          });
-          if (mounted && arePermissionsEnabled.every((e) => e)) {
-            context.goNamed('create-block', extra: widget.extra);
-          }
-        },
-      ),
+      _lifecycleEventHandler
     );
   }
 

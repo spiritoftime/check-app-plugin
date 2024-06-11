@@ -67,7 +67,7 @@ class _WebsiteScreenState extends State<WebsiteScreen> {
           CustomCheckboxGroup(
               name: 'websites',
               items: websites,
-              content: (website) => WebsiteRow(website: website),
+              content: (website) => WebsiteRow(website: website,key: Key(website.url),),
               initialValue: widget.blockCubit.state.websites)
         ],
       ),

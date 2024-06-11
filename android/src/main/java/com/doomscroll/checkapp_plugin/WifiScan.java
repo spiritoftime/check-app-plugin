@@ -34,9 +34,7 @@ public class WifiScan {
             public void onReceive(Context c, Intent intent) {
                 if (Objects.equals(intent.getAction(), WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)) {
                     scanResults = mWifiManager.getScanResults();
-                    for (ScanResult result : scanResults) {
-//                        Log.d("scan result:", result.SSID);
-                    }
+
                     // add your logic here
                 }
             }
