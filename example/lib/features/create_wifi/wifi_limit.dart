@@ -53,11 +53,8 @@ class _WifiLimitState extends State<WifiLimit> {
     super.dispose();
   }
 
-  void _onWifiCheckBoxChanged() {
-    _formKey.currentState!.save();
-    final val = _formKey.currentState!.value;
-    wifiCubit.updateWifi(wifi: val['wifi']);
-    print("checkboxChanged:${val['wifi']}");
+  void _onWifiCheckBoxChanged(selectedValues) {
+    wifiCubit.updateWifi(wifi: selectedValues);
   }
 
   @override
@@ -85,10 +82,10 @@ class _WifiLimitState extends State<WifiLimit> {
                       List<Wifi> wifiList = snapshot.data!;
                       return FormBuilder(
                         key: _formKey,
-                        onChanged: _onWifiCheckBoxChanged,
                         autovalidateMode: AutovalidateMode.disabled,
                         child: SingleChildScrollView(
                           child: CustomCheckboxGroup(
+                            onChanged: _onWifiCheckBoxChanged,
                             name: 'wifi',
                             items: wifiList,
                             content: (wifi) => WifiRow(

@@ -24,7 +24,9 @@ class _KeywordScreenState extends State<KeywordScreen> {
     myController.dispose();
     super.dispose();
   }
-
+  void _onKeywordCheckBoxChanged(selectedValues) {
+    widget.blockCubit.updateBlock(keywords: selectedValues);
+  }
   @override
   Widget build(BuildContext context) {
     List<Keyword> keywords = widget.blockCubit.state.keywords;
@@ -60,6 +62,7 @@ class _KeywordScreenState extends State<KeywordScreen> {
             color: Colors.grey,
           ),
           CustomCheckboxGroup(
+              onChanged: _onKeywordCheckBoxChanged,
               name: 'keywords',
               items: keywords,
               content: (keyword) => KeywordRow(

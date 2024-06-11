@@ -25,6 +25,10 @@ class _WebsiteScreenState extends State<WebsiteScreen> {
     super.dispose();
   }
 
+  void _onWebsiteCheckBoxChanged(selectedValues) {
+    widget.blockCubit.updateBlock(websites: selectedValues);
+  }
+
   @override
   Widget build(BuildContext context) {
     List<Website> websites = widget.blockCubit.state.websites;
@@ -65,9 +69,13 @@ class _WebsiteScreenState extends State<WebsiteScreen> {
             color: Colors.grey,
           ),
           CustomCheckboxGroup(
+              onChanged: _onWebsiteCheckBoxChanged,
               name: 'websites',
               items: websites,
-              content: (website) => WebsiteRow(website: website,key: Key(website.url),),
+              content: (website) => WebsiteRow(
+                    website: website,
+                    key: Key(website.url),
+                  ),
               initialValue: widget.blockCubit.state.websites)
         ],
       ),

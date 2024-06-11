@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AppScreen extends StatefulWidget {
-  final BlockCubit? blockCubit;
+  final BlockCubit blockCubit;
   final String? searchApplicationTerm;
 
   const AppScreen({
@@ -21,6 +21,10 @@ class AppScreen extends StatefulWidget {
 }
 
 class _AppScreenState extends State<AppScreen> {
+  void _onAppCheckBoxChanged(selectedValues) {
+    widget.blockCubit.updateBlock(apps: selectedValues);
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -40,10 +44,11 @@ class _AppScreenState extends State<AppScreen> {
                         .toList()
                     : state.apps;
                 return CustomCheckboxGroup(
+                    onChanged: _onAppCheckBoxChanged,
                     name: 'apps',
                     items: filteredApps,
-                    content: (app) => AppRow(app: app,key: Key(app.appName) ),
-                    initialValue: widget.blockCubit?.state.apps);
+                    content: (app) => AppRow(app: app, key: Key(app.appName)),
+                    initialValue: widget.blockCubit.state.apps);
               } else {
                 return const Text('No App Found');
               }

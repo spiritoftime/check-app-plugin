@@ -4,6 +4,7 @@ import 'package:checkapp_plugin_example/features/create_block/cubit/cubit/block_
 import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/app_screen.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/keyword_screen.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/website_screen.dart';
+import 'package:checkapp_plugin_example/shared/widgets/show_dialog.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -20,14 +21,11 @@ class CreateBlockPage extends StatefulWidget {
 
 class _CreateBlockPageState extends State<CreateBlockPage> {
   late BlockCubit blockCubit;
-  late bool isSubmitEnabled;
   @override
   void initState() {
     super.initState();
     blockCubit = widget.extra['blockCubit'] ?? BlockCubit();
-    isSubmitEnabled = blockCubit.state.apps.isNotEmpty ||
-        blockCubit.state.websites.isNotEmpty ||
-        blockCubit.state.keywords.isNotEmpty;
+
   }
 
   bool _isAppScreen = true;
@@ -57,24 +55,6 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
   void _onSearchApplicationTermChanged(String? text) {
     setState(() {
       _searchApplicationTerm = text;
-    });
-  }
-
-  void _onBlockScreenCheckboxChanged() {
-
-    _formKey.currentState!.save();
-    final val = _formKey.currentState!.value;
-    debugPrint("------formbuilder onchanged ------");
-    debugPrint(
-        "FORMbuilder state:keyword -  ${_formKey.currentState!.value['keywords'].toString()} websites: ${_formKey.currentState!.value['websites'].toString()} ");
-    blockCubit.updateBlock(
-        apps: val['apps'] ?? [],
-        websites: val['websites'] ?? [],
-        keywords: val['keywords'] ?? []);
-    setState(() {
-      isSubmitEnabled = val['apps'] != null && val['apps'].isNotEmpty ||
-          val['websites'] != null && val['websites'].isNotEmpty ||
-          val['keywords'] != null && val['keywords'].isNotEmpty;
     });
   }
 
@@ -180,7 +160,6 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
                               ),
                               Expanded(
                                 child: FormBuilder(
-                                  onChanged: _onBlockScreenCheckboxChanged,
                                   autovalidateMode: AutovalidateMode.disabled,
                                   key: _formKey,
                                   child: TabBarView(
@@ -209,25 +188,27 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
               ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: isSubmitEnabled ? Colors.blue : Colors.grey,
+                  backgroundColor:  Colors.blue ,
                   padding: const EdgeInsets.symmetric(
                       vertical: 16.0, horizontal: 16.0),
                 ),
-                onPressed: isSubmitEnabled
-                    ? () {
-                        if (widget.extra.containsKey('blockCubit')) {
-                          context.goNamed('confirm-schedule', extra: {
-                            ...widget.extra,
-                            'blockCubit': blockCubit
-                          });
-                        } else {
-                          context.goNamed('create-blocking-conditions', extra: {
-                            ...widget.extra,
-                            'blockCubit': blockCubit
-                          });
-                        }
-                      }
-                    : null, // null disables the button
+                onPressed: () {
+                  if (blockCubit.state.apps.isEmpty &&
+                      blockCubit.state.keywords.isEmpty &&
+                      blockCubit.state.websites.isEmpty) {
+                    createDialog(context, const Text("No item selected"),
+                        const Text("Please select at least one item to block"));
+                    return;
+                  }
+
+                  if (widget.extra.containsKey('blockCubit')) {
+                    context.goNamed('confirm-schedule',
+                        extra: {...widget.extra, 'blockCubit': blockCubit});
+                  } else {
+                    context.goNamed('create-blocking-conditions',
+                        extra: {...widget.extra, 'blockCubit': blockCubit});
+                  }
+                },
                 child: const Text(
                   "Save Blocklist",
                   style: TextStyle(fontSize: 24, color: Colors.white),
