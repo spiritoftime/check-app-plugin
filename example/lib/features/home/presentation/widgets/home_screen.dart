@@ -7,6 +7,7 @@ import 'package:checkapp_plugin_example/shared/widgets/grey_container.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gap/gap.dart';
+import 'package:sqflite/sqflite.dart';
 
 /// The home screen
 class HomeScreen extends StatelessWidget {
@@ -70,8 +71,10 @@ class HomeScreen extends StatelessWidget {
                                   ),
                                   backgroundColor: const Color(0xff5094F5),
                                 ),
-                                onPressed: () {
-                                  context.go('/basic');
+                                onPressed: () async {
+                                  final jibai = await getDatabasesPath();
+                                  // context.go('/basic');
+                                  print(jibai);
                                 },
                                 child: const Row(
                                   mainAxisAlignment: MainAxisAlignment.center,

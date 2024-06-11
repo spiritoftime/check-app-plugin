@@ -10,8 +10,10 @@ void main() {
         'verify search icon exists at app screen, but disappears at other screen',
         (tester) async {
       // Load app widget.
-      await tester.pumpWidget(const CreateBlockPage(
-        extra: {},
+      await tester.pumpWidget(const MaterialApp(
+        home: CreateBlockPage(
+          extra: {},
+        ),
       ));
 //  verify search icon exists  at app screen
       expect(find.byIcon(Icons.search) as Function(dynamic p1), findsOneWidget);
