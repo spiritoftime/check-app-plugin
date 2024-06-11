@@ -15,16 +15,12 @@ class Location {
   });
 
   copyWith({
-    int? id,
     required final String location,
     required final double latitude,
     required final double longitude,
   }) {
     return Location(
-        id: id ?? this.id,
-        location: location,
-        latitude: latitude,
-        longitude: longitude);
+        id: id, location: location, latitude: latitude, longitude: longitude);
   }
 
   factory Location.fromJson(Map<String, dynamic> json) =>
