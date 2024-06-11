@@ -11,9 +11,9 @@ class Schedule {
   final Time time;
   final ScheduleDetails scheduleDetails;
   final Location? location;
-  
+  final int? id;
   Schedule(
-    this.location, {
+ {this.id,    this.location,
     required this.scheduleDetails,
     required this.block,
     required this.time,
@@ -24,7 +24,7 @@ class Schedule {
       Time? time,
       Location? location,
       ScheduleDetails? scheduleDetails}) {
-    return Schedule(location ?? this.location,
+    return Schedule(location:location ?? this.location,id: id ?? this.id,
         block: block ?? this.block,
         time: time ?? this.time,
         scheduleDetails: scheduleDetails ?? this.scheduleDetails);

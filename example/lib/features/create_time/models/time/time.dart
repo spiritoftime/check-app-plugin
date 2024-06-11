@@ -7,16 +7,19 @@ part 'time.g.dart';
 class Time {
   final List<Day> days;
   final List<Timing> timings;
-
+final int? id;
   Time({
+    this.id,
     required this.days,
     required this.timings,
   });
   copyWith({
+    int? id,
     List<Day>? days,
     List<Timing>? timings,
   }) {
     return Time(
+      id: id ?? this.id,
       days: days ?? this.days,
       timings: timings ?? this.timings,
     );

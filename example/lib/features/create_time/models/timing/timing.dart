@@ -7,8 +7,9 @@ part 'timing.g.dart';
 class Timing {
   final String start;
   final String end;
-
+  final int? id;
   const Timing({
+    this.id,
     required this.start,
     required this.end,
   });

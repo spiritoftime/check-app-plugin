@@ -7,7 +7,8 @@ part of 'schedule.dart';
 // **************************************************************************
 
 Schedule _$ScheduleFromJson(Map<String, dynamic> json) => Schedule(
-      json['location'] == null
+      id: (json['id'] as num?)?.toInt(),
+      location: json['location'] == null
           ? null
           : Location.fromJson(json['location'] as Map<String, dynamic>),
       scheduleDetails: ScheduleDetails.fromJson(
@@ -21,4 +22,5 @@ Map<String, dynamic> _$ScheduleToJson(Schedule instance) => <String, dynamic>{
       'time': instance.time.toJson(),
       'scheduleDetails': instance.scheduleDetails.toJson(),
       'location': instance.location?.toJson(),
+      'id': instance.id,
     };

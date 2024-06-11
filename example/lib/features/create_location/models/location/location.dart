@@ -1,25 +1,30 @@
-
 import 'package:json_annotation/json_annotation.dart';
 part 'location.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class Location {
+  final int? id;
   final String location;
   final double latitude;
   final double longitude;
   Location({
+    this.id,
     required this.longitude,
     required this.location,
     required this.latitude,
   });
 
   copyWith({
+    int? id,
     required final String location,
     required final double latitude,
     required final double longitude,
   }) {
     return Location(
-        location: location, latitude: latitude, longitude: longitude);
+        id: id ?? this.id,
+        location: location,
+        latitude: latitude,
+        longitude: longitude);
   }
 
   factory Location.fromJson(Map<String, dynamic> json) =>
