@@ -37,7 +37,7 @@ class _KeywordScreenState extends State<KeywordScreen> {
             onSubmitted: (String value) {
               Keyword newKeyword = Keyword(keyword: value);
               List<Keyword> existingKeywords =
-                  widget.blockCubit.state.keywords ?? [];
+                  widget.blockCubit.state.keywords;
               List<Keyword> newKeywords = [...existingKeywords, newKeyword];
               // update cubit
               widget.blockCubit.updateBlock(keywords: newKeywords);
@@ -63,7 +63,7 @@ class _KeywordScreenState extends State<KeywordScreen> {
           CustomCheckboxGroup(
               name: 'keywords',
               items: keywords,
-              content: (keyword) => KeywordRow(keyword: keyword),
+              content: (keyword) => KeywordRow(keyword: keyword.keyword),
               initialValue: widget.blockCubit.state.keywords)
         ],
       ),

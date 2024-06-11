@@ -73,7 +73,7 @@ class _CreateSchedulePageState extends State<CreateSchedulePage> {
           .map((keyword) => Container(
                 margin: const EdgeInsets.only(bottom: 8),
                 child: KeywordRow(
-                  keyword: keyword,
+                  keyword: keyword.keyword,
                   key: Key(keyword.keyword),
                 ),
               ))
@@ -187,14 +187,14 @@ class _CreateSchedulePageState extends State<CreateSchedulePage> {
                                   )
                                 : Container(),
                             const Gap(16),
-                            locationCubit.state != null
+                            locationCubit.state.isNotEmpty
                                 ? ExistingCondition(
                                     extra: widget.extra,
                                     conditionType: 'Location',
                                     onTap: () => context.pushNamed(
                                         'create-location',
                                         extra: widget.extra),
-                                    text1: locationCubit.state!.location,
+                                    text1: locationCubit.state!.map((l)=>l.location).join(', '),
                                     text2: '',
                                     updateUI: _updateUI,
                                   )

@@ -10,10 +10,11 @@ class Schedule {
   final Block block;
   final Time time;
   final ScheduleDetails scheduleDetails;
-  final Location? location;
+  final List<Location>? location;
   final int? id;
-  Schedule(
- {this.id,    this.location,
+  Schedule({
+    this.id,
+    this.location,
     required this.scheduleDetails,
     required this.block,
     required this.time,
@@ -22,9 +23,11 @@ class Schedule {
   copyWith(
       {Block? block,
       Time? time,
-      Location? location,
+      List<Location>? location,
       ScheduleDetails? scheduleDetails}) {
-    return Schedule(location:location ?? this.location,id: id ?? this.id,
+    return Schedule(
+        location: location ?? this.location,
+        id: id,
         block: block ?? this.block,
         time: time ?? this.time,
         scheduleDetails: scheduleDetails ?? this.scheduleDetails);

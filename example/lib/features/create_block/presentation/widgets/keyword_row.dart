@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 class KeywordRow extends StatelessWidget {
-  final Keyword keyword;
+  final String keyword;
   const KeywordRow({
     required this.keyword,
     super.key,
@@ -25,7 +25,7 @@ class KeywordRow extends StatelessWidget {
             fit: BoxFit.scaleDown,
             alignment: Alignment.centerLeft,
             child: Text(
-              keyword.keyword,
+              keyword,
               softWrap: true,
               style: const TextStyle(
                   fontSize: 16, fontWeight: FontWeight.w500),

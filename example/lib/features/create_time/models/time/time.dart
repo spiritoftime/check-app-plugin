@@ -14,12 +14,11 @@ final int? id;
     required this.timings,
   });
   copyWith({
-    int? id,
     List<Day>? days,
     List<Timing>? timings,
   }) {
     return Time(
-      id: id ?? this.id,
+      id:id,
       days: days ?? this.days,
       timings: timings ?? this.timings,
     );
