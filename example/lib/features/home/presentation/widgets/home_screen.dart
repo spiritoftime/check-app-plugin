@@ -3,6 +3,7 @@ import 'package:checkapp_plugin_example/features/home/presentation/widgets/accor
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/carousel_icons.dart';
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/schedule_template_carousel.dart';
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/endless_scrolling_widget.dart';
+import 'package:checkapp_plugin_example/repository/auth_repository/authentication_repository.dart';
 import 'package:checkapp_plugin_example/shared/widgets/grey_container.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -12,6 +13,7 @@ import 'package:sqflite/sqflite.dart';
 /// The home screen
 class HomeScreen extends StatelessWidget {
   /// Constructs a [HomeScreen]
+
   HomeScreen({super.key});
   final CheckappPlugin checkappPlugin = CheckappPlugin();
   @override
@@ -72,9 +74,8 @@ class HomeScreen extends StatelessWidget {
                                   backgroundColor: const Color(0xff5094F5),
                                 ),
                                 onPressed: () async {
-                                  final jibai = await getDatabasesPath();
+                                  print(await AuthenticationRepository().userId);
                                   // context.go('/basic');
-                                  print(jibai);
                                 },
                                 child: const Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
