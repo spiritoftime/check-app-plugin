@@ -63,8 +63,7 @@ class _CustomCheckboxGroupState extends State<CustomCheckboxGroup> {
                       title: widget.content(app),
                       controlAffinity: ListTileControlAffinity.trailing,
                       onChanged: (bool? checked) {
-                        print(checked);
-                        var newSelectedValues;
+                        List newSelectedValues;
                         if (checked == true) {
                           newSelectedValues = selectedValues..add(app);
                         } else {

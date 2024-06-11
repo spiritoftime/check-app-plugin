@@ -19,7 +19,7 @@ class SetLocationPage extends StatefulWidget {
 class _SetLocationPageState extends State<SetLocationPage> {
   final searchTextController = TextEditingController();
   late LocationCubit locationCubit;
-  List<GBSearchData> searchItem = [];
+  List<Location> searchItem = [];
   Map<String, dynamic> details = {};
   bool isSearching = false;
   bool isLoading = false;
@@ -34,19 +34,24 @@ class _SetLocationPageState extends State<SetLocationPage> {
       isSearching = true;
     });
     List<GBSearchData> data = await GeocoderBuddy.query(query);
+    List<Location> locationData = data
+        .map((e) => Location(
+            latitude: double.parse(e.lat),
+            longitude: double.parse(e.lon),
+            location: e.displayName))
+        .toList();
     setState(() {
       isSearching = false;
-      searchItem = data;
+      searchItem = locationData;
     });
   }
 
   final _formKey = GlobalKey<FormBuilderState>();
 
-  void _onLocationCheckBoxChanged() {
-    _formKey.currentState!.save();
-    final val = _formKey.currentState!.value;
-    locationCubit.updateLocation(location: val['location']);
-    print("checkboxChanged:${val['location']}");
+  void _onLocationCheckBoxChanged(selectedItems) {
+
+    locationCubit.updateLocation(
+        location:selectedItems);
   }
 
   @override
@@ -88,67 +93,44 @@ class _SetLocationPageState extends State<SetLocationPage> {
                     },
                     child: const Text("Search"),
                   ),
-                  SizedBox(
-                    height: 300,
-                    child: !isSearching
-                        ? FormBuilder(
-                            key: _formKey,
+                  !isSearching
+                      ? FormBuilder(
+                          key: _formKey,
+                          autovalidateMode: AutovalidateMode.disabled,
+                          child: CustomCheckboxGroup(
                             onChanged: _onLocationCheckBoxChanged,
-                            autovalidateMode: AutovalidateMode.disabled,
-                            child: CustomCheckboxGroup(
-                              name: 'location',
-                              items: searchItem,
-                              content: (item) => KeywordRow(
-                                keyword: item.displayName,
-                                key: Key(item.displayName),
-                              ),
-                              initialValue: locationCubit.state,
+                            name: 'location',
+                            items: searchItem,
+                            content: (item) => KeywordRow(
+                              keyword: item.location,
+                              key: Key(item.location),
                             ),
-                          )
-                        // ListView.builder(
-                        //     itemCount: searchItem.length,
-                        //     itemBuilder: (context, index) {
-                        //       var item = searchItem[index];
-                        //       return ListTile(
-                        //         onTap: () {
-                        //           Location location = Location(
-                        //               latitude: double.parse(item.lat),
-                        //               longitude: double.parse(item.lon),
-                        //               location: item.displayName);
-                        //           locationCubit.updateLocation(location: location);
-                        //           context.goNamed('confirm-schedule',
-                        //               extra: {
-                        //                 ...widget.extra,
-                        //                 'locationCubit': locationCubit
-                        //               });
-                        //         },
-                        //         title: Text(item.displayName),
-                        //       );
-                        //     })
-                        : const Center(
-                            child: CircularProgressIndicator(),
+                            initialValue: locationCubit.state,
                           ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
+                        )
+                      : const Center(
+                          child: CircularProgressIndicator(),
+                        ),
                 ],
               ),
             ),
           ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size(double.infinity, 64),
-              backgroundColor: Colors.blue,
-              padding:
-                  const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size(double.infinity, 64),
+                backgroundColor: Colors.blue,
+                padding: const EdgeInsets.symmetric(
+                    vertical: 16.0, horizontal: 16.0),
+              ),
+              child: const Text('Save Location List',
+                  style: TextStyle(color: Colors.white)),
+              onPressed: () {
+                context.goNamed('confirm-schedule',
+                    extra: {...widget.extra, 'locationCubit': locationCubit});
+              },
             ),
-            child: const Text('Save Location List',
-                style: TextStyle(color: Colors.white)),
-            onPressed: () {
-              context.goNamed('confirm-schedule',
-                  extra: {...widget.extra, 'locationCubit': locationCubit});
-            },
           ),
         ],
       ),

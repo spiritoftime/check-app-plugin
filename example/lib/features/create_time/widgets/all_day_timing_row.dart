@@ -45,7 +45,7 @@ class _AllDayTimingRowState extends State<AllDayTimingRow> {
     subscription = widget.copyTimeCubit.stream.listen((int call) async {
       if (_isEnabled) {
         widget.timeCubit
-            .updateTime(timings: [Timing(start: '00:00', end: '23:59')]);
+            .updateTime(timings: [const Timing(start: '00:00', end: '23:59')]);
         print('updated all day timing ${widget.timeCubit.state.timings}');
       }
     });
