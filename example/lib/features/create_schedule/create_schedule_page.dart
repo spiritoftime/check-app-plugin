@@ -299,7 +299,7 @@ class _CreateSchedulePageState extends State<CreateSchedulePage> {
                       scheduleName: _controller.text,
                       iconName: 'schedule',
                     ),
-                    locationCubit.state,
+                    location: locationCubit.state,
                     time: timeCubit.state,
                     block: blockCubit.state);
                 print(schedule.toJson());

@@ -15,9 +15,11 @@ Map<String, String> daysMap = {
 
 @JsonSerializable(explicitToJson: true)
 class Day {
+  final int? id;
   final String day;
 
   Day({
+        this.id,
     required this.day,
   });
 

@@ -6,8 +6,10 @@ part 'wifi.g.dart';
 @JsonSerializable(explicitToJson: true)
 class Wifi extends Equatable {
   final String wifiName;
+  final int? id;
 
   const Wifi({
+    this.id,
     required this.wifiName,
   });
   @override

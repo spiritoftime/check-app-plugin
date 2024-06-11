@@ -4,9 +4,11 @@ part 'website.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class Website {
+  final int? id;
   final String url;
 
   Website({
+    this.id,
     required this.url,
   });
 

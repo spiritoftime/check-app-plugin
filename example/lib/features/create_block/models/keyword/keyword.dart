@@ -4,12 +4,15 @@ part 'keyword.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class Keyword {
+  final int? id;
   final String keyword;
 
-  Keyword({
+  Keyword(
+ {    this.id,
     required this.keyword,
   });
 
-  factory Keyword.fromJson(Map<String, dynamic> json) => _$KeywordFromJson(json);
+  factory Keyword.fromJson(Map<String, dynamic> json) =>
+      _$KeywordFromJson(json);
   Map<String, dynamic> toJson() => _$KeywordToJson(this);
 }

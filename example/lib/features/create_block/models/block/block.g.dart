@@ -7,6 +7,7 @@ part of 'block.dart';
 // **************************************************************************
 
 Block _$BlockFromJson(Map<String, dynamic> json) => Block(
+      id: (json['id'] as num?)?.toInt(),
       apps: (json['apps'] as List<dynamic>)
           .map((e) => App.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -19,6 +20,7 @@ Block _$BlockFromJson(Map<String, dynamic> json) => Block(
     );
 
 Map<String, dynamic> _$BlockToJson(Block instance) => <String, dynamic>{
+      'id': instance.id,
       'apps': instance.apps.map((e) => e.toJson()).toList(),
       'websites': instance.websites.map((e) => e.toJson()).toList(),
       'keywords': instance.keywords.map((e) => e.toJson()).toList(),

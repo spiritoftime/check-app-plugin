@@ -4,6 +4,7 @@ import 'package:checkapp_plugin_example/features/home/presentation/widgets/carou
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/schedule_template_carousel.dart';
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/endless_scrolling_widget.dart';
 import 'package:checkapp_plugin_example/repository/auth_repository/authentication_repository.dart';
+import 'package:checkapp_plugin_example/repository/database_repository/database_repository.dart';
 import 'package:checkapp_plugin_example/shared/widgets/grey_container.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -13,6 +14,7 @@ import 'package:sqflite/sqflite.dart';
 /// The home screen
 class HomeScreen extends StatelessWidget {
   /// Constructs a [HomeScreen]
+  final DatabaseRepository _databaseService = DatabaseRepository();
 
   HomeScreen({super.key});
   final CheckappPlugin checkappPlugin = CheckappPlugin();
