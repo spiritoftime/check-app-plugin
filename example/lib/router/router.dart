@@ -125,6 +125,7 @@ final GoRoute _createScheduleRouter = GoRoute(
 final GoRouter _router = GoRouter(
   routes: <RouteBase>[
     GoRoute(
+      name: 'home',
       path: '/',
       builder: (BuildContext context, GoRouterState state) {
         return const HomePage();

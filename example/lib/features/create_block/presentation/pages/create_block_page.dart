@@ -196,7 +196,7 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
                   if (blockCubit.state.apps.isEmpty &&
                       blockCubit.state.keywords.isEmpty &&
                       blockCubit.state.websites.isEmpty) {
-                    createDialog(context, const Text("No item selected"),
+                    createAlertDialog(context, const Text("No item selected"),
                         const Text("Please select at least one item to block"));
                     return;
                   }

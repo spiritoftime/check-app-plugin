@@ -8,6 +8,8 @@ import 'package:checkapp_plugin_example/features/create_schedule/models/schedule
 import 'package:checkapp_plugin_example/features/create_schedule/models/schedule_details/schedule_details.dart';
 import 'package:checkapp_plugin_example/features/create_schedule/widgets/existing_blocks.dart';
 import 'package:checkapp_plugin_example/features/create_schedule/widgets/existing_condition.dart';
+import 'package:checkapp_plugin_example/features/create_schedule/widgets/icon_dialog.dart';
+import 'package:checkapp_plugin_example/features/create_schedule/widgets/icon_selection.dart';
 import 'package:checkapp_plugin_example/features/create_schedule/widgets/schedule_name.dart';
 import 'package:checkapp_plugin_example/features/create_time/cubit/cubit/time_cubit.dart';
 import 'package:checkapp_plugin_example/features/create_wifi/cubit/cubit/wifi_cubit.dart';
@@ -89,7 +91,7 @@ class _CreateSchedulePageState extends State<CreateSchedulePage> {
   }
 
   final TextEditingController _controller = TextEditingController();
-
+  String _iconName = 'schedule';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -117,13 +119,26 @@ class _CreateSchedulePageState extends State<CreateSchedulePage> {
                       Center(
                         child: Stack(
                           children: [
-                            const Icon(Icons.schedule,
-                                color: Colors.blue, size: 80.0),
+                            CircleAvatar(
+                              radius: 50,
+                              backgroundColor: Colors.purple[100],
+                              child: Icon(icons[_iconName],
+                                  color: Colors.blue, size: 80.0),
+                            ),
                             Positioned(
                               bottom: 0,
                               right: 0,
                               child: HoverInkWell(
-                                onTap: () {},
+                                onTap: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return IconDialog(
+                                            currentIconName: _iconName,
+                                            onChanged: (iconName) => setState(
+                                                () => _iconName = iconName));
+                                      });
+                                },
                                 inkColor: Colors.transparent,
                                 inkWellPadding: const EdgeInsets.all(0),
                                 child: Container(
@@ -275,7 +290,7 @@ class _CreateSchedulePageState extends State<CreateSchedulePage> {
                         timeCubit.state.timings.isNotEmpty ||
                     timeCubit.state.days.isEmpty &&
                         timeCubit.state.timings.isEmpty) {
-                  await createDialog(
+                  await createAlertDialog(
                       context,
                       const Text(
                         "Error",
@@ -286,7 +301,7 @@ class _CreateSchedulePageState extends State<CreateSchedulePage> {
                   return;
                 }
                 if (scheduleName.isEmpty) {
-                  await createDialog(
+                  await createAlertDialog(
                       context,
                       const Text(
                         "Error",
@@ -307,7 +322,7 @@ class _CreateSchedulePageState extends State<CreateSchedulePage> {
                     time: timeCubit.state,
                     block: blockCubit.state);
                 await DatabaseRepository().insertSchedule(schedule);
-                // print(schedule.toJson());
+                if (context.mounted) context.goNamed('home');
               },
               child: const Text(
                 "Save Schedule",

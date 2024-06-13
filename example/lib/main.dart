@@ -17,10 +17,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-await Firebase.initializeApp(
-  options: DefaultFirebaseOptions.currentPlatform,
-); 
- await AuthenticationRepository().signInGetUserId();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  await AuthenticationRepository().signInGetUserId();
   // overlayPopUp();
   // await initializeService();
   SystemChrome.setPreferredOrientations(
