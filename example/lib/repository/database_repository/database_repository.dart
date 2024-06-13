@@ -1,9 +1,12 @@
 import 'package:checkapp_plugin_example/features/create_block/models/app/app.dart';
+import 'package:checkapp_plugin_example/features/create_block/models/block/block.dart';
 import 'package:checkapp_plugin_example/features/create_block/models/keyword/keyword.dart';
 import 'package:checkapp_plugin_example/features/create_block/models/website/website.dart';
 import 'package:checkapp_plugin_example/features/create_location/models/location/location.dart';
 import 'package:checkapp_plugin_example/features/create_schedule/models/schedule/schedule.dart';
+import 'package:checkapp_plugin_example/features/create_schedule/models/schedule_details/schedule_details.dart';
 import 'package:checkapp_plugin_example/features/create_time/models/day/day.dart';
+import 'package:checkapp_plugin_example/features/create_time/models/time/time.dart';
 import 'package:checkapp_plugin_example/features/create_time/models/timing/timing.dart';
 import 'package:checkapp_plugin_example/features/create_wifi/models/wifi.dart';
 import 'package:checkapp_plugin_example/repository/auth_repository/authentication_repository.dart';
@@ -50,7 +53,6 @@ class DatabaseRepository {
   }
 
   Future<void> insertSchedule(Schedule schedule) async {
-    //   // Get a reference to the database.
     final db = await _databaseRepository.database;
     String? userId = await AuthenticationRepository().userId;
     if (userId != null) {
@@ -116,6 +118,77 @@ class DatabaseRepository {
     }
   }
 
+  Future<List<Schedule>> schedules() async {
+    final db = await _databaseRepository.database;
+    String? userId = await AuthenticationRepository().userId;
+    List<Schedule> scheduleList = [];
+    if (userId != null) {
+      final List<Map<String, dynamic>> schedules =
+          await db.query('schedules', where: 'userId = ?', whereArgs: [userId]);
+
+      for (final s in schedules) {
+        int scheduleId = s['id'];
+
+        List<Map<String, dynamic>> locations = await db.query('locations',
+            where: 'scheduleId = ?', whereArgs: [scheduleId]);
+        List<Location> locationList =
+            locations.map((l) => Location.fromJson(l)).toList();
+        List<Map<String, dynamic>> wifis = await db
+            .query('wifis', where: 'scheduleId = ?', whereArgs: [scheduleId]);
+        List<Wifi> wifiList = wifis.map((w) => Wifi.fromJson(w)).toList();
+
+        List<Map<String, dynamic>> blockQuery = await db
+            .query('blocks', where: 'scheduleId = ?', whereArgs: [scheduleId]);
+
+        List<Map<String, dynamic>> apps = await db.query('apps',
+            where: 'blockId = ?', whereArgs: [blockQuery[0]['id']]);
+        List<App> appList = apps.map((a) => App.fromJson(a)).toList();
+        List<Map<String, dynamic>> websites = await db.query('websites',
+            where: 'blockId = ?', whereArgs: [blockQuery[0]['id']]);
+        List<Website> websiteList =
+            websites.map((w) => Website.fromJson(w)).toList();
+        List<Map<String, dynamic>> keywords = await db.query('keywords',
+            where: 'blockId = ?', whereArgs: [blockQuery[0]['id']]);
+        List<Keyword> keywordList =
+            keywords.map((k) => Keyword.fromJson(k)).toList();
+        Block block = Block(
+          id: blockQuery[0]['id'],
+          apps: appList,
+          websites: websiteList,
+          keywords: keywordList,
+        );
+
+        List<Map<String, dynamic>> timeQuery = await db
+            .query('times', where: 'scheduleId = ?', whereArgs: [scheduleId]);
+        List<Map<String, dynamic>> timings = await db.query('timings',
+            where: 'timeId = ?', whereArgs: [timeQuery[0]['id']]);
+        List<Timing> timingList =
+            timings.map((t) => Timing.fromJson(t)).toList();
+        List<Map<String, dynamic>> days = await db.query('days',
+            where: 'timeId = ?', whereArgs: [timeQuery[0]['id']]);
+        List<Day> dayList = days.map((d) => Day.fromJson(d)).toList();
+        Time time = Time(
+          id: timeQuery[0]['id'],
+          timings: timingList,
+          days: dayList,
+        );
+
+        Schedule schedule = Schedule(
+          id: s['id'],
+          block: block,
+          time: time,
+          location: locationList,
+          wifi: wifiList,
+          scheduleDetails: ScheduleDetails(
+            scheduleName: s['scheduleName'],
+            iconName: s['scheduleIcon'],
+          ),
+        );
+        scheduleList.add(schedule);
+      }
+    }
+    return scheduleList;
+  }
   // // Define a function that inserts breeds into the database
   // Future<void> insertBreed(Breed breed) async {
   //   // Get a reference to the database.

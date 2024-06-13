@@ -1,4 +1,5 @@
 import 'package:checkapp_plugin/checkapp_plugin.dart';
+import 'package:checkapp_plugin_example/features/create_schedule/models/schedule/schedule.dart';
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/accordion.dart';
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/carousel_icons.dart';
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/schedule_template_carousel.dart';
@@ -80,6 +81,12 @@ class HomeScreen extends StatelessWidget {
                                   // print(await AuthenticationRepository().userId);
                                   // await DatabaseRepository().database;
                                   // context.go('/basic');
+                                  List<Schedule> schedules =
+                                      await DatabaseRepository().schedules();
+
+                                  for (final s in schedules) {
+                                    print(s.toJson());
+                                  }
                                 },
                                 child: const Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
