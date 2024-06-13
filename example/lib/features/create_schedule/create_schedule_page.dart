@@ -315,6 +315,7 @@ class _CreateSchedulePageState extends State<CreateSchedulePage> {
                 Schedule schedule = Schedule(
                     wifi: wifiCubit.state,
                     scheduleDetails: ScheduleDetails(
+                      isActive: true,
                       scheduleName: _controller.text,
                       iconName: _iconName,
                     ),

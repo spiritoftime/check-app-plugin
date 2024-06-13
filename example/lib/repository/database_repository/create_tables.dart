@@ -143,6 +143,7 @@ Future<void> createSchedulesTable(Database db) async {
     'scheduleName TEXT, '
     'scheduleIcon TEXT, '
     'FOREIGN KEY(userId) REFERENCES users(id) ON DELETE SET NULL'
+    'isActive INTEGER DEFAULT 0'
     ')',
   );
 }

@@ -15,6 +15,7 @@ import 'package:checkapp_plugin_example/features/create_wifi/wifi_limit.dart';
 import 'package:checkapp_plugin_example/features/create_wifi/wifi_permission_page.dart';
 import 'package:checkapp_plugin_example/features/details/presentation/details_screen.dart';
 import 'package:checkapp_plugin_example/features/home/presentation/home_page.dart';
+import 'package:checkapp_plugin_example/shared/widgets/dropdown_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -142,6 +143,8 @@ final GoRouter _router = GoRouter(
             builder: (BuildContext context, GoRouterState state) {
               return BasicScreen();
             }),
+                   
+          
         _createScheduleRouter
       ],
     ),

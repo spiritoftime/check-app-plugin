@@ -46,18 +46,18 @@ Future<void> main() async {
               child: const CreateBlockPage(
                 extra: {},
               ),
-              create: (context) =>
-                  AppsBloc(RepositoryProvider.of<AppRepository>(context))
-                    ..add(
-                      LoadApps(),
-                    ),
+              create: (context) => AppsBloc(
+                RepositoryProvider.of<AppRepository>(context),
+              )..add(
+                  LoadApps(),
+                ),
             ),
             BlocProvider(
               lazy: true,
               child: HomeScreen(),
               create: (context) => SchedulesBloc(
-                  RepositoryProvider.of<DatabaseRepository>(context))
-                ..add(LoadSchedules()),
+                RepositoryProvider.of<DatabaseRepository>(context),
+              )..add(LoadSchedules()),
             )
           ],
           child:

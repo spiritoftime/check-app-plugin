@@ -63,7 +63,8 @@ class DatabaseRepository {
                 final int schedulePk = await txn.insert('schedules', {
                   'userId': userId,
                   'scheduleIcon': schedule.scheduleDetails.iconName,
-                  'scheduleName': schedule.scheduleDetails.scheduleName
+                  'scheduleName': schedule.scheduleDetails.scheduleName,
+                  'isActive': schedule.scheduleDetails.isActive ? 1 : 0,
                 });
                 final int timePk =
                     await txn.insert('times', {'scheduleId': schedulePk});
@@ -180,6 +181,7 @@ class DatabaseRepository {
           location: locationList,
           wifi: wifiList,
           scheduleDetails: ScheduleDetails(
+            isActive: s['isActive'] == 1 ? true : false,
             scheduleName: s['scheduleName'],
             iconName: s['scheduleIcon'],
           ),

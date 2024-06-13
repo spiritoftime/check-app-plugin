@@ -83,12 +83,13 @@ class HomeScreen extends StatelessWidget {
                                   // print(await AuthenticationRepository().userId);
                                   // await DatabaseRepository().database;
                                   // context.go('/basic');
-                                  List<Schedule> schedules =
-                                      await DatabaseRepository().schedules();
+                                  // List<Schedule> schedules =
+                                  //     await DatabaseRepository().schedules();
 
-                                  for (final s in schedules) {
-                                    print(s.toJson());
-                                  }
+                                  // for (final s in schedules) {
+                                  //   print(s.toJson());
+                                  // }
+                                  context.go('/test');
                                 },
                                 child: const Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
