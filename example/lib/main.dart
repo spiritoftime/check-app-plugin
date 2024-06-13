@@ -1,3 +1,6 @@
+import 'package:checkapp_plugin_example/features/create_block/bloc/schedule/bloc/schedule_bloc.dart';
+import 'package:checkapp_plugin_example/features/home/bloc/schedule_bloc.dart';
+import 'package:checkapp_plugin_example/features/home/presentation/widgets/home_screen.dart';
 import 'package:checkapp_plugin_example/firebase_options.dart';
 import 'package:checkapp_plugin_example/repository/auth_repository/authentication_repository.dart';
 import 'package:checkapp_plugin_example/repository/background_repository/background_repository.dart';
@@ -7,6 +10,7 @@ import 'package:checkapp_plugin_example/features/create_block/bloc/app/app_event
 import 'package:checkapp_plugin_example/features/create_block/presentation/pages/create_block_page.dart';
 import 'package:checkapp_plugin_example/features/create_block/repository/app_repository.dart';
 import 'package:checkapp_plugin_example/features/overlay/presentation/overlay_popup.dart';
+import 'package:checkapp_plugin_example/repository/database_repository/database_repository.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -26,8 +30,15 @@ Future<void> main() async {
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then(
     (_) => runApp(
-      RepositoryProvider(
-        create: (context) => AppRepository(),
+      MultiRepositoryProvider(
+        providers: [
+          RepositoryProvider(
+            create: (context) => AppRepository(),
+          ),
+          RepositoryProvider(
+            create: (context) => DatabaseRepository(),
+          ),
+        ],
         child: MultiBlocProvider(
           providers: [
             BlocProvider(
@@ -41,6 +52,13 @@ Future<void> main() async {
                       LoadApps(),
                     ),
             ),
+            BlocProvider(
+              lazy: true,
+              child: HomeScreen(),
+              create: (context) => SchedulesBloc(
+                  RepositoryProvider.of<DatabaseRepository>(context))
+                ..add(LoadSchedules()),
+            )
           ],
           child:
               const MyApp(), // TODO: currently set to myapp to make it run initially. however, this still blocks the UI. Consider an isolate.

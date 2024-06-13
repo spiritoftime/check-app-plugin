@@ -1,21 +1,23 @@
 import 'package:checkapp_plugin/checkapp_plugin.dart';
+import 'package:checkapp_plugin_example/features/create_block/bloc/schedule/bloc/schedule_bloc.dart';
 import 'package:checkapp_plugin_example/features/create_schedule/models/schedule/schedule.dart';
+import 'package:checkapp_plugin_example/features/home/bloc/schedule_bloc.dart';
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/accordion.dart';
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/carousel_icons.dart';
+import 'package:checkapp_plugin_example/features/home/presentation/widgets/schedule_row.dart';
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/schedule_template_carousel.dart';
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/endless_scrolling_widget.dart';
-import 'package:checkapp_plugin_example/repository/auth_repository/authentication_repository.dart';
 import 'package:checkapp_plugin_example/repository/database_repository/database_repository.dart';
 import 'package:checkapp_plugin_example/shared/widgets/grey_container.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gap/gap.dart';
-import 'package:sqflite/sqflite.dart';
 
 /// The home screen
 class HomeScreen extends StatelessWidget {
   /// Constructs a [HomeScreen]
-  final DatabaseRepository _databaseService = DatabaseRepository();
+  // final DatabaseRepository _databaseService = DatabaseRepository();
 
   HomeScreen({super.key});
   final CheckappPlugin checkappPlugin = CheckappPlugin();
@@ -163,26 +165,45 @@ class HomeScreen extends StatelessWidget {
                       ),
                       const Gap(12),
                       GreyContainer(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0, vertical: 32.0),
-                          child: Column(
-                            children: [
-                              const Text(
-                                "Plan your everyday blocking by time,\n location and more.",
-                                style: TextStyle(
-                                    color: Colors.grey, fontSize: 16.0),
-                                textAlign: TextAlign.center,
-                              ),
-                              const Gap(32),
-                              EndlessScrollingWidget(
-                                  gap: 20,
-                                  widgetWidth: 48,
-                                  scrollDuration: const Duration(seconds: 8),
-                                  widgetHeight: 48,
-                                  children: carouselIcons)
-                            ],
-                          ),
+                        child: BlocBuilder<SchedulesBloc, ScheduleState>(
+                          builder: (context, state) {
+                            if (state is SchedulesLoading) {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            }
+                            if (state is SchedulesLoaded) {
+                              if (state.schedules.isEmpty) {
+                                return Column(
+                                  children: [
+                                    const Text(
+                                      "Plan your everyday blocking by time,\n location and more.",
+                                      style: TextStyle(
+                                          color: Colors.grey, fontSize: 16.0),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    const Gap(32),
+                                    EndlessScrollingWidget(
+                                        gap: 20,
+                                        widgetWidth: 48,
+                                        scrollDuration:
+                                            const Duration(seconds: 8),
+                                        widgetHeight: 48,
+                                        children: carouselIcons)
+                                  ],
+                                );
+                              } else {
+                                return Column(
+                                  children: [
+                                    ...state.schedules.map(
+                                      (Schedule s) => ScheduleRow(schedule: s),
+                                    )
+                                  ],
+                                );
+                              }
+                            } else {
+                              return const Text('No App Found');
+                            }
+                          },
                         ),
                       ),
                       const Gap(20),
@@ -201,8 +222,6 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-
-//  to demo routing
 class MyButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
