@@ -8,7 +8,9 @@ class Time {
   final List<Day> days;
   final List<Timing> timings;
 final int? id;
+final int? scheduleId;
   Time({
+    this.scheduleId,
     this.id,
     required this.days,
     required this.timings,
@@ -18,6 +20,7 @@ final int? id;
     List<Timing>? timings,
   }) {
     return Time(
+      scheduleId: scheduleId,
       id:id,
       days: days ?? this.days,
       timings: timings ?? this.timings,

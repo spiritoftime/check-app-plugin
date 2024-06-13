@@ -7,6 +7,7 @@ part of 'website.dart';
 // **************************************************************************
 
 Website _$WebsiteFromJson(Map<String, dynamic> json) => Website(
+      blockId: (json['blockId'] as num?)?.toInt(),
       id: (json['id'] as num?)?.toInt(),
       url: json['url'] as String,
     );
@@ -14,4 +15,5 @@ Website _$WebsiteFromJson(Map<String, dynamic> json) => Website(
 Map<String, dynamic> _$WebsiteToJson(Website instance) => <String, dynamic>{
       'id': instance.id,
       'url': instance.url,
+      'blockId': instance.blockId,
     };

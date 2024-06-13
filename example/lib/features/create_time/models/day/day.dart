@@ -12,14 +12,14 @@ Map<String, String> daysMap = {
   'Sunday': 'Sunday',
 };
 
-
 @JsonSerializable(explicitToJson: true)
 class Day {
   final int? id;
   final String day;
-
+  final int? timeId;
   Day({
-        this.id,
+    this.timeId,
+    this.id,
     required this.day,
   });
 

@@ -7,6 +7,7 @@ part of 'day.dart';
 // **************************************************************************
 
 Day _$DayFromJson(Map<String, dynamic> json) => Day(
+      timeId: (json['timeId'] as num?)?.toInt(),
       id: (json['id'] as num?)?.toInt(),
       day: json['day'] as String,
     );
@@ -14,4 +15,5 @@ Day _$DayFromJson(Map<String, dynamic> json) => Day(
 Map<String, dynamic> _$DayToJson(Day instance) => <String, dynamic>{
       'id': instance.id,
       'day': instance.day,
+      'timeId': instance.timeId,
     };

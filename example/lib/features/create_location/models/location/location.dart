@@ -9,7 +9,9 @@ class Location extends Equatable {
   final String location;
   final double latitude;
   final double longitude;
+  final int? scheduleId;
   const Location({
+    this.scheduleId,
     this.id,
     required this.longitude,
     required this.location,
@@ -22,7 +24,11 @@ class Location extends Equatable {
     required final double longitude,
   }) {
     return Location(
-        id: id, location: location, latitude: latitude, longitude: longitude);
+        id: id,
+        location: location,
+        latitude: latitude,
+        longitude: longitude,
+        scheduleId: scheduleId);
   }
 
   @override

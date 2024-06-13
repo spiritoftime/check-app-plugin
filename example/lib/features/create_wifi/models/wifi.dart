@@ -7,13 +7,14 @@ part 'wifi.g.dart';
 class Wifi extends Equatable {
   final String wifiName;
   final int? id;
-
+  final int? scheduleId;
   const Wifi({
+    this.scheduleId,
     this.id,
     required this.wifiName,
   });
   @override
-  List<Object?> get props => [wifiName];
+  List<Object?> get props => [wifiName,id,scheduleId];
   factory Wifi.fromJson(Map<String, dynamic> json) => _$WifiFromJson(json);
   Map<String, dynamic> toJson() => _$WifiToJson(this);
 }

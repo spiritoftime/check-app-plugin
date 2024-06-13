@@ -11,6 +11,7 @@ import 'package:checkapp_plugin_example/features/create_schedule/widgets/existin
 import 'package:checkapp_plugin_example/features/create_schedule/widgets/schedule_name.dart';
 import 'package:checkapp_plugin_example/features/create_time/cubit/cubit/time_cubit.dart';
 import 'package:checkapp_plugin_example/features/create_wifi/cubit/cubit/wifi_cubit.dart';
+import 'package:checkapp_plugin_example/repository/database_repository/database_repository.dart';
 import 'package:checkapp_plugin_example/shared/widgets/accordion_wrapper.dart';
 import 'package:checkapp_plugin_example/shared/widgets/hover_ink_well.dart';
 import 'package:checkapp_plugin_example/shared/widgets/show_dialog.dart';
@@ -194,7 +195,9 @@ class _CreateSchedulePageState extends State<CreateSchedulePage> {
                                     onTap: () => context.pushNamed(
                                         'create-location',
                                         extra: widget.extra),
-                                    text1: locationCubit.state!.map((l)=>l.location).join(', '),
+                                    text1: locationCubit.state!
+                                        .map((l) => l.location)
+                                        .join(', '),
                                     text2: '',
                                     updateUI: _updateUI,
                                   )
@@ -295,6 +298,7 @@ class _CreateSchedulePageState extends State<CreateSchedulePage> {
 
                 //  compile everything to one schedule
                 Schedule schedule = Schedule(
+                    wifi: wifiCubit.state,
                     scheduleDetails: ScheduleDetails(
                       scheduleName: _controller.text,
                       iconName: 'schedule',
@@ -302,7 +306,8 @@ class _CreateSchedulePageState extends State<CreateSchedulePage> {
                     location: locationCubit.state,
                     time: timeCubit.state,
                     block: blockCubit.state);
-                print(schedule.toJson());
+                await DatabaseRepository().insertSchedule(schedule);
+                // print(schedule.toJson());
               },
               child: const Text(
                 "Save Schedule",

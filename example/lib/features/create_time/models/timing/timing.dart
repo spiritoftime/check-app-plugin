@@ -7,8 +7,10 @@ part 'timing.g.dart';
 class Timing {
   final String start;
   final String end;
+  final int? timeId;
   final int? id;
   const Timing({
+    this.timeId,
     this.id,
     required this.start,
     required this.end,

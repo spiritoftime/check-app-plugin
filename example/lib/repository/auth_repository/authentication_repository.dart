@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 class AuthenticationRepository {
   // Singleton pattern
@@ -31,6 +32,7 @@ class AuthenticationRepository {
           default:
             print("Unknown error.");
         }
+        FormatException("Error: ${e.code}");
       }
     } else {
       return user.uid;

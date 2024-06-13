@@ -7,6 +7,7 @@ part of 'wifi.dart';
 // **************************************************************************
 
 Wifi _$WifiFromJson(Map<String, dynamic> json) => Wifi(
+      scheduleId: (json['scheduleId'] as num?)?.toInt(),
       id: (json['id'] as num?)?.toInt(),
       wifiName: json['wifiName'] as String,
     );
@@ -14,4 +15,5 @@ Wifi _$WifiFromJson(Map<String, dynamic> json) => Wifi(
 Map<String, dynamic> _$WifiToJson(Wifi instance) => <String, dynamic>{
       'wifiName': instance.wifiName,
       'id': instance.id,
+      'scheduleId': instance.scheduleId,
     };

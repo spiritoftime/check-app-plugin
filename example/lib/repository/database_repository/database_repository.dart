@@ -1,3 +1,12 @@
+import 'package:checkapp_plugin_example/features/create_block/models/app/app.dart';
+import 'package:checkapp_plugin_example/features/create_block/models/keyword/keyword.dart';
+import 'package:checkapp_plugin_example/features/create_block/models/website/website.dart';
+import 'package:checkapp_plugin_example/features/create_location/models/location/location.dart';
+import 'package:checkapp_plugin_example/features/create_schedule/models/schedule/schedule.dart';
+import 'package:checkapp_plugin_example/features/create_time/models/day/day.dart';
+import 'package:checkapp_plugin_example/features/create_time/models/timing/timing.dart';
+import 'package:checkapp_plugin_example/features/create_wifi/models/wifi.dart';
+import 'package:checkapp_plugin_example/repository/auth_repository/authentication_repository.dart';
 import 'package:checkapp_plugin_example/repository/database_repository/create_tables.dart';
 import 'package:checkapp_plugin_example/shared/helper_functions/helper_functions.dart';
 import 'package:path/path.dart';
@@ -36,10 +45,75 @@ class DatabaseRepository {
     );
   }
 
-
-
   Future<void> _onCreate(Database db, int version) async {
     await createTables(db);
+  }
+
+  Future<void> insertSchedule(Schedule schedule) async {
+    //   // Get a reference to the database.
+    final db = await _databaseRepository.database;
+    String? userId = await AuthenticationRepository().userId;
+    if (userId != null) {
+      HelperFunctions.tryCatchWrapper(
+          operation: () async => await db.transaction((txn) async {
+                await txn.insert('users', {'id': userId},
+                    conflictAlgorithm: ConflictAlgorithm.replace);
+                final int schedulePk = await txn.insert('schedules', {
+                  'userId': userId,
+                  'scheduleIcon': schedule.scheduleDetails.iconName,
+                  'scheduleName': schedule.scheduleDetails.scheduleName
+                });
+                final int timePk =
+                    await txn.insert('times', {'scheduleId': schedulePk});
+
+                final int blockPk =
+                    await txn.insert('blocks', {'scheduleId': schedulePk});
+                Batch batch = txn.batch();
+
+                // ---------------------- insert components of block --------------------
+                for (App app in schedule.block.apps) {
+                  batch.insert('apps', {...app.toJson(), 'blockId': blockPk},
+                      conflictAlgorithm: ConflictAlgorithm.replace);
+                }
+
+                for (Website web in schedule.block.websites) {
+                  batch.insert(
+                      'websites', {...web.toJson(), 'blockId': blockPk},
+                      conflictAlgorithm: ConflictAlgorithm.replace);
+                }
+                for (Keyword keyword in schedule.block.keywords) {
+                  batch.insert(
+                      'keywords', {...keyword.toJson(), 'blockId': blockPk},
+                      conflictAlgorithm: ConflictAlgorithm.replace);
+                }
+                // ---------------------- insert components of location --------------------
+                for (Location location in schedule.location) {
+                  batch.insert('locations',
+                      {...location.toJson(), 'scheduleId': schedulePk},
+                      conflictAlgorithm: ConflictAlgorithm.replace);
+                }
+                // ---------------------- insert components of time --------------------
+
+                for (Timing timing in schedule.time.timings) {
+                  batch.insert(
+                      'timings', {...timing.toJson(), 'timeId': timePk},
+                      conflictAlgorithm: ConflictAlgorithm.replace);
+                }
+                for (Day day in schedule.time.days) {
+                  batch.insert('days', {...day.toJson(), 'timeId': timePk},
+                      conflictAlgorithm: ConflictAlgorithm.replace);
+                }
+                // ---------------------- insert components of wifi --------------------
+
+                for (Wifi wifi in schedule.wifi) {
+                  batch.insert(
+                      'wifis', {...wifi.toJson(), 'scheduleId': schedulePk},
+                      conflictAlgorithm: ConflictAlgorithm.replace);
+                }
+                return await batch.commit(noResult: true);
+              }),
+          errorMessage: "Unable to create new schedule");
+    }
   }
 
   // // Define a function that inserts breeds into the database

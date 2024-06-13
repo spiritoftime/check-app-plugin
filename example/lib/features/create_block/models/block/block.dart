@@ -11,19 +11,22 @@ class Block {
   final List<App> apps;
   final List<Website> websites;
   final List<Keyword> keywords;
-
+  final int? scheduleId;
   Block({
+    this.scheduleId,
     this.id,
     required this.apps,
     required this.websites,
     required this.keywords,
   });
-  copyWith(
-      {List<App>? apps,
-      List<Website>? websites,
-      List<Keyword>? keywords,
-      }) {
+  copyWith({
+    List<App>? apps,
+    List<Website>? websites,
+    List<Keyword>? keywords,
+  }) {
     return Block(
+      scheduleId: scheduleId,
+      id: id,
       apps: apps ?? this.apps,
       websites: websites ?? this.websites,
       keywords: keywords ?? this.keywords,

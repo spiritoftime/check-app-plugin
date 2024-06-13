@@ -6,8 +6,10 @@ part 'website.g.dart';
 class Website {
   final int? id;
   final String url;
+  final int? blockId;
 
   Website({
+    this.blockId,
     this.id,
     required this.url,
   });

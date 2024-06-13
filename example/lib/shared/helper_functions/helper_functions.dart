@@ -1,9 +1,9 @@
 class HelperFunctions {
-  static void tryCatchWrapper(
-      {required Future<void> Function() operation,
+  static dynamic tryCatchWrapper(
+      {required Future<dynamic> Function() operation,
       required String errorMessage}) async {
     try {
-      await operation();
+      return await operation();
     } catch (e) {
       throw FormatException('$errorMessage: $e');
     }

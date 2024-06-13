@@ -5,10 +5,13 @@ part 'keyword.g.dart';
 @JsonSerializable(explicitToJson: true)
 class Keyword {
   final int? id;
+  final int? blockId;
+
   final String keyword;
 
-  Keyword(
- {    this.id,
+  Keyword({
+    this.id,
+    this.blockId,
     required this.keyword,
   });
 

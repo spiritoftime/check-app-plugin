@@ -7,6 +7,7 @@ part of 'time.dart';
 // **************************************************************************
 
 Time _$TimeFromJson(Map<String, dynamic> json) => Time(
+      scheduleId: (json['scheduleId'] as num?)?.toInt(),
       id: (json['id'] as num?)?.toInt(),
       days: (json['days'] as List<dynamic>)
           .map((e) => Day.fromJson(e as Map<String, dynamic>))
@@ -20,4 +21,5 @@ Map<String, dynamic> _$TimeToJson(Time instance) => <String, dynamic>{
       'days': instance.days.map((e) => e.toJson()).toList(),
       'timings': instance.timings.map((e) => e.toJson()).toList(),
       'id': instance.id,
+      'scheduleId': instance.scheduleId,
     };

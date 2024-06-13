@@ -9,9 +9,10 @@ class App extends Equatable {
   final String packageName;
   final String iconBase64String;
   final String appName;
-
+  final int? blockId;
   const App({
     this.id,
+    this.blockId,
     required this.packageName,
     required this.iconBase64String,
     required this.appName,
@@ -23,7 +24,8 @@ class App extends Equatable {
     String? appName,
   }) {
     return App(
-      id: id ,
+      id: id,
+      blockId: blockId,
       packageName: packageName ?? this.packageName,
       iconBase64String: iconBase64String ?? this.iconBase64String,
       appName: appName ?? this.appName,
@@ -31,7 +33,8 @@ class App extends Equatable {
   }
 
   @override
-  List<Object?> get props => [packageName, iconBase64String, appName];
+  List<Object?> get props =>
+      [packageName, iconBase64String, appName, blockId, id];
   factory App.fromJson(Map<String, dynamic> json) => _$AppFromJson(json);
   Map<String, dynamic> toJson() => _$AppToJson(this);
 }
