@@ -1,17 +1,32 @@
 import 'package:checkapp_plugin_example/features/create_schedule/models/schedule/schedule.dart';
 import 'package:checkapp_plugin_example/features/create_schedule/widgets/icon_selection.dart';
+import 'package:checkapp_plugin_example/repository/database_repository/database_repository.dart';
 import 'package:checkapp_plugin_example/shared/widgets/dropdown_screen.dart';
 import 'package:checkapp_plugin_example/shared/widgets/hover_ink_well.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-class ScheduleRow extends StatelessWidget {
+class ScheduleRow extends StatefulWidget {
   final Schedule schedule;
   const ScheduleRow({
     super.key,
     required this.schedule,
   });
   static const List<String> dropdownValue = ['Toggle Active', 'Edit', 'Delete'];
+
+  @override
+  State<ScheduleRow> createState() => _ScheduleRowState();
+}
+
+class _ScheduleRowState extends State<ScheduleRow> {
+  late bool _isEnabled;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _isEnabled = widget.schedule.scheduleDetails.isActive;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -23,13 +38,13 @@ class ScheduleRow extends StatelessWidget {
             CircleAvatar(
               radius: 15,
               backgroundColor: Colors.purple[100],
-              child: Icon(icons[schedule.scheduleDetails.iconName],
+              child: Icon(icons[widget.schedule.scheduleDetails.iconName],
                   size: 24, color: Colors.blue),
             ),
             const Gap(16),
             Expanded(
               child: Text(
-                schedule.scheduleDetails.scheduleName,
+                widget.schedule.scheduleDetails.scheduleName,
                 style: const TextStyle(color: Colors.white, fontSize: 16),
               ),
             ),
@@ -42,34 +57,21 @@ class ScheduleRow extends StatelessWidget {
                     activeColor: Colors.blue,
                     inactiveTrackColor: Colors.grey,
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    value: schedule.scheduleDetails.isActive,
+                    value: _isEnabled,
                     trackOutlineWidth: WidgetStateProperty.all(0),
                     onChanged: (bool isEnabled) {
                       // toggle active/ go to edit route/ go to delete route
+                      setState(() {
+                        _isEnabled = isEnabled;
+                      });
+                      DatabaseRepository().updateSchedule(data: {
+                        'id': widget.schedule.id,
+                        'isActive': isEnabled ? 1 : 0
+                      }, tableName: 'schedules', model: widget.schedule);
                     }),
               ),
             ),
             const ActionButton()
-            // Flexible(fit: FlexFit.loose, child: const ActionButton())
-            // ElevatedButton(
-            //   style: ElevatedButton.styleFrom(
-            //       splashFactory: NoSplash.splashFactory,
-            //       elevation: 0,
-            //       padding: const EdgeInsets.all(0),
-            //       backgroundColor: Colors.transparent),
-            //   onPressed: () {
-            //     // context.goNamed(
-            //     //     'create-block',
-            //     //     extra: <String,
-            //     //         dynamic>{
-            //     //       'schedule': s
-            //     //     });
-            //   },
-            //   child: const Text(
-            //     "...",
-            //     style: TextStyle(color: Colors.white),
-            //   ),
-            // ),
           ],
         ),
       ),

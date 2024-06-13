@@ -25,6 +25,7 @@ Future<void> createTables(Database db) async {
     );
   }
 }
+
 Future<void> createUsersTable(Database db) async {
   await db.execute(
     'CREATE TABLE users ('
@@ -142,8 +143,8 @@ Future<void> createSchedulesTable(Database db) async {
     'userId TEXT, '
     'scheduleName TEXT, '
     'scheduleIcon TEXT, '
+    'isActive INTEGER DEFAULT 0, '
     'FOREIGN KEY(userId) REFERENCES users(id) ON DELETE SET NULL'
-    'isActive INTEGER DEFAULT 0'
     ')',
   );
 }

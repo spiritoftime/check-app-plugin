@@ -191,6 +191,27 @@ class DatabaseRepository {
     }
     return scheduleList;
   }
+
+    Future<void> updateSchedule({required dynamic data, required String tableName,required dynamic model}) async {
+    final db = await _databaseRepository.database;
+    await db.update(tableName, data, where: 'id = ?', whereArgs: [model.id]);
+  }
+
+   // // A method that updates a breed data from the breeds table.
+  // Future<void> updateBreed(Breed breed) async {
+  //   // Get a reference to the database.
+  //   final db = await _databaseRepository.database;
+
+  //   // Update the given breed
+  //   await db.update(
+  //     'breeds',
+  //     breed.toMap(),
+  //     // Ensure that the Breed has a matching id.
+  //     where: 'id = ?',
+  //     // Pass the Breed's id as a whereArg to prevent SQL injection.
+  //     whereArgs: [breed.id],
+  //   );
+  // }
   // // Define a function that inserts breeds into the database
   // Future<void> insertBreed(Breed breed) async {
   //   // Get a reference to the database.
@@ -241,21 +262,7 @@ class DatabaseRepository {
   //   return List.generate(maps.length, (index) => Dog.fromMap(maps[index]));
   // }
 
-  // // A method that updates a breed data from the breeds table.
-  // Future<void> updateBreed(Breed breed) async {
-  //   // Get a reference to the database.
-  //   final db = await _databaseRepository.database;
-
-  //   // Update the given breed
-  //   await db.update(
-  //     'breeds',
-  //     breed.toMap(),
-  //     // Ensure that the Breed has a matching id.
-  //     where: 'id = ?',
-  //     // Pass the Breed's id as a whereArg to prevent SQL injection.
-  //     whereArgs: [breed.id],
-  //   );
-  // }
+ 
 
   // Future<void> updateDog(Dog dog) async {
   //   final db = await _databaseRepository.database;

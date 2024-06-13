@@ -56,7 +56,6 @@ class HomeScreen extends StatelessWidget {
                       ),
                       const Gap(20),
                       GreyContainer(
-                        padding: const EdgeInsets.all(0),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 16.0, vertical: 16.0),
@@ -166,6 +165,8 @@ class HomeScreen extends StatelessWidget {
                       ),
                       const Gap(12),
                       GreyContainer(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 16.0),
                         child: BlocBuilder<SchedulesBloc, ScheduleState>(
                           builder: (context, state) {
                             if (state is SchedulesLoading) {
@@ -223,6 +224,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
+
 class MyButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
