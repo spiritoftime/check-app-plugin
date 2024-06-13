@@ -1,10 +1,12 @@
-
+import 'package:checkapp_plugin_example/repository/database_repository/create_tables.dart';
+import 'package:checkapp_plugin_example/shared/helper_functions/helper_functions.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DatabaseRepository {
   // Singleton pattern
-  static final DatabaseRepository _databaseRepository = DatabaseRepository._internal();
+  static final DatabaseRepository _databaseRepository =
+      DatabaseRepository._internal();
   factory DatabaseRepository() => _databaseRepository;
   DatabaseRepository._internal();
 
@@ -34,17 +36,10 @@ class DatabaseRepository {
     );
   }
 
-  // When the database is first created, create a table to store breeds
-  // and a table to store dogs.
+
+
   Future<void> _onCreate(Database db, int version) async {
-    // Run the CREATE {breeds} TABLE statement on the database.
-    await db.execute(
-      'CREATE TABLE breeds(id INTEGER PRIMARY KEY, name TEXT, description TEXT)',
-    );
-    // Run the CREATE {dogs} TABLE statement on the database.
-    await db.execute(
-      'CREATE TABLE dogs(id INTEGER PRIMARY KEY, name TEXT, age INTEGER, color INTEGER, breedId INTEGER, FOREIGN KEY (breedId) REFERENCES breeds(id) ON DELETE SET NULL)',
-    );
+    await createTables(db);
   }
 
   // // Define a function that inserts breeds into the database

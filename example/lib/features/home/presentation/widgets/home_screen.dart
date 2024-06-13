@@ -76,7 +76,9 @@ class HomeScreen extends StatelessWidget {
                                   backgroundColor: const Color(0xff5094F5),
                                 ),
                                 onPressed: () async {
-                                  print(await AuthenticationRepository().userId);
+                                  // print(await getDatabasesPath());
+                                  // print(await AuthenticationRepository().userId);
+                                  // await DatabaseRepository().database;
                                   // context.go('/basic');
                                 },
                                 child: const Row(

@@ -8,7 +8,7 @@ List<Widget> instructionList({required wifiPermissions}) => [
       Container(
         margin: const EdgeInsets.only(bottom: 8.0),
         child: Instruction(
-          instructionNumber: '2',
+          instructionNumber: '1',
           instruction: const Text("Enable Location Services"),
           actionButton: ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -28,7 +28,7 @@ List<Widget> instructionList({required wifiPermissions}) => [
       Container(
         margin: const EdgeInsets.only(bottom: 8.0),
         child: Instruction(
-          instructionNumber: '1',
+          instructionNumber: '2',
           instruction: const Text("Enable Location permission"),
           actionButton: ElevatedButton(
             style: ElevatedButton.styleFrom(

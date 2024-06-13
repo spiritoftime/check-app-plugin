@@ -19,7 +19,7 @@ class WifiPermissionPage extends StatefulWidget {
 }
 
 class _WifiPermissionPageState extends State<WifiPermissionPage> {
-      late final LifecycleEventHandler _lifecycleEventHandler;
+  late final LifecycleEventHandler _lifecycleEventHandler;
 
   List<bool> get wifiPermissions => widget.extra['wifiPermissionsEnabled'];
   final _checkappPlugin = CheckappPlugin();
@@ -28,33 +28,28 @@ class _WifiPermissionPageState extends State<WifiPermissionPage> {
   @override
   void initState() {
     super.initState();
-  _lifecycleEventHandler =   LifecycleEventHandler(
-        resumeCallBack: () async {
-          List<bool> wifiPermissionsEnabled = await Future.wait([
-            _checkappPlugin.checkGPSEnabled(),
-            _checkappPlugin.checkLocationPermission()
-          ]);
-          setState(() {
-            wifiPermissions = wifiPermissionsEnabled;
-          });
-          if (mounted &&
-              wifiPermissionsEnabled.first &&
-              wifiPermissionsEnabled[1]) {
-            context.goNamed('create-wifi', extra: widget.extra);
-          }
-        },
-      );
-    WidgetsBinding.instance.addObserver(
-      _lifecycleEventHandler
+    _lifecycleEventHandler = LifecycleEventHandler(
+      resumeCallBack: () async {
+        List<bool> wifiPermissionsEnabled = await Future.wait([
+          _checkappPlugin.checkGPSEnabled(),
+          _checkappPlugin.checkLocationPermission()
+        ]);
+        setState(() {
+          wifiPermissions = wifiPermissionsEnabled;
+        });
+        if (mounted &&
+            wifiPermissionsEnabled.every((element) => element == true)) {
+          context.goNamed('create-wifi', extra: widget.extra);
+        }
+      },
     );
+    WidgetsBinding.instance.addObserver(_lifecycleEventHandler);
   }
 
   @override
   void dispose() {
     super.dispose();
-    WidgetsBinding.instance.removeObserver(
-    _lifecycleEventHandler
-    );
+    WidgetsBinding.instance.removeObserver(_lifecycleEventHandler);
   }
 
   @override
