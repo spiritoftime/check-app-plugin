@@ -40,7 +40,7 @@ Future<void> createKeywordsTable(Database db) async {
     'id INTEGER PRIMARY KEY AUTOINCREMENT, '
     'keyword TEXT, '
     'blockId INTEGER, '
-    'FOREIGN KEY(blockId) REFERENCES blocks(id) ON DELETE SET NULL'
+    'FOREIGN KEY(blockId) REFERENCES blocks(id) ON DELETE CASCADE'
     ')',
   );
 }
@@ -53,7 +53,7 @@ Future<void> createAppsTable(Database db) async {
     'iconBase64String TEXT, '
     'appName TEXT, '
     'blockId INTEGER, '
-    'FOREIGN KEY(blockId) REFERENCES blocks(id) ON DELETE SET NULL'
+    'FOREIGN KEY(blockId) REFERENCES blocks(id) ON DELETE CASCADE'
     ')',
   );
 }
@@ -64,7 +64,7 @@ Future<void> createWebsitesTable(Database db) async {
     'id INTEGER PRIMARY KEY AUTOINCREMENT, '
     'url TEXT, '
     'blockId INTEGER, '
-    'FOREIGN KEY(blockId) REFERENCES blocks(id) ON DELETE SET NULL'
+    'FOREIGN KEY(blockId) REFERENCES blocks(id) ON DELETE CASCADE'
     ')',
   );
 }
@@ -74,7 +74,7 @@ Future<void> createBlocksTable(Database db) async {
     'CREATE TABLE blocks('
     'id INTEGER PRIMARY KEY AUTOINCREMENT, '
     'scheduleId INTEGER, '
-    'FOREIGN KEY(scheduleId) REFERENCES schedules(id) ON DELETE SET NULL'
+    'FOREIGN KEY(scheduleId) REFERENCES schedules(id) ON DELETE CASCADE'
     ')',
   );
 }
@@ -87,7 +87,7 @@ Future<void> createLocationsTable(Database db) async {
     'longitude NUMERIC, '
     'location TEXT, '
     'scheduleId INTEGER, '
-    'FOREIGN KEY(scheduleId) REFERENCES schedules(id) ON DELETE SET NULL'
+    'FOREIGN KEY(scheduleId) REFERENCES schedules(id) ON DELETE CASCADE'
     ')',
   );
 }
@@ -98,7 +98,7 @@ Future<void> createWifisTable(Database db) async {
     'id INTEGER PRIMARY KEY AUTOINCREMENT, '
     'wifiName TEXT, '
     'scheduleId INTEGER, '
-    'FOREIGN KEY(scheduleId) REFERENCES schedules(id) ON DELETE SET NULL'
+    'FOREIGN KEY(scheduleId) REFERENCES schedules(id) ON DELETE CASCADE'
     ')',
   );
 }
@@ -110,7 +110,7 @@ Future<void> createTimingsTable(Database db) async {
     'start TEXT, '
     'end TEXT, '
     'timeId INTEGER, '
-    'FOREIGN KEY(timeId) REFERENCES times(id) ON DELETE SET NULL'
+    'FOREIGN KEY(timeId) REFERENCES times(id) ON DELETE CASCADE'
     ')',
   );
 }
@@ -121,7 +121,7 @@ Future<void> createDaysTable(Database db) async {
     'id INTEGER PRIMARY KEY AUTOINCREMENT, '
     'day TEXT, '
     'timeId INTEGER, '
-    'FOREIGN KEY(timeId) REFERENCES times(id) ON DELETE SET NULL'
+    'FOREIGN KEY(timeId) REFERENCES times(id) ON DELETE CASCADE'
     ')',
   );
 }
@@ -131,7 +131,7 @@ Future<void> createTimesTable(Database db) async {
     'CREATE TABLE times('
     'id INTEGER PRIMARY KEY AUTOINCREMENT, '
     'scheduleId INTEGER, '
-    'FOREIGN KEY(scheduleId) REFERENCES schedules(id) ON DELETE SET NULL'
+    'FOREIGN KEY(scheduleId) REFERENCES schedules(id) ON DELETE CASCADE'
     ')',
   );
 }
@@ -144,7 +144,7 @@ Future<void> createSchedulesTable(Database db) async {
     'scheduleName TEXT, '
     'scheduleIcon TEXT, '
     'isActive INTEGER DEFAULT 0, '
-    'FOREIGN KEY(userId) REFERENCES users(id) ON DELETE SET NULL'
+    'FOREIGN KEY(userId) REFERENCES users(id) ON DELETE CASCADE'
     ')',
   );
 }

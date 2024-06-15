@@ -10,7 +10,8 @@ class SchedulesBloc extends Bloc<ScheduleEvent, ScheduleState> {
 
   SchedulesBloc(this._databaseRepository) : super(const SchedulesLoaded()) {
     on<LoadSchedules>(_onLoadSchedule);
-    // on<AddTask>(_onAddTask);
+    on<AddSchedule>(_onAddSchedule);
+    on<DeleteSchedule>(_onDeleteSchedule);
     // on<DeleteTask>(_onDeleteTask);
     on<UpdateSchedule>(_onUpdateSchedule);
   }
@@ -29,29 +30,31 @@ class SchedulesBloc extends Bloc<ScheduleEvent, ScheduleState> {
   void _onUpdateSchedule(
       UpdateSchedule event, Emitter<ScheduleState> emit) async {
     try {
-      await DatabaseRepository().updateSchedule(
-          data: event.schedule, tableName: 'schedules', model: event.schedule);
+      await DatabaseRepository().updateSchedule(s: event.schedule);
     } catch (e) {
       emit(ScheduleError(e.toString()));
     }
   }
 }
-  // void _onAddTask(AddTask event, Emitter<TasksState> emit) {
-  //   final state = this.state;
-  //   if (state is TasksLoaded) {
-  //     emit(TasksLoaded(tasks: List.from(state.tasks)..add(event.task)));
-  //   }
-  // }
 
-  // void _onDeleteTask(DeleteTask event, Emitter<TasksState> emit) {
-  //   final state = this.state;
-  //   if (state is TasksLoaded) {
-  //     List<Task> tasks = state.tasks.where((task) {
-  //       return task.id != event.task.id;
-  //     }).toList();
-  //     emit(TasksLoaded(tasks: tasks));
-  //   }
-  // }
+void _onAddSchedule(AddSchedule event, Emitter<ScheduleState> emit) async {
+  try {
+    await DatabaseRepository().insertSchedule(event.schedule);
+  } catch (e) {
+    emit(ScheduleError(e.toString()));
+  }
+}
+
+void _onDeleteSchedule(
+    DeleteSchedule event, Emitter<ScheduleState> emit) async {
+  try {
+    await DatabaseRepository().deleteSchedule(
+      scheduleId: event.scheduleId,
+    );
+  } catch (e) {
+    emit(ScheduleError(e.toString()));
+  }
+}
 
   // void _onUpdateTask(UpdateTask event, Emitter<TasksState> emit) {
   //   final state = this.state;

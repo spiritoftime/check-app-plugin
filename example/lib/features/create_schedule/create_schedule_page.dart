@@ -14,12 +14,15 @@ import 'package:checkapp_plugin_example/features/create_schedule/widgets/icon_se
 import 'package:checkapp_plugin_example/features/create_schedule/widgets/schedule_name.dart';
 import 'package:checkapp_plugin_example/features/create_time/cubit/cubit/time_cubit.dart';
 import 'package:checkapp_plugin_example/features/create_wifi/cubit/cubit/wifi_cubit.dart';
+import 'package:checkapp_plugin_example/features/home/bloc/schedule_bloc.dart';
+import 'package:checkapp_plugin_example/features/home/bloc/schedule_event.dart';
 import 'package:checkapp_plugin_example/repository/database_repository/database_repository.dart';
 import 'package:checkapp_plugin_example/shared/widgets/accordion_wrapper.dart';
 import 'package:checkapp_plugin_example/shared/widgets/hover_ink_well.dart';
 import 'package:checkapp_plugin_example/shared/widgets/show_dialog.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -322,19 +325,37 @@ class _CreateSchedulePageState extends State<CreateSchedulePage> {
                       const Text("Please enter a schedule name"));
                   return;
                 }
+                if (scheduleCubit.state.id != null) {
+                                    //  compile everything to one schedule
+                  Schedule schedule = Schedule(
+                      id: scheduleCubit.state.id,
+                      wifi: wifiCubit.state,
+                      scheduleDetails: ScheduleDetails(
+                        isActive: true,
+                        scheduleName: _controller.text,
+                        iconName: _iconName,
+                      ),
+                      location: locationCubit.state,
+                      time: timeCubit.state,
+                      block: blockCubit.state);
 
-                //  compile everything to one schedule
-                Schedule schedule = Schedule(
-                    wifi: wifiCubit.state,
-                    scheduleDetails: ScheduleDetails(
-                      isActive: true,
-                      scheduleName: _controller.text,
-                      iconName: _iconName,
-                    ),
-                    location: locationCubit.state,
-                    time: timeCubit.state,
-                    block: blockCubit.state);
-                await DatabaseRepository().insertSchedule(schedule);
+                  context.read<SchedulesBloc>().add(UpdateSchedule(schedule));
+
+                } else {
+                  //  compile everything to one schedule
+                  Schedule schedule = Schedule(
+                      wifi: wifiCubit.state,
+                      scheduleDetails: ScheduleDetails(
+                        isActive: true,
+                        scheduleName: _controller.text,
+                        iconName: _iconName,
+                      ),
+                      location: locationCubit.state,
+                      time: timeCubit.state,
+                      block: blockCubit.state);
+                  context.read<SchedulesBloc>().add(AddSchedule(schedule));
+                }
+                context.read<SchedulesBloc>().add(LoadSchedules());
                 if (context.mounted) context.goNamed('home');
               },
               child: const Text(

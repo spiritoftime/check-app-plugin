@@ -36,7 +36,12 @@ class _ExistingConditionState extends State<ExistingCondition> {
       child: GreyContainer(
         child: Row(
           children: [
-         widget.conditionType=='Time'?   const Icon(Icons.schedule, color: Colors.blue, size: 24):widget.conditionType=='Location'?const Icon(Icons.location_on, color: Colors.blue, size: 24):const Icon(Icons.wifi, color: Colors.blue, size: 24),
+            widget.conditionType == 'Time'
+                ? const Icon(Icons.schedule, color: Colors.blue, size: 24)
+                : widget.conditionType == 'Location'
+                    ? const Icon(Icons.location_on,
+                        color: Colors.blue, size: 24)
+                    : const Icon(Icons.wifi, color: Colors.blue, size: 24),
             const Gap(16),
             Expanded(
               child: Column(
@@ -55,7 +60,7 @@ class _ExistingConditionState extends State<ExistingCondition> {
                     softWrap: true,
                   ),
                   const Gap(4),
-                 widget.text2.isNotEmpty? Text(widget.text2):Container()
+                  widget.text2.isNotEmpty ? Text(widget.text2) : Container()
                 ],
               ),
             ),
@@ -63,13 +68,13 @@ class _ExistingConditionState extends State<ExistingCondition> {
                 ? GestureDetector(
                     onTap: () {
                       if (widget.conditionType == 'Location') {
-                        widget.extra['locationCubit'].updateLocation();
-                      } else if (widget.conditionType == 'Wifi'){
-                        widget.extra['wifiCubit'].updateWifi(wifi:<Wifi>[]);
-                      
+                        widget.extra['locationCubit']
+                            .updateLocation(location: <Location>[]);
+                      } else if (widget.conditionType == 'Wifi') {
+                        widget.extra['wifiCubit'].updateWifi(wifi: <Wifi>[]);
                       }
 
-                        widget.updateUI();
+                      widget.updateUI();
                     },
                     child:
                         const Icon(Icons.close, size: 24, color: Colors.grey),

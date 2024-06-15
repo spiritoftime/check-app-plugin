@@ -1,9 +1,12 @@
 import 'package:checkapp_plugin_example/features/create_schedule/models/schedule/schedule.dart';
 import 'package:checkapp_plugin_example/features/create_schedule/widgets/icon_selection.dart';
+import 'package:checkapp_plugin_example/features/home/bloc/schedule_bloc.dart';
+import 'package:checkapp_plugin_example/features/home/bloc/schedule_event.dart';
 import 'package:checkapp_plugin_example/repository/database_repository/database_repository.dart';
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/action_button.dart';
 import 'package:checkapp_plugin_example/shared/widgets/hover_ink_well.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class ScheduleRow extends StatefulWidget {
@@ -64,10 +67,12 @@ class _ScheduleRowState extends State<ScheduleRow> {
                       setState(() {
                         _isEnabled = isEnabled;
                       });
-                      DatabaseRepository().updateSchedule(data: {
-                        'id': widget.schedule.id,
-                        'isActive': isEnabled ? 1 : 0
-                      }, tableName: 'schedules', model: widget.schedule);
+                      Schedule newS = widget.schedule.copyWith(
+                        scheduleDetails: widget.schedule.scheduleDetails
+                            .copyWith(isActive: isEnabled),
+                      );
+                      context.read<SchedulesBloc>().add(UpdateSchedule(newS));
+
                     }),
               ),
             ),

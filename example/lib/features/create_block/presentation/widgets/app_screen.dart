@@ -1,6 +1,7 @@
 import 'package:checkapp_plugin_example/features/create_block/bloc/app/app_bloc.dart';
 import 'package:checkapp_plugin_example/features/create_block/bloc/app/app_state.dart';
 import 'package:checkapp_plugin_example/features/create_block/cubit/cubit/block_cubit.dart';
+import 'package:checkapp_plugin_example/features/create_block/models/app/app.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/app_row.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/custom_checkbox_group.dart';
 import 'package:flutter/material.dart';
@@ -44,11 +45,17 @@ class _AppScreenState extends State<AppScreen> {
                         .toList()
                     : state.apps;
                 return CustomCheckboxGroup(
-                    onChanged: _onAppCheckBoxChanged,
-                    name: 'apps',
-                    items: filteredApps,
-                    content: (app) => AppRow(app: app, key: Key(app.appName)),
-                    initialValue: widget.blockCubit.state.apps);
+                  onChanged: _onAppCheckBoxChanged,
+                  name: 'apps',
+                  items: filteredApps,
+                  content: (app) => AppRow(app: app, key: Key(app.appName)),
+                  initialValue: widget.blockCubit.state.apps
+                      .map((a) => App(
+                          packageName: a.packageName,
+                          appName: a.appName,
+                          iconBase64String: a.iconBase64String))
+                      .toList(),
+                );
               } else {
                 return const Text('No App Found');
               }

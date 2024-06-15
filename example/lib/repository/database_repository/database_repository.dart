@@ -72,7 +72,6 @@ class DatabaseRepository {
                 final int blockPk =
                     await txn.insert('blocks', {'scheduleId': schedulePk});
                 Batch batch = txn.batch();
-
                 // ---------------------- insert components of block --------------------
                 for (App app in schedule.block.apps) {
                   batch.insert('apps', {...app.toJson(), 'blockId': blockPk},
@@ -175,6 +174,7 @@ class DatabaseRepository {
         );
 
         Schedule schedule = Schedule(
+          userId: userId,
           id: s['id'],
           block: block,
           time: time,
@@ -192,12 +192,98 @@ class DatabaseRepository {
     return scheduleList;
   }
 
-    Future<void> updateSchedule({required dynamic data, required String tableName,required dynamic model}) async {
+  Future<void> updateSchedule({required Schedule s}) async {
     final db = await _databaseRepository.database;
-    await db.update(tableName, data, where: 'id = ?', whereArgs: [model.id]);
+    HelperFunctions.tryCatchWrapper(
+        operation: () async => await db.transaction((txn) async {
+              Batch batch = txn.batch();
+              batch.update(
+                  'schedules',
+                  {
+                    'scheduleIcon': s.scheduleDetails.iconName,
+                    'scheduleName': s.scheduleDetails.scheduleName,
+                    'isActive': s.scheduleDetails.isActive ? 1 : 0,
+                  },
+                  where: 'id = ?',
+                  whereArgs: [s.id]);
+              // ---------------------- update components of block --------------------
+              batch.delete('apps',
+                  where: 'blockId = ?', whereArgs: [s.block.id]);
+              for (App app in s.block.apps) {
+                batch.update('apps', app.toJson(),
+                    where: 'id = ?', whereArgs: [app.id]);
+              }
+              batch.delete('websites',
+                  where: 'blockId = ?', whereArgs: [s.block.id]);
+              for (Website web in s.block.websites) {
+                batch.update('websites', web.toJson(),
+                    where: 'id = ?', whereArgs: [web.id]);
+              }
+              batch.delete('keywords',
+                  where: 'blockId = ?', whereArgs: [s.block.id]);
+              for (Keyword keyword in s.block.keywords) {
+                batch.update('keywords', keyword.toJson(),
+                    where: 'id = ?', whereArgs: [keyword.id]);
+              }
+              // ---------------------- update components of location --------------------
+              batch.delete('locations',
+                  where: 'scheduleId = ?', whereArgs: [s.id]);
+              for (Location location in s.location) {
+                batch.update('locations', location.toJson(),
+                    where: 'id = ?', whereArgs: [location.id]);
+              }
+              // ---------------------- update components of time --------------------
+              batch.delete('timings',
+                  where: 'timeId = ?', whereArgs: [s.time.id]);
+              for (Timing timing in s.time.timings) {
+                batch.update('timings', timing.toJson(),
+                    where: 'id = ?', whereArgs: [timing.id]);
+              }
+              batch.delete('days', where: 'timeId = ?', whereArgs: [s.time.id]);
+              for (Day day in s.time.days) {
+                batch.update('days', day.toJson(),
+                    where: 'id = ?', whereArgs: [day.id]);
+              }
+              // ---------------------- update components of wifi --------------------
+              batch.delete('wifis', where: 'scheduleId = ?', whereArgs: [s.id]);
+              for (Wifi wifi in s.wifi) {
+                batch.update('wifis', wifi.toJson(),
+                    where: 'id = ?', whereArgs: [wifi.id]);
+              }
+              return await batch.commit(noResult: true);
+            }),
+        errorMessage: "Unable to update schedule");
+    // await db.update(tableName, data, where: 'id = ?', whereArgs: [model.id]);
   }
+  // A method that deletes a breed data from the breeds table.
+  Future<void> deleteBreed(int id) async {
+    // Get a reference to the database.
+    final db = await _databaseRepository.database;
 
-   // // A method that updates a breed data from the breeds table.
+    // Remove the Breed from the database.
+    await db.delete(
+      'breeds',
+      // Use a `where` clause to delete a specific breed.
+      where: 'id = ?',
+      // Pass the Breed's id as a whereArg to prevent SQL injection.
+      whereArgs: [id],
+    );
+  }
+    // A method that deletes a breed data from the breeds table.
+  Future<void> deleteSchedule({required int scheduleId}) async {
+    // Get a reference to the database.
+    final db = await _databaseRepository.database;
+
+    // Remove the Breed from the database.
+    await db.delete(
+      'schedules',
+      // Use a `where` clause to delete a specific breed.
+      where: 'id = ?',
+      // Pass the Breed's id as a whereArg to prevent SQL injection.
+      whereArgs: [scheduleId],
+    );
+  }
+  // // A method that updates a breed data from the breeds table.
   // Future<void> updateBreed(Breed breed) async {
   //   // Get a reference to the database.
   //   final db = await _databaseRepository.database;
@@ -261,8 +347,6 @@ class DatabaseRepository {
   //   final List<Map<String, dynamic>> maps = await db.query('dogs');
   //   return List.generate(maps.length, (index) => Dog.fromMap(maps[index]));
   // }
-
- 
 
   // Future<void> updateDog(Dog dog) async {
   //   final db = await _databaseRepository.database;

@@ -25,3 +25,17 @@ final Schedule schedule;
   @override
   List<Object> get props => [schedule];
 }
+class AddSchedule extends ScheduleEvent{
+  final Schedule schedule;
+
+  const AddSchedule(this.schedule);
+
+  @override
+  List<Object> get props => [schedule];
+}
+class DeleteSchedule extends ScheduleEvent{
+  final int scheduleId;
+  const DeleteSchedule(this.scheduleId);
+    @override
+  List<Object> get props => [scheduleId];
+}

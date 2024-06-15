@@ -31,7 +31,7 @@ class _AllDayTimingRowState extends State<AllDayTimingRow> {
     super.initState();
 
     _isEnabled = widget.timeCubit.state.timings
-        .contains(const Timing(start: '00:00', end: '23:59'));
+        .any((Timing t)=>t.start == '00:00'&& t.end == '23:59');
   }
 
   @override

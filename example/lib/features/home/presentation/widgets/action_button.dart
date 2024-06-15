@@ -4,8 +4,11 @@ import 'package:checkapp_plugin_example/features/create_schedule/cubit/schedule_
 import 'package:checkapp_plugin_example/features/create_schedule/models/schedule/schedule.dart';
 import 'package:checkapp_plugin_example/features/create_time/cubit/cubit/time_cubit.dart';
 import 'package:checkapp_plugin_example/features/create_wifi/cubit/cubit/wifi_cubit.dart';
+import 'package:checkapp_plugin_example/features/home/bloc/schedule_bloc.dart';
+import 'package:checkapp_plugin_example/features/home/bloc/schedule_event.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class ActionButton extends StatefulWidget {
@@ -117,7 +120,10 @@ abstract class MenuItems {
         break;
 
       case MenuItems.delete:
-        //Do something
+        if (s.id != null) {
+          context.read<SchedulesBloc>().add(DeleteSchedule(s.id!));
+        }
+        context.read<SchedulesBloc>().add(LoadSchedules());
         break;
     }
   }

@@ -28,6 +28,7 @@ class _TimeLimitPageState extends State<TimeLimitPage> {
   void _addTiming() {
     setState(() {
       String uniqueKey = UniqueKey().toString();
+      
       timings.putIfAbsent(
           uniqueKey,
           () => TimingRow(
