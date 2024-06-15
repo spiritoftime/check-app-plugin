@@ -5,7 +5,8 @@ import 'package:checkapp_plugin_example/features/create_time/models/timing/timin
 import 'package:meta/meta.dart';
 
 class TimeCubit extends Cubit<Time> {
-  TimeCubit() : super(Time(days: [], timings: []));
+  TimeCubit({Time? initialTime})
+      : super(initialTime ?? Time(days: [], timings: []));
   void updateTime({
     List<Day>? days,
     List<Timing>? timings,

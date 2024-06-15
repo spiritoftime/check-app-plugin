@@ -1,9 +1,16 @@
+import 'package:checkapp_plugin_example/features/create_block/cubit/cubit/block_cubit.dart';
+import 'package:checkapp_plugin_example/features/create_location/cubit/location_cubit.dart';
+import 'package:checkapp_plugin_example/features/create_schedule/cubit/schedule_cubit.dart';
+import 'package:checkapp_plugin_example/features/create_schedule/models/schedule/schedule.dart';
+import 'package:checkapp_plugin_example/features/create_time/cubit/cubit/time_cubit.dart';
+import 'package:checkapp_plugin_example/features/create_wifi/cubit/cubit/wifi_cubit.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ActionButton extends StatefulWidget {
-  const ActionButton({super.key});
-
+  const ActionButton({super.key, required this.s});
+  final Schedule s;
   @override
   State<ActionButton> createState() => _ActionButtonState();
 }
@@ -34,7 +41,7 @@ class _ActionButtonState extends State<ActionButton> {
           ),
         ],
         onChanged: (value) {
-          MenuItems.onChanged(context, value! as MenuItem);
+          MenuItems.onChanged(context, value! as MenuItem, widget.s);
         },
         dropdownStyleData: DropdownStyleData(
           width: 160,
@@ -96,9 +103,16 @@ abstract class MenuItems {
     );
   }
 
-  static void onChanged(BuildContext context, MenuItem item) {
+  static void onChanged(BuildContext context, MenuItem item, Schedule s) {
     switch (item) {
       case MenuItems.edit:
+        context.goNamed('confirm-schedule', extra: {
+          'blockCubit': BlockCubit(initialBlock: s.block),
+          'timeCubit': TimeCubit(initialTime: s.time),
+          'locationCubit': LocationCubit(initialLocation: s.location),
+          'wifiCubit': WifiCubit(initialWifi: s.wifi),
+          'scheduleCubit': ScheduleCubit(initialSchedule: s),
+        });
         //Do something
         break;
 

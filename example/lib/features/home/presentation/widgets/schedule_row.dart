@@ -1,7 +1,7 @@
 import 'package:checkapp_plugin_example/features/create_schedule/models/schedule/schedule.dart';
 import 'package:checkapp_plugin_example/features/create_schedule/widgets/icon_selection.dart';
 import 'package:checkapp_plugin_example/repository/database_repository/database_repository.dart';
-import 'package:checkapp_plugin_example/shared/widgets/dropdown_screen.dart';
+import 'package:checkapp_plugin_example/features/home/presentation/widgets/action_button.dart';
 import 'package:checkapp_plugin_example/shared/widgets/hover_ink_well.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -71,7 +71,9 @@ class _ScheduleRowState extends State<ScheduleRow> {
                     }),
               ),
             ),
-            const ActionButton()
+            ActionButton(
+              s: widget.schedule,
+            )
           ],
         ),
       ),

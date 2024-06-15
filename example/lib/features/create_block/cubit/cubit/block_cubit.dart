@@ -5,7 +5,8 @@ import 'package:checkapp_plugin_example/features/create_block/models/keyword/key
 import 'package:checkapp_plugin_example/features/create_block/models/website/website.dart';
 
 class BlockCubit extends Cubit<Block> {
-  BlockCubit() : super(Block(apps: [], websites: [], keywords: []));
+  BlockCubit({Block? initialBlock})
+      : super(initialBlock ?? Block(apps: [], websites: [], keywords: []));
 
   void updateBlock(
       {List<App>? apps, List<Website>? websites, List<Keyword>? keywords}) {

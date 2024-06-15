@@ -15,112 +15,112 @@ import 'package:checkapp_plugin_example/features/create_wifi/wifi_limit.dart';
 import 'package:checkapp_plugin_example/features/create_wifi/wifi_permission_page.dart';
 import 'package:checkapp_plugin_example/features/details/presentation/details_screen.dart';
 import 'package:checkapp_plugin_example/features/home/presentation/home_page.dart';
-import 'package:checkapp_plugin_example/shared/widgets/dropdown_screen.dart';
+import 'package:checkapp_plugin_example/features/home/presentation/widgets/action_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-final GoRoute _createScheduleRouter = GoRoute(
-  name: 'create-block',
-  path: 'create-schedule',
-  builder: (BuildContext context, GoRouterState state) {
-    final extra = state.extra as Map<String, dynamic>;
+final List<RouteBase> _createScheduleRouter = <RouteBase>[
+  GoRoute(
+    name: 'create-block',
+    path: 'create-schedule',
+    builder: (BuildContext context, GoRouterState state) {
+      final extra = state.extra as Map<String, dynamic>;
 
-    return CreateBlockPage(extra: extra);
-  },
-  routes: <RouteBase>[
-    GoRoute(
-      name: 'create-block-permission',
-      path: 'block-permission',
-      builder: (BuildContext context, GoRouterState state) {
-        final extra = state.extra as Map<String, dynamic>;
+      return CreateBlockPage(extra: extra);
+    },
+  ),
+  GoRoute(
+    name: 'create-block-permission',
+    path: 'block-permission',
+    builder: (BuildContext context, GoRouterState state) {
+      final extra = state.extra as Map<String, dynamic>;
 
-        return BlockPermissionsPage(extra: extra);
-      },
-    ),
-    GoRoute(
-      name: 'create-location-permission',
-      path: 'location-permission',
-      builder: (BuildContext context, GoRouterState state) {
-        final extra = state.extra as Map<String, dynamic>;
+      return BlockPermissionsPage(extra: extra);
+    },
+  ),
+  GoRoute(
+    name: 'create-location-permission',
+    path: 'location-permission',
+    builder: (BuildContext context, GoRouterState state) {
+      final extra = state.extra as Map<String, dynamic>;
 
-        return LocationPermission(extra: extra);
-      },
-    ),
-    GoRoute(
-      name: 'create-location',
-      path: 'location',
-      builder: (BuildContext context, GoRouterState state) {
-        final extra = state.extra as Map<String, dynamic>;
+      return LocationPermission(extra: extra);
+    },
+  ),
+  GoRoute(
+    name: 'create-location',
+    path: 'location',
+    builder: (BuildContext context, GoRouterState state) {
+      final extra = state.extra as Map<String, dynamic>;
 
-        return SetLocationPage(extra: extra);
-      },
-    ),
-    GoRoute(
-      name: 'confirm-schedule',
-      path: 'confirm',
-      builder: (BuildContext context, GoRouterState state) {
-        final extra = state.extra as Map<String, dynamic>;
+      return SetLocationPage(extra: extra);
+    },
+  ),
+  GoRoute(
+    name: 'confirm-schedule',
+    path: 'confirm',
+    builder: (BuildContext context, GoRouterState state) {
+      final extra = state.extra as Map<String, dynamic>;
 
-        return CreateSchedulePage(extra: extra);
-      },
-    ),
-    GoRoute(
-      name: 'create-time',
-      path: 'time',
-      builder: (BuildContext context, GoRouterState state) {
-        final extra = state.extra as Map<String, dynamic>;
+      return CreateSchedulePage(extra: extra);
+    },
+  ),
+  GoRoute(
+    name: 'create-time',
+    path: 'time',
+    builder: (BuildContext context, GoRouterState state) {
+      final extra = state.extra as Map<String, dynamic>;
 
-        return TimeLimitPage(extra: extra);
-      },
-    ),
-    GoRoute(
-      name: 'create-wifi',
-      path: 'wifi',
-      builder: (BuildContext context, GoRouterState state) {
-        final extra = state.extra as Map<String, dynamic>;
+      return TimeLimitPage(extra: extra);
+    },
+  ),
+  GoRoute(
+    name: 'create-wifi',
+    path: 'wifi',
+    builder: (BuildContext context, GoRouterState state) {
+      final extra = state.extra as Map<String, dynamic>;
 
-        return WifiLimit(extra: extra);
-      },
-    ),
-    GoRoute(
-      name: 'create-wifi-permission',
-      path: 'wifi-permission',
-      builder: (BuildContext context, GoRouterState state) {
-        final extra = (state.extra as Map<String, dynamic>);
+      return WifiLimit(extra: extra);
+    },
+  ),
+  GoRoute(
+    name: 'create-wifi-permission',
+    path: 'wifi-permission',
+    builder: (BuildContext context, GoRouterState state) {
+      final extra = (state.extra as Map<String, dynamic>);
 
-        return WifiPermissionPage(
-          extra: extra,
-        );
-      },
-    ),
-    GoRoute(
-      name: 'create-launch-count',
-      path: 'launch-count',
-      builder: (BuildContext context, GoRouterState state) {
-        final extra = state.extra as Map<String, dynamic>;
+      return WifiPermissionPage(
+        extra: extra,
+      );
+    },
+  ),
+  GoRoute(
+    name: 'create-launch-count',
+    path: 'launch-count',
+    builder: (BuildContext context, GoRouterState state) {
+      final extra = state.extra as Map<String, dynamic>;
 
-        return LaunchLimit(extra: extra);
-      },
-    ),
-    GoRoute(
-      name: 'create-usage-limit',
-      path: 'usage-limit',
-      builder: (BuildContext context, GoRouterState state) {
-        final extra = state.extra as Map<String, dynamic>;
+      return LaunchLimit(extra: extra);
+    },
+  ),
+  GoRoute(
+    name: 'create-usage-limit',
+    path: 'usage-limit',
+    builder: (BuildContext context, GoRouterState state) {
+      final extra = state.extra as Map<String, dynamic>;
 
-        return UsageLimit(extra: extra);
-      },
-    ),
-    GoRoute(
-      name: 'create-blocking-conditions',
-      path: 'blocking-conditions',
-      builder: (BuildContext context, GoRouterState state) {
-        final extra = state.extra as Map<String, dynamic>;
-        return BlockingConditionsPage(extra: extra);
-      },
-    ),
-  ],
-);
+      return UsageLimit(extra: extra);
+    },
+  ),
+  GoRoute(
+    name: 'create-blocking-conditions',
+    path: 'blocking-conditions',
+    builder: (BuildContext context, GoRouterState state) {
+      final extra = state.extra as Map<String, dynamic>;
+      return BlockingConditionsPage(extra: extra);
+    },
+  ),
+];
 
 /// The route configuration.
 final GoRouter _router = GoRouter(
@@ -143,9 +143,7 @@ final GoRouter _router = GoRouter(
             builder: (BuildContext context, GoRouterState state) {
               return BasicScreen();
             }),
-                   
-          
-        _createScheduleRouter
+        ..._createScheduleRouter
       ],
     ),
   ],

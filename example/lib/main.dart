@@ -1,5 +1,5 @@
-import 'package:checkapp_plugin_example/features/create_block/bloc/schedule/bloc/schedule_bloc.dart';
 import 'package:checkapp_plugin_example/features/home/bloc/schedule_bloc.dart';
+import 'package:checkapp_plugin_example/features/home/bloc/schedule_event.dart';
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/home_screen.dart';
 import 'package:checkapp_plugin_example/firebase_options.dart';
 import 'package:checkapp_plugin_example/repository/auth_repository/authentication_repository.dart';

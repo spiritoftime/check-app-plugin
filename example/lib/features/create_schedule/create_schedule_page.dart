@@ -4,6 +4,7 @@ import 'package:checkapp_plugin_example/features/create_block/presentation/widge
 import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/keyword_row.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/website_row.dart';
 import 'package:checkapp_plugin_example/features/create_location/cubit/location_cubit.dart';
+import 'package:checkapp_plugin_example/features/create_schedule/cubit/schedule_cubit.dart';
 import 'package:checkapp_plugin_example/features/create_schedule/models/schedule/schedule.dart';
 import 'package:checkapp_plugin_example/features/create_schedule/models/schedule_details/schedule_details.dart';
 import 'package:checkapp_plugin_example/features/create_schedule/widgets/existing_blocks.dart';
@@ -33,6 +34,8 @@ class CreateSchedulePage extends StatefulWidget {
 }
 
 class _CreateSchedulePageState extends State<CreateSchedulePage> {
+  ScheduleCubit get scheduleCubit =>
+      widget.extra['scheduleCubit'] ?? ScheduleCubit();
   BlockCubit get blockCubit => widget.extra['blockCubit'];
 
   TimeCubit get timeCubit => widget.extra['timeCubit'] ?? TimeCubit();
@@ -40,6 +43,17 @@ class _CreateSchedulePageState extends State<CreateSchedulePage> {
   LocationCubit get locationCubit =>
       widget.extra['locationCubit'] ?? LocationCubit();
   WifiCubit get wifiCubit => widget.extra['wifiCubit'] ?? WifiCubit();
+  late String _iconName;
+  final TextEditingController _controller = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _iconName = scheduleCubit.state.scheduleDetails.iconName != ''
+        ? scheduleCubit.state.scheduleDetails.iconName
+        : 'schedule';
+    _controller.text = scheduleCubit.state.scheduleDetails.scheduleName;
+  }
 
   List<Widget> appWidgets() {
     if (blockCubit.state.apps.isNotEmpty) {
@@ -90,8 +104,6 @@ class _CreateSchedulePageState extends State<CreateSchedulePage> {
     setState(() {});
   }
 
-  final TextEditingController _controller = TextEditingController();
-  String _iconName = 'schedule';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
