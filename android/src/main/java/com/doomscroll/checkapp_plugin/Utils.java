@@ -46,5 +46,29 @@ public class Utils {
 
         return Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT);
     }
+    public static String[][] parseStringToArray(String input) {
+        if (input == null || input.isEmpty()) {
+            return new String[0][0];
+        }
+        // Remove surrounding square brackets and split by "],["
+        String[] pairs = input.substring(1, input.length() - 1).split("\\],\\[");
 
+        String[][] result = new String[pairs.length][];
+
+        for (int i = 0; i < pairs.length; i++) {
+            result[i] = pairs[i].split(",");
+        }
+
+        return result;
+    }
+    public static String[] parseStringToSingleArray(String input) {
+        if (input == null || input.isEmpty()) {
+            return new String[0];
+        }
+
+        // Remove surrounding square brackets and split by "],["
+        String[] elements = input.substring(1, input.length() - 1).split("\\],\\[");
+
+        return elements;
+    }
 }

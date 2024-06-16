@@ -76,7 +76,7 @@ public class LocationChecker {
                     if (lastLocation != null) {
                         double lat = lastLocation.getLatitude();
                         double lng = lastLocation.getLongitude();
-                        Log.d("coords", "lat: " + lat + " lng: " + lng);
+//                        Log.d("coords", "lat: " + lat + " lng: " + lng);
                     }
                 }
             };

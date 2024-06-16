@@ -33,6 +33,8 @@ import com.google.android.gms.location.Priority;
 import com.google.android.gms.location.LocationRequest;
 
 
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class AppService extends Service {
@@ -108,7 +110,16 @@ public class AppService extends Service {
     //        code for starting service
 
     public static void initializeServiceAtFlutter(Context context) {
-
+        try (DatabaseHelper dbHelper = new DatabaseHelper(context)) {
+           String userId =  dbHelper.getUserId();
+           if(!Objects.equals(userId, "user")){
+               List<Map<String,Object>> schedules =    dbHelper.getSchedules(userId);
+                Log.d("schedules", schedules.toString());
+           }
+        } catch (Exception e) {
+            // Handle any exceptions that may occur
+            e.printStackTrace();
+        }
         Intent serviceIntent = new Intent(context, AppService.class);
         serviceIntent.setAction(START);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
