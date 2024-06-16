@@ -1,6 +1,8 @@
 package com.doomscroll.checkapp_plugin;
 
+import static com.doomscroll.checkapp_plugin.LocationChecker.getFusedLocationClient;
 import static com.doomscroll.checkapp_plugin.LocationChecker.startLocationUpdates;
+import static com.doomscroll.checkapp_plugin.LocationChecker.stopLocationUpdates;
 import static com.doomscroll.checkapp_plugin.WifiScan.initializeWifiScan;
 
 import android.app.Notification;
@@ -43,12 +45,9 @@ public class AppService extends Service {
 
     final static String START = "START";
     final static String STOP = "STOP";
-    private static FusedLocationProviderClient fusedLocationClient;
-    private final LocationRequest locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000)
-            .setMinUpdateIntervalMillis(5000)
-            .build();
-    ;
-    private LocationCallback locationCallback;
+//    private static FusedLocationProviderClient fusedLocationClient;
+//    private final LocationRequest locationRequest
+//    private LocationCallback locationCallback;
 
     @Nullable
     @Override
@@ -69,11 +68,11 @@ public class AppService extends Service {
                 stopSelf();
                 break;
             case STOP_REQUEST_LOCATION:
-                fusedLocationClient.removeLocationUpdates(locationCallback);
+                stopLocationUpdates();
                 break;
             case REQUEST_LOCATION:
                 try {
-                    startLocationUpdates(this, NOTIFICATION_CHANNEL, fusedLocationClient, locationRequest);
+                    startLocationUpdates(this, NOTIFICATION_CHANNEL);
                 } catch (PackageManager.NameNotFoundException e) {
                     throw new RuntimeException(e);
                 }
@@ -125,8 +124,12 @@ public class AppService extends Service {
             context.startService(serviceIntent);
 
         }
+        getFusedLocationClient(context);
+//         queries the active schedules
+        createIntentForService(context, REQUEST_LOCATION); // autostarts location if active schedule demands for it
+//         autostart wifi if active schedule demands for it
+//        should stop location & wifi when no active schedule needs it
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
     }
 
 
