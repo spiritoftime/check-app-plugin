@@ -9,13 +9,13 @@ part of 'timing.dart';
 Timing _$TimingFromJson(Map<String, dynamic> json) => Timing(
       timeId: (json['timeId'] as num?)?.toInt(),
       id: (json['id'] as num?)?.toInt(),
-      start: json['start'] as String,
-      end: json['end'] as String,
+      startTiming: json['startTiming'] as String,
+      endTiming: json['endTiming'] as String,
     );
 
 Map<String, dynamic> _$TimingToJson(Timing instance) => <String, dynamic>{
-      'start': instance.start,
-      'end': instance.end,
+      'startTiming': instance.startTiming,
+      'endTiming': instance.endTiming,
       'timeId': instance.timeId,
       'id': instance.id,
     };
