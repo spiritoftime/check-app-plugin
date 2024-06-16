@@ -103,11 +103,6 @@ class _TimeLimitPageState extends State<TimeLimitPage> {
     });
   }
 
-  void _clearTimings() {
-    setState(() {
-      timings.clear();
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -153,15 +148,9 @@ class _TimeLimitPageState extends State<TimeLimitPage> {
                       const Gap(16),
                       AllDayTimingRow(
                         isEnabled: _allDayEnabled,
-                        toggleEnabled: (bool isEnabled) {
-                          setState(() {
-                            _allDayEnabled = isEnabled;
-                          });
-                        },
+
                         add24hTiming: _add24hTiming,
-                        clearTimings: _clearTimings,
                         addTiming: _addTiming,
-                        timeCubit: timeCubit,
                       ),
                       ListView.builder(
                           shrinkWrap: true,
