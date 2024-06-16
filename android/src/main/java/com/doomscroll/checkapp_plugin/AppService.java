@@ -17,6 +17,7 @@ import android.content.pm.PackageManager;
 
 import android.net.wifi.WifiManager;
 import android.os.IBinder;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -102,22 +103,30 @@ public class AppService extends Service {
     private void start() {
         Notification notification = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL).setContentText("This service runs in the foreground to check your location/wifi/app usage according to your enabled app blocking schedule").build();
         startForeground(1, notification);
+        initializeWifiScan(this);
 
     }
     //        code for starting service
 
     public static void initializeServiceAtFlutter(Context context) {
+
+        Intent serviceIntent = new Intent(context, AppService.class);
+        serviceIntent.setAction(START);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL, "Running Notification", NotificationManager.IMPORTANCE_NONE);
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.createNotificationChannel(notificationChannel);
 
-            Intent serviceIntent = new Intent(context, AppService.class);
-            serviceIntent.setAction(START);
+
+            context.startForegroundService(serviceIntent);
+
+
+        } else {
             context.startService(serviceIntent);
-            fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
-            initializeWifiScan(context);
+
         }
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
     }
 
 

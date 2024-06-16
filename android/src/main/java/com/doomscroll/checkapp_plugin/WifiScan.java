@@ -35,7 +35,6 @@ public class WifiScan {
                 if (Objects.equals(intent.getAction(), WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)) {
                     scanResults = mWifiManager.getScanResults();
 
-                    // add your logic here
                 }
             }
         };
