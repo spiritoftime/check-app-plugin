@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gap/gap.dart';
+import 'package:sqflite/sqflite.dart';
 
 /// The home screen
 class HomeScreen extends StatelessWidget {

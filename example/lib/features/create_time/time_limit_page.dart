@@ -33,8 +33,8 @@ class _TimeLimitPageState extends State<TimeLimitPage> {
                 'deleteRow': () {
                   _deleteTiming(uniqueKey);
                 },
-                'startTime': timing.start,
-                'endTime': timing.end,
+                'startTime': timing.startTiming,
+                'endTime': timing.endTiming,
                 'editRow': (Map<String, dynamic> newTimings) {
                   _editTiming(uniqueKey, newTimings);
                 },
@@ -192,8 +192,8 @@ class _TimeLimitPageState extends State<TimeLimitPage> {
                   List<Timing> finalTimings = [];
                   for (String k in timings.keys) {
                     finalTimings.add(Timing(
-                        start: timings[k]['startTime'],
-                        end: timings[k]['endTime']));
+                        startTiming: timings[k]['startTime'],
+                        endTiming: timings[k]['endTime']));
                   }
                   timeCubit.updateTime(timings: finalTimings);
 

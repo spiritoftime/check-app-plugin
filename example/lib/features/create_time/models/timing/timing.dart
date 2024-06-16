@@ -5,15 +5,15 @@ part 'timing.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class Timing {
-  final String start;
-  final String end;
+  final String startTiming;
+  final String endTiming;
   final int? timeId;
   final int? id;
   const Timing({
     this.timeId,
     this.id,
-    required this.start,
-    required this.end,
+    required this.startTiming,
+    required this.endTiming,
   });
 
   factory Timing.fromJson(Map<String, dynamic> json) => _$TimingFromJson(json);

@@ -212,7 +212,7 @@ class _CreateSchedulePageState extends State<CreateSchedulePage> {
                                         'create-time',
                                         extra: widget.extra),
                                     text2: timeCubit.state.timings
-                                        .map((e) => '${e.start} to ${e.end}')
+                                        .map((e) => '${e.startTiming} to ${e.endTiming}')
                                         .join(', '),
                                     updateUI: _updateUI,
                                   )

@@ -107,8 +107,8 @@ Future<void> createTimingsTable(Database db) async {
   await db.execute(
     'CREATE TABLE timings('
     'id INTEGER PRIMARY KEY AUTOINCREMENT, '
-    'start TEXT, '
-    'end TEXT, '
+    'startTiming TEXT, '
+    'endTiming TEXT, '
     'timeId INTEGER, '
     'FOREIGN KEY(timeId) REFERENCES times(id) ON DELETE CASCADE'
     ')',
