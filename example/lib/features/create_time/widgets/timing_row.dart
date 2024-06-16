@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:checkapp_plugin_example/features/create_time/cubit/cubit/time_cubit.dart';
 import 'package:checkapp_plugin_example/features/create_time/models/time/time.dart';
 import 'package:checkapp_plugin_example/features/create_time/models/timing/timing.dart';
+import 'package:checkapp_plugin_example/shared/helper_functions/helper_functions.dart';
 import 'package:checkapp_plugin_example/shared/widgets/grey_container.dart';
 import 'package:checkapp_plugin_example/shared/widgets/hover_ink_well.dart';
 import 'package:flutter/material.dart';
@@ -11,13 +12,19 @@ import 'package:intl/intl.dart';
 
 class TimingRow extends StatefulWidget {
   final Function() deleteRow;
-  final TimeCubit timeCubit;
-  final CopyTimeCubit copyTimeCubit;
+  // final TimeCubit timeCubit;
+  // final CopyTimeCubit copyTimeCubit;
+  final String startTime;
+  final String endTime;
+  final Function(Map<String, dynamic>) editRow;
   const TimingRow({
     super.key,
     required this.deleteRow,
-    required this.timeCubit,
-    required this.copyTimeCubit,
+    required this.startTime,
+    required this.endTime,
+    required this.editRow,
+    // required this.timeCubit,
+    // required this.copyTimeCubit,
   });
 
   @override
@@ -25,53 +32,60 @@ class TimingRow extends StatefulWidget {
 }
 
 class _TimingRowState extends State<TimingRow> {
-  late StreamSubscription<int> subscription;
+  // late StreamSubscription<int> subscription;
+  // TimeOfDay _startTimeOfDay = TimeOfDay.now();
+  // TimeOfDay _endTimeOfDay = TimeOfDay.now();
+  late String _startTimeOfDay;
 
-  TimeOfDay _startTimeOfDay = TimeOfDay.now();
-  TimeOfDay _endTimeOfDay = TimeOfDay.now();
+  late String _endTimeOfDay;
+  @override
+  void initState() {
+    super.initState();
+    _startTimeOfDay = widget.startTime;
+    _endTimeOfDay = widget.endTime;
+  }
+
   Future<void> _selectTime(
-      {required bool isStartTime, required TimeOfDay initialTime}) async {
+      {required bool isStartTime, required String initialTime}) async {
+    TimeOfDay initialTimeOfDay =
+        HelperFunctions.convertToTimeOfDay(initialTime);
     TimeOfDay? chosenTime =
-        await showTimePicker(context: context, initialTime: initialTime);
+        await showTimePicker(context: context, initialTime: initialTimeOfDay);
     if (isStartTime && chosenTime != null) {
       setState(() {
-        _startTimeOfDay = chosenTime;
+        _startTimeOfDay = HelperFunctions.convertToHHMM(chosenTime);
       });
+      widget.editRow({'startTime': HelperFunctions.convertToHHMM(chosenTime)});
     } else if (!isStartTime && chosenTime != null) {
       setState(() {
-        _endTimeOfDay = chosenTime;
+        _endTimeOfDay = HelperFunctions.convertToHHMM(chosenTime);
       });
+      widget.editRow({'endTime': HelperFunctions.convertToHHMM(chosenTime)});
     }
   }
 
-  DateTime convertTimeOfDay(TimeOfDay timeOfDay) {
-    return DateFormat('HH:mm', 'en_US').parse('${timeOfDay.hour}:${timeOfDay.minute}');
-  }
-
-  @override
-  void dispose() async {
-    super.dispose();
-    await subscription.cancel();
-  }
+  // @override
+  // void dispose() async {
+  //   super.dispose();
+  //   await subscription.cancel();
+  // }
 
   @override
   Widget build(BuildContext context) {
-    subscription =
-        widget.copyTimeCubit.stream.listen((int call) async {
-        widget.timeCubit.updateTime(
-          timings: widget.timeCubit.state.timings +
-              [
-                Timing(
-                    start: DateFormat('HH:mm')
-                        .format(convertTimeOfDay(_startTimeOfDay)),
-                    end: DateFormat('HH:mm')
-                        .format(convertTimeOfDay(_endTimeOfDay)))
-              ],
-        );
-        print(
-            "${widget.timeCubit.state.timings.length} timings, timing_row updated");
-      }
-    );
+    // subscription = widget.copyTimeCubit.stream.listen((int call) async {
+    //   widget.timeCubit.updateTime(
+    //     timings: widget.timeCubit.state.timings +
+    //         [
+    //           Timing(
+    //               start: DateFormat('HH:mm')
+    //                   .format(convertTimeOfDay(_startTimeOfDay)),
+    //               end: DateFormat('HH:mm')
+    //                   .format(convertTimeOfDay(_endTimeOfDay)))
+    //         ],
+    //   );
+    //   print(
+    //       "${widget.timeCubit.state.timings.length} timings, timing_row updated");
+    // });
     return Padding(
       padding: const EdgeInsets.only(top: 16.0),
       child: HoverInkWell(
@@ -90,7 +104,9 @@ class _TimingRowState extends State<TimingRow> {
                 },
                 inkWellPadding:
                     const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
-                child: Text(_startTimeOfDay.format(context),
+                child: Text(
+                    HelperFunctions.convertToTimeOfDay(_startTimeOfDay)
+                        .format(context),
                     style: const TextStyle(fontSize: 16)),
               ),
               const Gap(8),
@@ -104,7 +120,9 @@ class _TimingRowState extends State<TimingRow> {
                 borderColor: const Color(0xff21222D),
                 inkWellPadding:
                     const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
-                child: Text(_endTimeOfDay.format(context),
+                child: Text(
+                    HelperFunctions.convertToTimeOfDay(_endTimeOfDay)
+                        .format(context),
                     style: const TextStyle(fontSize: 16)),
               ),
               const Spacer(),

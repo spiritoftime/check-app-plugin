@@ -207,69 +207,71 @@ class DatabaseRepository {
                   where: 'id = ?',
                   whereArgs: [s.id]);
               // ---------------------- update components of block --------------------
+              // delete and reinsert as i dont know what was updated, if just update then if a component was removed it will still be in the db
               batch.delete('apps',
                   where: 'blockId = ?', whereArgs: [s.block.id]);
               for (App app in s.block.apps) {
-                batch.update('apps', app.toJson(),
-                    where: 'id = ?', whereArgs: [app.id]);
+                batch.insert('apps', {...app.toJson(), 'blockId': s.block.id},
+                    conflictAlgorithm: ConflictAlgorithm.replace);
               }
               batch.delete('websites',
                   where: 'blockId = ?', whereArgs: [s.block.id]);
               for (Website web in s.block.websites) {
-                batch.update('websites', web.toJson(),
-                    where: 'id = ?', whereArgs: [web.id]);
+                batch.insert('websites', {...web.toJson(), 'blockId': s.block.id},
+                    conflictAlgorithm: ConflictAlgorithm.replace);
               }
               batch.delete('keywords',
                   where: 'blockId = ?', whereArgs: [s.block.id]);
               for (Keyword keyword in s.block.keywords) {
-                batch.update('keywords', keyword.toJson(),
-                    where: 'id = ?', whereArgs: [keyword.id]);
+                batch.insert('apps', {...keyword.toJson(), 'blockId': s.block.id},
+                    conflictAlgorithm: ConflictAlgorithm.replace);
               }
               // ---------------------- update components of location --------------------
               batch.delete('locations',
                   where: 'scheduleId = ?', whereArgs: [s.id]);
               for (Location location in s.location) {
-                batch.update('locations', location.toJson(),
-                    where: 'id = ?', whereArgs: [location.id]);
+                batch.insert('locations', {...location.toJson(), 'scheduleId': s.id},
+                    conflictAlgorithm: ConflictAlgorithm.replace);
               }
               // ---------------------- update components of time --------------------
+              //  i didnt remove time as time is a required field
               batch.delete('timings',
                   where: 'timeId = ?', whereArgs: [s.time.id]);
               for (Timing timing in s.time.timings) {
-                batch.update('timings', timing.toJson(),
-                    where: 'id = ?', whereArgs: [timing.id]);
+                batch.insert('timings', {...timing.toJson(), 'timeId': s.time.id},
+                    conflictAlgorithm: ConflictAlgorithm.replace);
               }
               batch.delete('days', where: 'timeId = ?', whereArgs: [s.time.id]);
               for (Day day in s.time.days) {
-                batch.update('days', day.toJson(),
-                    where: 'id = ?', whereArgs: [day.id]);
+                batch.insert('days', {...day.toJson(), 'timeId': s.time.id},
+                    conflictAlgorithm: ConflictAlgorithm.replace);
               }
               // ---------------------- update components of wifi --------------------
               batch.delete('wifis', where: 'scheduleId = ?', whereArgs: [s.id]);
               for (Wifi wifi in s.wifi) {
-                batch.update('wifis', wifi.toJson(),
-                    where: 'id = ?', whereArgs: [wifi.id]);
+                batch.insert('wifis', {...wifi.toJson(), 'scheduleId': s.id},
+                    conflictAlgorithm: ConflictAlgorithm.replace);
               }
-              return await batch.commit(noResult: true);
+              return await batch.commit(noResult: true, continueOnError: true);
             }),
         errorMessage: "Unable to update schedule");
     // await db.update(tableName, data, where: 'id = ?', whereArgs: [model.id]);
   }
-  // A method that deletes a breed data from the breeds table.
-  Future<void> deleteBreed(int id) async {
-    // Get a reference to the database.
-    final db = await _databaseRepository.database;
+  // // A method that deletes a breed data from the breeds table.
+  // Future<void> deleteBreed(int id) async {
+  //   // Get a reference to the database.
+  //   final db = await _databaseRepository.database;
 
-    // Remove the Breed from the database.
-    await db.delete(
-      'breeds',
-      // Use a `where` clause to delete a specific breed.
-      where: 'id = ?',
-      // Pass the Breed's id as a whereArg to prevent SQL injection.
-      whereArgs: [id],
-    );
-  }
-    // A method that deletes a breed data from the breeds table.
+  //   // Remove the Breed from the database.
+  //   await db.delete(
+  //     'breeds',
+  //     // Use a `where` clause to delete a specific breed.
+  //     where: 'id = ?',
+  //     // Pass the Breed's id as a whereArg to prevent SQL injection.
+  //     whereArgs: [id],
+  //   );
+  // }
+  // A method that deletes a breed data from the breeds table.
   Future<void> deleteSchedule({required int scheduleId}) async {
     // Get a reference to the database.
     final db = await _databaseRepository.database;

@@ -225,9 +225,9 @@ class _CreateSchedulePageState extends State<CreateSchedulePage> {
                                     onTap: () => context.pushNamed(
                                         'create-location',
                                         extra: widget.extra),
-                                    text1: locationCubit.state!
+                                    text1: locationCubit.state
                                         .map((l) => l.location)
-                                        .join(', '),
+                                        .join('\n'),
                                     text2: '',
                                     updateUI: _updateUI,
                                   )
@@ -306,13 +306,14 @@ class _CreateSchedulePageState extends State<CreateSchedulePage> {
                     timeCubit.state.days.isEmpty &&
                         timeCubit.state.timings.isEmpty) {
                   await createAlertDialog(
-                      context,
-                      const Text(
-                        "Error",
-                        style: TextStyle(color: Colors.red),
-                      ),
-                      const Text(
-                          "Please enter both days and timings if you want to create a schedule with time conditions. Click the add button under conditions and re-edit the time condition"));
+                    context,
+                    const Text(
+                      "Error",
+                      style: TextStyle(color: Colors.red),
+                    ),
+                    const Text(
+                        "Please enter both days and timings if you want to create a schedule with time conditions. Click the add button under conditions and re-edit the time condition"),
+                  );
                   return;
                 }
                 if (scheduleName.isEmpty) {
@@ -326,7 +327,7 @@ class _CreateSchedulePageState extends State<CreateSchedulePage> {
                   return;
                 }
                 if (scheduleCubit.state.id != null) {
-                                    //  compile everything to one schedule
+                  //  compile everything to one schedule
                   Schedule schedule = Schedule(
                       id: scheduleCubit.state.id,
                       wifi: wifiCubit.state,
@@ -340,7 +341,6 @@ class _CreateSchedulePageState extends State<CreateSchedulePage> {
                       block: blockCubit.state);
 
                   context.read<SchedulesBloc>().add(UpdateSchedule(schedule));
-
                 } else {
                   //  compile everything to one schedule
                   Schedule schedule = Schedule(

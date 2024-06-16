@@ -1,7 +1,9 @@
 import 'package:checkapp_plugin_example/features/create_time/cubit/cubit/time_cubit.dart';
+import 'package:checkapp_plugin_example/features/create_time/models/timing/timing.dart';
 import 'package:checkapp_plugin_example/features/create_time/widgets/day_row.dart';
 import 'package:checkapp_plugin_example/features/create_time/widgets/all_day_timing_row.dart';
 import 'package:checkapp_plugin_example/features/create_time/widgets/timing_row.dart';
+import 'package:checkapp_plugin_example/shared/helper_functions/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -16,29 +18,82 @@ class TimeLimitPage extends StatefulWidget {
 }
 
 class _TimeLimitPageState extends State<TimeLimitPage> {
+  late bool _allDayEnabled;
   late final TimeCubit timeCubit;
-  final CopyTimeCubit copyTimeCubit = CopyTimeCubit();
+  final Map<String, dynamic> timings = {};
   @override
   void initState() {
     super.initState();
     timeCubit = widget.extra['timeCubit'] ?? TimeCubit();
-  }
-
-  final Map<String, TimingRow> timings = {};
-  void _addTiming() {
-    setState(() {
+    for (Timing timing in timeCubit.state.timings) {
       String uniqueKey = UniqueKey().toString();
-      
       timings.putIfAbsent(
           uniqueKey,
-          () => TimingRow(
-                key: ValueKey(uniqueKey),
-                deleteRow: () {
+          () => {
+                'deleteRow': () {
                   _deleteTiming(uniqueKey);
                 },
-                timeCubit: timeCubit,
-                copyTimeCubit: copyTimeCubit,
-              ));
+                'startTime': timing.start,
+                'endTime': timing.end,
+                'editRow': (Map<String, dynamic> newTimings) {
+                  _editTiming(uniqueKey, newTimings);
+                },
+              });
+    }
+    _allDayEnabled = timings.values
+        .any((e) => e['startTime'] == '00:00' && e['endTime'] == '23:59');
+  }
+
+  void _addTiming() {
+    String uniqueKey = UniqueKey().toString();
+    if (timings.values
+        .any((e) => e['startTime'] == '00:00' && e['endTime'] == '23:59')) {
+      timings.clear();
+    }
+    setState(() {
+      _allDayEnabled = false;
+      timings.putIfAbsent(
+          uniqueKey,
+          () => {
+                'deleteRow': () {
+                  _deleteTiming(uniqueKey);
+                },
+                'key': uniqueKey,
+                'startTime': HelperFunctions.currentTime(),
+                'endTime': HelperFunctions.currentTime(),
+                'editRow': (Map<String, dynamic> newTimings) {
+                  _editTiming(uniqueKey, newTimings);
+                },
+              });
+    });
+  }
+
+  void _add24hTiming() {
+    String uniqueKey = UniqueKey().toString();
+
+    timings.clear();
+
+    setState(() {
+      _allDayEnabled = true;
+      timings.putIfAbsent(
+          uniqueKey,
+          () => {
+                'deleteRow': () {
+                  _deleteTiming(uniqueKey);
+                },
+                'key': uniqueKey,
+                'startTime': '00:00',
+                'endTime': '23:59',
+                'editRow': (Map<String, dynamic> newTimings) {
+                  _editTiming(uniqueKey, newTimings);
+                },
+              });
+    });
+  }
+
+  void _editTiming(String id, Map<String, dynamic> newTimings) {
+    setState(() {
+      timings[id] = {...timings[id], ...newTimings};
     });
   }
 
@@ -97,17 +152,32 @@ class _TimeLimitPageState extends State<TimeLimitPage> {
                       ),
                       const Gap(16),
                       AllDayTimingRow(
+                        isEnabled: _allDayEnabled,
+                        toggleEnabled: (bool isEnabled) {
+                          setState(() {
+                            _allDayEnabled = isEnabled;
+                          });
+                        },
+                        add24hTiming: _add24hTiming,
                         clearTimings: _clearTimings,
                         addTiming: _addTiming,
                         timeCubit: timeCubit,
-                        copyTimeCubit: copyTimeCubit,
                       ),
                       ListView.builder(
                           shrinkWrap: true,
                           itemCount: timings.length,
                           itemBuilder: (BuildContext context, int index) {
                             String key = timings.keys.elementAt(index);
-                            return timings[key]!;
+                            if (timings[key]['startTime'] != '00:00' &&
+                                timings[key]['endTime'] != '23:59') {
+                              return TimingRow(
+                                key: ValueKey(key),
+                                deleteRow: timings[key]['deleteRow'],
+                                editRow: timings[key]['editRow'],
+                                startTime: timings[key]['startTime'],
+                                endTime: timings[key]['endTime'],
+                              );
+                            }
                           }),
                       const Gap(16),
                       ElevatedButton.icon(
@@ -130,9 +200,14 @@ class _TimeLimitPageState extends State<TimeLimitPage> {
                   side: const BorderSide(color: Colors.black),
                 ),
                 onPressed: () {
-                  //  clear timings in cubit first before regrabbing all the new timings to prevent duplicates
-                  timeCubit.updateTime(timings: []);
-                  copyTimeCubit.copyTime();
+                  List<Timing> finalTimings = [];
+                  for (String k in timings.keys) {
+                    finalTimings.add(Timing(
+                        start: timings[k]['startTime'],
+                        end: timings[k]['endTime']));
+                  }
+                  timeCubit.updateTime(timings: finalTimings);
+
                   context.goNamed('confirm-schedule',
                       extra: {...widget.extra, 'timeCubit': timeCubit});
                 },
