@@ -20,7 +20,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "doomscroll.db";
     private static final int DATABASE_VERSION = 1;
-private Context context;
+    private Context context;
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
@@ -36,14 +37,16 @@ private Context context;
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Handle database upgrades
     }
-    private boolean doesDatabaseExist(Context context, String dbName) {
-        File dbFile = context.getDatabasePath(dbName);
+
+    private boolean doesDatabaseExist(Context context) {
+        File dbFile = context.getDatabasePath(DATABASE_NAME);
         return dbFile.exists();
     }
+
     public String getUserId() {
         String userId = "user";
 
-        if (!doesDatabaseExist(context, DATABASE_NAME)) {
+        if (!doesDatabaseExist(context)) {
             Log.d("Database Status", "Database has not been created from flutter side");
             return userId;
         }
@@ -72,7 +75,7 @@ private Context context;
         return userId;
     }
 
-    public List<Map<String,Object>> getSchedules(String userId) {
+    public List<Map<String, Object>> getSchedules(String userId) {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT " +
                 "s.id AS scheduleId, " +

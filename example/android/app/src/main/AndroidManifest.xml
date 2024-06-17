@@ -24,7 +24,9 @@
     <uses-permission android:name="android.permission.NEARBY_WIFI_DEVICES"
   />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-<!--autoboot permissions-->
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+
+    <!--autoboot permissions-->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application

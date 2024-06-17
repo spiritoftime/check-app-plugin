@@ -29,6 +29,7 @@ import java.util.Objects;
 import io.flutter.plugin.common.MethodChannel;
 
 public class WifiScan {
+    public static String connectedWifi;
     static List<ScanResult> scanResults;
 
     public static void initializeWifiScan(Context context) {
@@ -67,16 +68,17 @@ public class WifiScan {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.S)
-    public static String getWiFiSSID(Context context) {
+    public static void getWiFiSSID(Context context) {
         final NetworkRequest request =
                 new NetworkRequest.Builder()
                         .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
                         .build();
-        List<String> ssidList = new ArrayList<>();
+//        List<String> ssidList = new ArrayList<>();
         final ConnectivityManager connectivityManager =
                 context.getSystemService(ConnectivityManager.class);
-//        ConnectivityManager.NetworkCallback.FLAG_INCLUDE_LOCATION_INFO
-        final ConnectivityManager.NetworkCallback networkCallback = new ConnectivityManager.NetworkCallback() {
+//         flag needed or you get unknown ssid
+        final ConnectivityManager.NetworkCallback networkCallback = new ConnectivityManager.NetworkCallback(ConnectivityManager.NetworkCallback.FLAG_INCLUDE_LOCATION_INFO
+        ) {
 
             @Override
             public void onAvailable(Network network) {
@@ -89,29 +91,15 @@ public class WifiScan {
                 wifiInfo = (WifiInfo) networkCapabilities.getTransportInfo();
 
                 assert wifiInfo != null;
-                ssidList.add(wifiInfo.getSSID());
-                Log.d("connected wifi", ssidList.get(0));
+                connectedWifi = wifiInfo.getSSID();
+                Log.d("connected wifi", connectedWifi);
 //                connectivityManager.unregisterNetworkCallback(this);
             }
             // etc.
         };
-        connectivityManager.requestNetwork(request, networkCallback); // For request
+//        connectivityManager.requestNetwork(request, networkCallback); // For request
         connectivityManager.registerNetworkCallback(request, networkCallback); // For listen
-        int timer = 5000;
-        while (ssidList.isEmpty() && timer >= 0) {
-            try {
-                Thread.sleep(250);
-                timer -= 250;
-            } catch (InterruptedException e) {
-                break;
-            }
-        }
-        if (!ssidList.isEmpty()) {
-            return ssidList.get(0);
-        } else {
-            connectivityManager.unregisterNetworkCallback(networkCallback);
-            return null;
-        }
+
     }
 
 }

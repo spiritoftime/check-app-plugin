@@ -3,6 +3,7 @@ package com.doomscroll.checkapp_plugin;
 import static com.doomscroll.checkapp_plugin.LocationChecker.getFusedLocationClient;
 import static com.doomscroll.checkapp_plugin.LocationChecker.startLocationUpdates;
 import static com.doomscroll.checkapp_plugin.LocationChecker.stopLocationUpdates;
+import static com.doomscroll.checkapp_plugin.WifiScan.getWiFiSSID;
 import static com.doomscroll.checkapp_plugin.WifiScan.initializeWifiScan;
 
 import android.app.Notification;
@@ -18,6 +19,7 @@ import android.content.pm.PackageManager;
 
 
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -122,7 +124,7 @@ public class AppService extends Service {
 //        }
         Intent serviceIntent = new Intent(context, AppService.class);
         serviceIntent.setAction(START);
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL, "Running Notification", NotificationManager.IMPORTANCE_NONE);
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.createNotificationChannel(notificationChannel);
@@ -140,7 +142,9 @@ public class AppService extends Service {
         createIntentForService(context, REQUEST_LOCATION); // autostarts location if active schedule demands for it
 //         autostart wifi if active schedule demands for it
 //        should stop location & wifi when no active schedule needs it
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            getWiFiSSID(context);
+        }
     }
 
 
