@@ -123,8 +123,9 @@ class DatabaseRepository {
     String? userId = await AuthenticationRepository().userId;
     List<Schedule> scheduleList = [];
     if (userId != null) {
-      final List<Map<String, dynamic>> schedules =
-          await db.query('schedules', where: 'userId = ?', whereArgs: [userId]);
+
+        List<Map<String, dynamic>> schedules = await db
+            .query('schedules', where: 'userId = ?', whereArgs: [userId]);
 
       for (final s in schedules) {
         int scheduleId = s['id'];
@@ -217,20 +218,23 @@ class DatabaseRepository {
               batch.delete('websites',
                   where: 'blockId = ?', whereArgs: [s.block.id]);
               for (Website web in s.block.websites) {
-                batch.insert('websites', {...web.toJson(), 'blockId': s.block.id},
+                batch.insert(
+                    'websites', {...web.toJson(), 'blockId': s.block.id},
                     conflictAlgorithm: ConflictAlgorithm.replace);
               }
               batch.delete('keywords',
                   where: 'blockId = ?', whereArgs: [s.block.id]);
               for (Keyword keyword in s.block.keywords) {
-                batch.insert('apps', {...keyword.toJson(), 'blockId': s.block.id},
+                batch.insert(
+                    'apps', {...keyword.toJson(), 'blockId': s.block.id},
                     conflictAlgorithm: ConflictAlgorithm.replace);
               }
               // ---------------------- update components of location --------------------
               batch.delete('locations',
                   where: 'scheduleId = ?', whereArgs: [s.id]);
               for (Location location in s.location) {
-                batch.insert('locations', {...location.toJson(), 'scheduleId': s.id},
+                batch.insert(
+                    'locations', {...location.toJson(), 'scheduleId': s.id},
                     conflictAlgorithm: ConflictAlgorithm.replace);
               }
               // ---------------------- update components of time --------------------
@@ -238,7 +242,8 @@ class DatabaseRepository {
               batch.delete('timings',
                   where: 'timeId = ?', whereArgs: [s.time.id]);
               for (Timing timing in s.time.timings) {
-                batch.insert('timings', {...timing.toJson(), 'timeId': s.time.id},
+                batch.insert(
+                    'timings', {...timing.toJson(), 'timeId': s.time.id},
                     conflictAlgorithm: ConflictAlgorithm.replace);
               }
               batch.delete('days', where: 'timeId = ?', whereArgs: [s.time.id]);

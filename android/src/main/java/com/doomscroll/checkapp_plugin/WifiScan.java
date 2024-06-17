@@ -8,8 +8,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
+import android.net.NetworkRequest;
 import android.net.wifi.ScanResult;
+import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.util.Log;
@@ -49,17 +53,65 @@ public class WifiScan {
         result.success(scanResultToMap());
     }
 
-    private static List<Map<String,Object>> scanResultToMap(){
-        List<Map<String,Object>> wifiList = new ArrayList<>();
+    private static List<Map<String, Object>> scanResultToMap() {
+        List<Map<String, Object>> wifiList = new ArrayList<>();
         for (ScanResult scanResult : scanResults) {
             Map<String, Object> resultMap = new HashMap<>();
-            if(!scanResult.SSID.isEmpty()){
+            if (!scanResult.SSID.isEmpty()) {
                 resultMap.put("wifiName", scanResult.SSID);
                 wifiList.add(resultMap);
             }
 
         }
         return wifiList;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.S)
+    public static String getWiFiSSID(Context context) {
+        final NetworkRequest request =
+                new NetworkRequest.Builder()
+                        .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+                        .build();
+        List<String> ssidList = new ArrayList<>();
+        final ConnectivityManager connectivityManager =
+                context.getSystemService(ConnectivityManager.class);
+//        ConnectivityManager.NetworkCallback.FLAG_INCLUDE_LOCATION_INFO
+        final ConnectivityManager.NetworkCallback networkCallback = new ConnectivityManager.NetworkCallback() {
+
+            @Override
+            public void onAvailable(Network network) {
+            }
+
+            @Override
+            public void onCapabilitiesChanged(Network network, NetworkCapabilities networkCapabilities) {
+                WifiInfo wifiInfo = null;
+
+                wifiInfo = (WifiInfo) networkCapabilities.getTransportInfo();
+
+                assert wifiInfo != null;
+                ssidList.add(wifiInfo.getSSID());
+                Log.d("connected wifi", ssidList.get(0));
+//                connectivityManager.unregisterNetworkCallback(this);
+            }
+            // etc.
+        };
+        connectivityManager.requestNetwork(request, networkCallback); // For request
+        connectivityManager.registerNetworkCallback(request, networkCallback); // For listen
+        int timer = 5000;
+        while (ssidList.isEmpty() && timer >= 0) {
+            try {
+                Thread.sleep(250);
+                timer -= 250;
+            } catch (InterruptedException e) {
+                break;
+            }
+        }
+        if (!ssidList.isEmpty()) {
+            return ssidList.get(0);
+        } else {
+            connectivityManager.unregisterNetworkCallback(networkCallback);
+            return null;
+        }
     }
 
 }

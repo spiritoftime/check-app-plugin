@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,9 +20,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "doomscroll.db";
     private static final int DATABASE_VERSION = 1;
-
+private Context context;
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context = context;
+
     }
 
     @Override
@@ -33,10 +36,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Handle database upgrades
     }
-
+    private boolean doesDatabaseExist(Context context, String dbName) {
+        File dbFile = context.getDatabasePath(dbName);
+        return dbFile.exists();
+    }
     public String getUserId() {
         String userId = "user";
 
+        if (!doesDatabaseExist(context, DATABASE_NAME)) {
+            Log.d("Database Status", "Database has not been created from flutter side");
+            return userId;
+        }
         SQLiteDatabase db = this.getReadableDatabase();
 
         String query = "SELECT id " +

@@ -20,7 +20,7 @@ Future<void> createTables(Database db) async {
     final Future<void> Function(Database) createTable =
         createStatement['create'] as Future<void> Function(Database);
     await HelperFunctions.tryCatchWrapper(
-      operation: () => createTable(db),
+      operation: ()async => await createTable(db),
       errorMessage: "Unable to create table ${createStatement['tableName']}",
     );
   }
