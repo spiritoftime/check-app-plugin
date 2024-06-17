@@ -10,6 +10,7 @@ import androidx.core.util.Consumer;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.function.Function;
 
 public class GPSCheckerTask extends TimerTask {
     private final Context context;
@@ -17,13 +18,39 @@ public class GPSCheckerTask extends TimerTask {
     private final String NOTIFICATION_CHANNEL;
     private final String blockType;
     private final Timer timer;
+    //optional param
+    private final Consumer<Void> callback;
 
-    public GPSCheckerTask(Context context,  String NOTIFICATION_CHANNEL, String blockType,Timer timer) {
-        this.context = context;
-        this.timer = timer;
-        this.NOTIFICATION_CHANNEL = NOTIFICATION_CHANNEL;
-        this.blockType = blockType;
 
+    private GPSCheckerTask(GPSCheckerTaskBuilder builder) {
+        this.context = builder.context;
+        this.NOTIFICATION_CHANNEL = builder.NOTIFICATION_CHANNEL;
+        this.blockType = builder.blockType;
+        this.timer = builder.timer;
+        this.callback = builder.callback;
+    }
+
+    public static class GPSCheckerTaskBuilder {
+        //        required params
+        private final Context context;
+
+        private final String NOTIFICATION_CHANNEL;
+        private final String blockType;
+        private final Timer timer;
+private Consumer<Void> callback;
+        public GPSCheckerTaskBuilder(Context context, String notificationChannel, String blockType, Timer timer) {
+            this.context = context;
+            NOTIFICATION_CHANNEL = notificationChannel;
+            this.blockType = blockType;
+            this.timer = timer;
+        }
+        public GPSCheckerTaskBuilder setCallback(Consumer<Void> callback){
+            this.callback = callback;
+            return this;
+        }
+        public GPSCheckerTask build(){
+            return new GPSCheckerTask(this);
+        }
     }
 
     @Override
@@ -33,8 +60,12 @@ public class GPSCheckerTask extends TimerTask {
         if (!isGPSEnabled) {
             sendLocationAccessNotification(context, NOTIFICATION_CHANNEL, blockType);
         }
-        if(isGPSEnabled) timer.cancel();
-
+        if (isGPSEnabled) {
+            callback.accept(null);
+            timer.cancel();
+        }
 
     }
+
+
 }

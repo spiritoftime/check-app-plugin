@@ -3,7 +3,7 @@ package com.doomscroll.checkapp_plugin;
 import static com.doomscroll.checkapp_plugin.LocationChecker.getFusedLocationClient;
 import static com.doomscroll.checkapp_plugin.LocationChecker.startLocationUpdates;
 import static com.doomscroll.checkapp_plugin.LocationChecker.stopLocationUpdates;
-import static com.doomscroll.checkapp_plugin.WifiScan.getWiFiSSID;
+import static com.doomscroll.checkapp_plugin.WifiScan.getConnectedWiFiSSID;
 import static com.doomscroll.checkapp_plugin.WifiScan.initializeWifiScan;
 
 import android.app.Notification;
@@ -14,25 +14,16 @@ import android.app.Service;
 import android.content.Context;
 
 import android.content.Intent;
-import android.content.IntentFilter;
+
 import android.content.pm.PackageManager;
 
 
-import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
-
-
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.Priority;
-import com.google.android.gms.location.LocationRequest;
 
 
 import java.util.List;
@@ -49,9 +40,7 @@ public class AppService extends Service {
 
     final static String START = "START";
     final static String STOP = "STOP";
-//    private static FusedLocationProviderClient fusedLocationClient;
-//    private final LocationRequest locationRequest
-//    private LocationCallback locationCallback;
+    private static boolean connectedWifiInActiveSchedule;
 
     @Nullable
     @Override
@@ -113,11 +102,11 @@ public class AppService extends Service {
 
     public static void initializeServiceAtFlutter(Context context) {
         try (DatabaseHelper dbHelper = new DatabaseHelper(context)) {
-           String userId =  dbHelper.getUserId();
-           if(!Objects.equals(userId, "user")){
-               List<Map<String,Object>> schedules =    dbHelper.getSchedules(userId);
+            String userId = dbHelper.getUserId();
+            if (!Objects.equals(userId, "user")) {
+                List<Map<String, Object>> schedules = dbHelper.getSchedules(userId);
                 Log.d("schedules", schedules.toString());
-           }
+            }
         } catch (Exception e) {
             // Handle any exceptions that may occur
             e.printStackTrace();
@@ -143,8 +132,14 @@ public class AppService extends Service {
 //         autostart wifi if active schedule demands for it
 //        should stop location & wifi when no active schedule needs it
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            getWiFiSSID(context);
+            getConnectedWiFiSSID(context);
         }
+
+
+    }
+
+    public static void setConnectedWifiInActiveSchedule(boolean isConnectedWifiInActiveSchedule) {
+        connectedWifiInActiveSchedule = isConnectedWifiInActiveSchedule;
     }
 
 

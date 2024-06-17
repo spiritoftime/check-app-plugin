@@ -1,6 +1,8 @@
 package com.doomscroll.checkapp_plugin;
 
 
+import static com.doomscroll.checkapp_plugin.AppService.NOTIFICATION_CHANNEL;
+
 import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -59,9 +61,9 @@ public class LocationChecker {
 
     public static void startLocationUpdates(Context context, String NOTIFICATION_CHANNEL) throws PackageManager.NameNotFoundException {
 
-        // need to request for gps to be enabled
         Timer timer = new Timer();
-        timer.schedule(new GPSCheckerTask(context,  NOTIFICATION_CHANNEL, "location",timer), 0, 5000);
+        GPSCheckerTask gpsCheckerTask = new GPSCheckerTask.GPSCheckerTaskBuilder(context, NOTIFICATION_CHANNEL, "wifi", timer).build();
+        timer.schedule(gpsCheckerTask, 0, 5000);
 
         if (locationCallback == null) {
             locationCallback = new LocationCallback() {
@@ -77,7 +79,7 @@ public class LocationChecker {
                     if (lastLocation != null) {
                         double lat = lastLocation.getLatitude();
                         double lng = lastLocation.getLongitude();
-//                        Log.d("coords", "lat: " + lat + " lng: " + lng);
+                        Log.d("coords", "lat: " + lat + " lng: " + lng);
                     }
                 }
             };

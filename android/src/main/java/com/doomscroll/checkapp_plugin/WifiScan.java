@@ -4,23 +4,20 @@ package com.doomscroll.checkapp_plugin;
 import static androidx.core.content.ContextCompat.registerReceiver;
 
 import static com.doomscroll.checkapp_plugin.AppService.NOTIFICATION_CHANNEL;
-import static com.doomscroll.checkapp_plugin.LocationChecker.sendLocationAccessNotification;
+import static com.doomscroll.checkapp_plugin.AppService.setConnectedWifiInActiveSchedule;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
-import android.net.NetworkInfo;
 import android.net.NetworkRequest;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
-import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
@@ -30,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Timer;
+import java.util.TimerTask;
 
 import io.flutter.plugin.common.MethodChannel;
 
@@ -73,11 +71,28 @@ public class WifiScan {
         return wifiList;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.S)
-    public static void getWiFiSSID(Context context) {
-        Timer timer = new Timer();
-        timer.schedule(new GPSCheckerTask(context,  NOTIFICATION_CHANNEL, "wifi",timer), 0, 5000);
+    public static class GetCurrentWifiTask extends TimerTask {
+        @Override
+        public void run() {
+        }
 
+    }
+
+    public static void getConnectedWiFiSSID(Context context) {
+        Timer timer = new Timer();
+        GPSCheckerTask gpsCheckerTask = new GPSCheckerTask.GPSCheckerTaskBuilder(context, NOTIFICATION_CHANNEL, "wifi", timer).setCallback((Void) -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                registerConnectivityManager(context);
+            }
+        }).build();
+        timer.schedule(gpsCheckerTask, 0, 5000);
+
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.S)
+
+    public static void registerConnectivityManager(Context context) {
 
         final NetworkRequest request =
                 new NetworkRequest.Builder()
@@ -99,14 +114,11 @@ public class WifiScan {
                 wifiInfo = (WifiInfo) networkCapabilities.getTransportInfo();
 
                 assert wifiInfo != null;
-                connectedWifi = wifiInfo.getSSID();
-                Log.d("connected wifi", connectedWifi);
-//                connectivityManager.unregisterNetworkCallback(this);
+                connectedWifi = wifiInfo.getSSID().replaceAll("^\"|\"$", "");;
+                setConnectedWifiInActiveSchedule(Objects.equals(connectedWifi, "5Ghz myhome"));
             }
         };
         connectivityManager.registerNetworkCallback(request, networkCallback);
-
     }
-
 }
 
