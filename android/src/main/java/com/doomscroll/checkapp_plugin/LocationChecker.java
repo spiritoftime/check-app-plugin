@@ -22,10 +22,13 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
 
+import java.util.Timer;
+
 
 public class LocationChecker {
+    private static boolean isGPSEnabled;
     private static FusedLocationProviderClient fusedLocationClient;
-    private static LocationRequest locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000)
+    private static final LocationRequest locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000)
             .setMinUpdateIntervalMillis(5000)
             .build();
     ;
@@ -35,7 +38,7 @@ public class LocationChecker {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
     }
 
-    private static void sendLocationAccessNotification(Context context, String NOTIFICATION_CHANNEL) {
+    public static void sendLocationAccessNotification(Context context, String NOTIFICATION_CHANNEL, String blockType) {
         int requestID = (int) System.currentTimeMillis();
         Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
 
@@ -46,7 +49,7 @@ public class LocationChecker {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL).setSmallIcon(android.R.drawable.ic_menu_mylocation)
                 .setContentTitle("Enable Location Access")
                 .setContentIntent(pendingIntent)
-                .setContentText("Doomscroll needs location access, since you enabled a location appblocking schedule. Please enable it in settings.")
+                .setContentText("Doomscroll needs location access, since you enabled a " + blockType + " appblocking schedule. Please enable it in settings.")
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setAutoCancel(true);
 
@@ -57,11 +60,9 @@ public class LocationChecker {
     public static void startLocationUpdates(Context context, String NOTIFICATION_CHANNEL) throws PackageManager.NameNotFoundException {
 
         // need to request for gps to be enabled
-        LocationManager manager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        final boolean isGPSEnabled = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        if (!isGPSEnabled) {
-            sendLocationAccessNotification(context, NOTIFICATION_CHANNEL);
-        }
+        Timer timer = new Timer();
+        timer.schedule(new GPSCheckerTask(context,  NOTIFICATION_CHANNEL, "location",timer), 0, 5000);
+
         if (locationCallback == null) {
             locationCallback = new LocationCallback() {
 
@@ -86,6 +87,7 @@ public class LocationChecker {
 
     }
 
+    //when there is no active schedule with location, should stop it
     public static void stopLocationUpdates() {
         fusedLocationClient.removeLocationUpdates(locationCallback);
     }

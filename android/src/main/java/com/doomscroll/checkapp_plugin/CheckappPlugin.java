@@ -180,7 +180,6 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
                 break;
             case GET_NEARBY_WIFI:
                 getNearbyWifi(result);
-
                 break;
             case CHECK_GPS_ENABLED:
                 result.success(checkGPSEnabled(context));

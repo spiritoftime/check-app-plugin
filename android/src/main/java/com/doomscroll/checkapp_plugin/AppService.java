@@ -112,16 +112,16 @@ public class AppService extends Service {
     //        code for starting service
 
     public static void initializeServiceAtFlutter(Context context) {
-//        try (DatabaseHelper dbHelper = new DatabaseHelper(context)) {
-//           String userId =  dbHelper.getUserId();
-//           if(!Objects.equals(userId, "user")){
-//               List<Map<String,Object>> schedules =    dbHelper.getSchedules(userId);
-//                Log.d("schedules", schedules.toString());
-//           }
-//        } catch (Exception e) {
-//            // Handle any exceptions that may occur
-//            e.printStackTrace();
-//        }
+        try (DatabaseHelper dbHelper = new DatabaseHelper(context)) {
+           String userId =  dbHelper.getUserId();
+           if(!Objects.equals(userId, "user")){
+               List<Map<String,Object>> schedules =    dbHelper.getSchedules(userId);
+                Log.d("schedules", schedules.toString());
+           }
+        } catch (Exception e) {
+            // Handle any exceptions that may occur
+            e.printStackTrace();
+        }
         Intent serviceIntent = new Intent(context, AppService.class);
         serviceIntent.setAction(START);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

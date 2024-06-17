@@ -62,7 +62,7 @@
 
             </intent-filter>
         </activity>
-        <receiver android:exported="false" android:name="com.doomscroll.checkapp_plugin.AutoStart">
+        <receiver android:exported="false" android:name="com.doomscroll.checkapp_plugin.AutoStartReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <category android:name="android.intent.category.DEFAULT" />

@@ -3,10 +3,14 @@ package com.doomscroll.checkapp_plugin;
 
 import static androidx.core.content.ContextCompat.registerReceiver;
 
+import static com.doomscroll.checkapp_plugin.AppService.NOTIFICATION_CHANNEL;
+import static com.doomscroll.checkapp_plugin.LocationChecker.sendLocationAccessNotification;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
@@ -25,10 +29,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Timer;
 
 import io.flutter.plugin.common.MethodChannel;
 
 public class WifiScan {
+    private static boolean isGPSEnabled;
     public static String connectedWifi;
     static List<ScanResult> scanResults;
 
@@ -69,14 +75,16 @@ public class WifiScan {
 
     @RequiresApi(api = Build.VERSION_CODES.S)
     public static void getWiFiSSID(Context context) {
+        Timer timer = new Timer();
+        timer.schedule(new GPSCheckerTask(context,  NOTIFICATION_CHANNEL, "wifi",timer), 0, 5000);
+
+
         final NetworkRequest request =
                 new NetworkRequest.Builder()
                         .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
                         .build();
-//        List<String> ssidList = new ArrayList<>();
         final ConnectivityManager connectivityManager =
                 context.getSystemService(ConnectivityManager.class);
-//         flag needed or you get unknown ssid
         final ConnectivityManager.NetworkCallback networkCallback = new ConnectivityManager.NetworkCallback(ConnectivityManager.NetworkCallback.FLAG_INCLUDE_LOCATION_INFO
         ) {
 
@@ -95,10 +103,8 @@ public class WifiScan {
                 Log.d("connected wifi", connectedWifi);
 //                connectivityManager.unregisterNetworkCallback(this);
             }
-            // etc.
         };
-//        connectivityManager.requestNetwork(request, networkCallback); // For request
-        connectivityManager.registerNetworkCallback(request, networkCallback); // For listen
+        connectivityManager.registerNetworkCallback(request, networkCallback);
 
     }
 
