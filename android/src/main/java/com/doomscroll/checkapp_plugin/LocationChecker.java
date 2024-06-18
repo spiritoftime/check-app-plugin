@@ -2,6 +2,7 @@ package com.doomscroll.checkapp_plugin;
 
 
 import static com.doomscroll.checkapp_plugin.AppService.NOTIFICATION_CHANNEL;
+import static com.doomscroll.checkapp_plugin.AppService.setLatLng;
 
 import android.annotation.SuppressLint;
 import android.app.PendingIntent;
@@ -28,7 +29,6 @@ import java.util.Timer;
 
 
 public class LocationChecker {
-    private static boolean isGPSEnabled;
     private static FusedLocationProviderClient fusedLocationClient;
     private static final LocationRequest locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000)
             .setMinUpdateIntervalMillis(5000)
@@ -79,7 +79,7 @@ public class LocationChecker {
                     if (lastLocation != null) {
                         double lat = lastLocation.getLatitude();
                         double lng = lastLocation.getLongitude();
-                        Log.d("coords", "lat: " + lat + " lng: " + lng);
+                        setLatLng(lat,lng);
                     }
                 }
             };

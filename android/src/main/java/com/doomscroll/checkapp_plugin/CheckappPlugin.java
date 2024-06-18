@@ -91,7 +91,7 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
 
     private static final String GET_LAUNCHABLE_APPLICATIONS = "GET_LAUNCHABLE_APPLICATIONS";
     private MethodChannel channel;
-    private Context context;
+    private static Context context;
     @Nullable
     private Activity activity;
 
@@ -117,7 +117,7 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
                 requestUsagePermission(context, activity);
                 requestBackgroundPermissionForXiaomi(context, activity);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-                    boolean shouldShowPopUp = isFacebookAppInForeground();
+                    boolean shouldShowPopUp = isAppInForeground("com.facebook.katana");
                     if (shouldShowPopUp) {
                         createIntentForService(context, REDIRECT_HOME);
                     }
@@ -195,7 +195,7 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
 
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
-    private boolean isFacebookAppInForeground() {
+    public static boolean isAppInForeground(String packageName) {
         UsageStatsManager usageStatsManager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
         long endTime = System.currentTimeMillis();
         long beginTime = endTime - 1000;
@@ -204,7 +204,7 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
         while (usageEvents.hasNextEvent()) {
             usageEvents.getNextEvent(event);
             if (event.getEventType() == UsageEvents.Event.ACTIVITY_RESUMED &&
-                    FACEBOOK_PACKAGE_NAME.equals(event.getPackageName())) {
+                    packageName.equals(event.getPackageName())) {
 
                 return true;
             }

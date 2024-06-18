@@ -4,7 +4,7 @@ package com.doomscroll.checkapp_plugin;
 import static androidx.core.content.ContextCompat.registerReceiver;
 
 import static com.doomscroll.checkapp_plugin.AppService.NOTIFICATION_CHANNEL;
-import static com.doomscroll.checkapp_plugin.AppService.setConnectedWifiInActiveSchedule;
+import static com.doomscroll.checkapp_plugin.AppService.setConnectedWifi;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -114,8 +114,9 @@ public class WifiScan {
                 wifiInfo = (WifiInfo) networkCapabilities.getTransportInfo();
 
                 assert wifiInfo != null;
-                connectedWifi = wifiInfo.getSSID().replaceAll("^\"|\"$", "");;
-                setConnectedWifiInActiveSchedule(Objects.equals(connectedWifi, "5Ghz myhome"));
+                String connectedWifi = wifiInfo.getSSID().replaceAll("^\"|\"$", "");
+
+                setConnectedWifi(connectedWifi);
             }
         };
         connectivityManager.registerNetworkCallback(request, networkCallback);

@@ -3,6 +3,7 @@ package com.doomscroll.checkapp_plugin;
 import static com.doomscroll.checkapp_plugin.LocationChecker.getFusedLocationClient;
 import static com.doomscroll.checkapp_plugin.LocationChecker.startLocationUpdates;
 import static com.doomscroll.checkapp_plugin.LocationChecker.stopLocationUpdates;
+import static com.doomscroll.checkapp_plugin.ScheduleParser.compileToCheck;
 import static com.doomscroll.checkapp_plugin.WifiScan.getConnectedWiFiSSID;
 import static com.doomscroll.checkapp_plugin.WifiScan.initializeWifiScan;
 
@@ -26,21 +27,26 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Timer;
 
 public class AppService extends Service {
     final static String REDIRECT_HOME = "REDIRECT_HOME";
     final static String NOTIFICATION_CHANNEL = "NOTIFICATION_CHANNEL";
 
-
+    static List<Map<String, Object>> schedules;
     final static String REQUEST_LOCATION = "REQUEST_LOCATION";
     final static String STOP_REQUEST_LOCATION = "STOP_REQUEST_LOCATION";
 
     final static String START = "START";
     final static String STOP = "STOP";
-    private static boolean connectedWifiInActiveSchedule;
+    private static String connectedWifi;
+    private static double currentLat;
+    private static double currentLng;
+    private static Map<String, Object> toCheck;
 
     @Nullable
     @Override
@@ -104,8 +110,16 @@ public class AppService extends Service {
         try (DatabaseHelper dbHelper = new DatabaseHelper(context)) {
             String userId = dbHelper.getUserId();
             if (!Objects.equals(userId, "user")) {
-                List<Map<String, Object>> schedules = dbHelper.getSchedules(userId);
-                Log.d("schedules", schedules.toString());
+                schedules = dbHelper.getSchedules(userId);
+                ScheduleParser parser = new ScheduleParser(schedules);
+                toCheck = compileToCheck();
+
+                toCheck.put("currentLat", currentLat);
+                toCheck.put("currentLng", currentLng);
+                Timer timer = new Timer();
+                BlockTask blockTask = new BlockTask(toCheck, context);
+                timer.schedule(blockTask, 0, 2000);
+
             }
         } catch (Exception e) {
             // Handle any exceptions that may occur
@@ -138,10 +152,16 @@ public class AppService extends Service {
 
     }
 
-    public static void setConnectedWifiInActiveSchedule(boolean isConnectedWifiInActiveSchedule) {
-        connectedWifiInActiveSchedule = isConnectedWifiInActiveSchedule;
+    public static void setConnectedWifi(String currentConnectedWifi) {
+        connectedWifi = currentConnectedWifi;
+
+        toCheck.put("currentWifi", connectedWifi);
     }
 
+    public static void setLatLng(double lat, double lng) {
+        currentLat = lat;
+        currentLng = lng;
+    }
 
 }
 

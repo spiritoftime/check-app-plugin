@@ -8,6 +8,9 @@ import android.graphics.drawable.PictureDrawable;
 import android.util.Base64;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Utils {
 
@@ -46,29 +49,33 @@ public class Utils {
 
         return Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT);
     }
-    public static String[][] parseStringToArray(String input) {
+    public static List<List<String>> parseStringToArray(String input) {
         if (input == null || input.isEmpty()) {
-            return new String[0][0];
+            return new ArrayList<>();
         }
         // Remove surrounding square brackets and split by "],["
         String[] pairs = input.substring(1, input.length() - 1).split("\\],\\[");
 
-        String[][] result = new String[pairs.length][];
+        List<List<String>> result = new ArrayList<>();
 
-        for (int i = 0; i < pairs.length; i++) {
-            result[i] = pairs[i].split(",");
+        for (String pair : pairs) {
+            String[] elements = pair.split(",");
+            List<String> innerList = Arrays.asList(elements);
+            result.add(innerList);
         }
 
         return result;
     }
-    public static String[] parseStringToSingleArray(String input) {
+
+    public static List<String> parseStringToSingleArray(String input) {
         if (input == null || input.isEmpty()) {
-            return new String[0];
+            return new ArrayList<>();
         }
 
-        // Remove surrounding square brackets and split by "],["
-        String[] elements = input.substring(1, input.length() - 1).split("\\],\\[");
+        // Remove surrounding square brackets and split by ","
+        String[] elements = input.substring(1, input.length() - 1).split(",");
 
-        return elements;
+        return Arrays.asList(elements);
     }
+
 }

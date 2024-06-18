@@ -113,13 +113,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String days = cursor.getString(cursor.getColumnIndexOrThrow("days"));
 
 
-            String[][] appList = parseStringToArray(apps);
-            String[] websiteList = parseStringToSingleArray(websites);
-            String[] keywordList = parseStringToSingleArray(keywords);
-            String[][] timeList = parseStringToArray(times);
-            String[][] locationList = parseStringToArray(locations);
-            String[] wifiList = parseStringToSingleArray(wifis);
-            String[] dayList = parseStringToSingleArray(days);
+            List<List<String>> appList = parseStringToArray(apps);
+            List<String> websiteList = parseStringToSingleArray(websites);
+            List<String> keywordList = parseStringToSingleArray(keywords);
+            List<List<String>> timeList = parseStringToArray(times);
+            List<List<String>> locationList = parseStringToArray(locations);
+            List<String> wifiList = parseStringToSingleArray(wifis);
+            List<String> dayList = parseStringToSingleArray(days);
             schedule.put("apps", appList);
             schedule.put("websites", websiteList);
             schedule.put("keywords", keywordList);
