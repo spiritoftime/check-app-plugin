@@ -1,3 +1,4 @@
+import 'package:checkapp_plugin/checkapp_plugin.dart';
 import 'package:checkapp_plugin_example/features/create_block/cubit/cubit/block_cubit.dart';
 import 'package:checkapp_plugin_example/features/create_block/models/app/app.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/app_row.dart';
@@ -37,6 +38,8 @@ class CreateSchedulePage extends StatefulWidget {
 }
 
 class _CreateSchedulePageState extends State<CreateSchedulePage> {
+  final CheckappPlugin _checkappPlugin = CheckappPlugin();
+
   ScheduleCubit get scheduleCubit =>
       widget.extra['scheduleCubit'] ?? ScheduleCubit();
   BlockCubit get blockCubit => widget.extra['blockCubit'];
@@ -212,7 +215,8 @@ class _CreateSchedulePageState extends State<CreateSchedulePage> {
                                         'create-time',
                                         extra: widget.extra),
                                     text2: timeCubit.state.timings
-                                        .map((e) => '${e.startTiming} to ${e.endTiming}')
+                                        .map((e) =>
+                                            '${e.startTiming} to ${e.endTiming}')
                                         .join(', '),
                                     updateUI: _updateUI,
                                   )
@@ -341,12 +345,13 @@ class _CreateSchedulePageState extends State<CreateSchedulePage> {
                       block: blockCubit.state);
 
                   context.read<SchedulesBloc>().add(UpdateSchedule(schedule));
+                  _checkappPlugin.reQueryActiveSchedules();
                 } else {
                   //  compile everything to one schedule
                   Schedule schedule = Schedule(
                       wifi: wifiCubit.state,
                       scheduleDetails: ScheduleDetails(
-                        isActive: true,
+                        isActive: false,
                         scheduleName: _controller.text,
                         iconName: _iconName,
                       ),

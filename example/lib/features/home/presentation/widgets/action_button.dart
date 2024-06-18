@@ -1,3 +1,4 @@
+import 'package:checkapp_plugin/checkapp_plugin.dart';
 import 'package:checkapp_plugin_example/features/create_block/cubit/cubit/block_cubit.dart';
 import 'package:checkapp_plugin_example/features/create_location/cubit/location_cubit.dart';
 import 'package:checkapp_plugin_example/features/create_schedule/cubit/schedule_cubit.dart';
@@ -107,6 +108,8 @@ abstract class MenuItems {
   }
 
   static void onChanged(BuildContext context, MenuItem item, Schedule s) {
+    final CheckappPlugin _checkappPlugin = CheckappPlugin();
+
     switch (item) {
       case MenuItems.edit:
         context.goNamed('confirm-schedule', extra: {
@@ -122,6 +125,7 @@ abstract class MenuItems {
       case MenuItems.delete:
         if (s.id != null) {
           context.read<SchedulesBloc>().add(DeleteSchedule(s.id!));
+          _checkappPlugin.reQueryActiveSchedules();
         }
         context.read<SchedulesBloc>().add(LoadSchedules());
         break;

@@ -98,4 +98,9 @@ abstract class CheckappPluginPlatform extends PlatformInterface {
     throw UnimplementedError(
         'requestEnableGPS() has not been implemented.');
   }
+  
+    Future<void> reQueryActiveSchedules() {
+    throw UnimplementedError(
+        'reQueryActiveSchedules() has not been implemented.');
+  }
 }

@@ -7,13 +7,11 @@ import 'package:checkapp_plugin_example/features/home/presentation/widgets/carou
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/schedule_row.dart';
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/schedule_template_carousel.dart';
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/endless_scrolling_widget.dart';
-import 'package:checkapp_plugin_example/repository/database_repository/database_repository.dart';
 import 'package:checkapp_plugin_example/shared/widgets/grey_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gap/gap.dart';
-import 'package:sqflite/sqflite.dart';
 
 /// The home screen
 class HomeScreen extends StatelessWidget {
@@ -89,7 +87,7 @@ class HomeScreen extends StatelessWidget {
                                   // for (final s in schedules) {
                                   //   print(s.toJson());
                                   // }
-                                  context.go('/test');
+                                  // context.go('/test');
                                 },
                                 child: const Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -226,22 +224,4 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class MyButtons extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        children: [
-          ElevatedButton(
-            onPressed: () => context.go('/details'),
-            child: const Text('Go to the Details screen'),
-          ),
-          ElevatedButton(
-            onPressed: () => context.go('/basic'),
-            child: const Text('Go to the basic screen'),
-          ),
-        ],
-      ),
-    );
-  }
-}
+

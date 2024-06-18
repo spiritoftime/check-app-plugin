@@ -85,7 +85,8 @@ class MethodChannelCheckappPlugin extends CheckappPluginPlatform {
 
     return castedData;
   }
- @override
+
+  @override
   Future<List<Map<String, dynamic>>> getNearbyWifi() async {
     var launchableApplications = await methodChannel
         .invokeListMethod<Map<dynamic, dynamic>>(GET_NEARBY_WIFI);
@@ -97,9 +98,15 @@ class MethodChannelCheckappPlugin extends CheckappPluginPlatform {
 
     return castedData;
   }
+
   @override
   Future<void> requestLocationPermission() async {
     await methodChannel.invokeMethod<void>(REQUEST_LOCATION_PERMISSION);
+  }
+
+  @override
+  Future<void> reQueryActiveSchedules() async {
+    await methodChannel.invokeMethod<void>(REQUERY_ACTIVE_SCHEDULES);
   }
 
   @override
@@ -108,10 +115,6 @@ class MethodChannelCheckappPlugin extends CheckappPluginPlatform {
         await methodChannel.invokeMethod<bool>(CHECK_LOCATION_PERMISSION);
     return isPermissionEnabled ?? false;
   }
-
-
-
-
 
   @override
   Future<bool> checkGPSEnabled() async {

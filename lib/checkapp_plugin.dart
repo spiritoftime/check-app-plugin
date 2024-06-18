@@ -57,12 +57,16 @@ class CheckappPlugin {
     return CheckappPluginPlatform.instance.getNearbyWifi();
   }
 
-
-    Future<bool> checkGPSEnabled() {
+  Future<bool> checkGPSEnabled() {
     return CheckappPluginPlatform.instance.checkGPSEnabled();
   }
 
   Future<void> requestEnableGPS() {
     return CheckappPluginPlatform.instance.requestEnableGPS();
   }
+
+    Future<void> reQueryActiveSchedules() {
+    return CheckappPluginPlatform.instance.reQueryActiveSchedules();
+  }
+
 }

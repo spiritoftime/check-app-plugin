@@ -101,6 +101,12 @@ class MockCheckappPluginPlatform
     // TODO: implement getNearbyWifi
     throw UnimplementedError();
   }
+  
+  @override
+  Future<void> reQueryActiveSchedules() {
+    // TODO: implement reQueryActiveSchedules
+    throw UnimplementedError();
+  }
 }
 
 void main() {

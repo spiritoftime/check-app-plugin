@@ -1,3 +1,4 @@
+import 'package:checkapp_plugin/checkapp_plugin.dart';
 import 'package:checkapp_plugin_example/features/create_schedule/models/schedule/schedule.dart';
 import 'package:checkapp_plugin_example/features/create_schedule/widgets/icon_selection.dart';
 import 'package:checkapp_plugin_example/features/home/bloc/schedule_bloc.dart';
@@ -29,6 +30,7 @@ class _ScheduleRowState extends State<ScheduleRow> {
     super.initState();
     _isEnabled = widget.schedule.scheduleDetails.isActive;
   }
+  final CheckappPlugin _checkappPlugin = CheckappPlugin();
 
   @override
   Widget build(BuildContext context) {
@@ -72,6 +74,7 @@ class _ScheduleRowState extends State<ScheduleRow> {
                             .copyWith(isActive: isEnabled),
                       );
                       context.read<SchedulesBloc>().add(UpdateSchedule(newS));
+                      _checkappPlugin.reQueryActiveSchedules();
 
                     }),
               ),
