@@ -69,6 +69,12 @@
 
             </intent-filter>
         </receiver>
+        <receiver android:exported="false" android:name="com.doomscroll.checkapp_plugin.WifiReceiver">
+            <intent-filter>
+                <action android:name="android.net.wifi.STATE_CHANGE" />
+
+            </intent-filter>
+        </receiver>
         <service
             android:name="com.doomscroll.checkapp_plugin.AppService"
             android:exported="true"

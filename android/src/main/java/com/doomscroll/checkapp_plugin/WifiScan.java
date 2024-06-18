@@ -15,6 +15,7 @@ import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkRequest;
 import android.net.wifi.ScanResult;
+import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -36,6 +37,7 @@ public class WifiScan {
     public static String connectedWifi;
     static List<ScanResult> scanResults;
 
+    //gets nearby wifi
     public static void initializeWifiScan(Context context) {
         WifiManager mWifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         final BroadcastReceiver mWifiScanReceiver = new BroadcastReceiver() {
@@ -78,20 +80,20 @@ public class WifiScan {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.S)
     public static void getConnectedWiFiSSID(Context context) {
         Timer timer = new Timer();
         GPSCheckerTask gpsCheckerTask = new GPSCheckerTask.GPSCheckerTaskBuilder(context, NOTIFICATION_CHANNEL, "wifi", timer).setCallback((Void) -> {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                registerConnectivityManager(context);
-            }
+            registerConnectivityManager(context);
+
         }).build();
         timer.schedule(gpsCheckerTask, 0, 5000);
 
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.S)
 
+    @RequiresApi(api = Build.VERSION_CODES.S)
     public static void registerConnectivityManager(Context context) {
 
         final NetworkRequest request =
@@ -100,26 +102,49 @@ public class WifiScan {
                         .build();
         final ConnectivityManager connectivityManager =
                 context.getSystemService(ConnectivityManager.class);
-        final ConnectivityManager.NetworkCallback networkCallback = new ConnectivityManager.NetworkCallback(ConnectivityManager.NetworkCallback.FLAG_INCLUDE_LOCATION_INFO
-        ) {
+        ConnectivityManager.NetworkCallback networkCallback;
 
-            @Override
-            public void onAvailable(Network network) {
-            }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            networkCallback = new ConnectivityManager.NetworkCallback(ConnectivityManager.NetworkCallback.FLAG_INCLUDE_LOCATION_INFO) {
 
-            @Override
-            public void onCapabilitiesChanged(Network network, NetworkCapabilities networkCapabilities) {
-                WifiInfo wifiInfo = null;
+                @Override
+                public void onAvailable(Network network) {
+                    // Handle network available
+                }
 
-                wifiInfo = (WifiInfo) networkCapabilities.getTransportInfo();
+                @Override
+                public void onCapabilitiesChanged(Network network, NetworkCapabilities networkCapabilities) {
+                    WifiInfo wifiInfo = (WifiInfo) networkCapabilities.getTransportInfo();
 
-                assert wifiInfo != null;
-                String connectedWifi = wifiInfo.getSSID().replaceAll("^\"|\"$", "");
+                    assert wifiInfo != null;
+                    String currentWifi = wifiInfo.getSSID();
+                    handleNetworkCapabilitiesChanged(currentWifi);
+                }
+            };
+            connectivityManager.registerNetworkCallback(request, networkCallback);
 
-                setConnectedWifi(connectedWifi);
-            }
-        };
-        connectivityManager.registerNetworkCallback(request, networkCallback);
+
+        }
+
+
+    }
+
+    public static void getCurrentWifiBelowApi31(Context context) {
+        WifiManager wifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        WifiInfo wifiInfo;
+
+        wifiInfo = wifiManager.getConnectionInfo();
+        if (wifiInfo.getSupplicantState() == SupplicantState.COMPLETED) {
+            String ssid = wifiInfo.getSSID();
+            handleNetworkCapabilitiesChanged(ssid);
+        }
+    }
+
+    private static void handleNetworkCapabilitiesChanged(String currentWifi) {
+
+        String connectedWifi = currentWifi.replaceAll("^\"|\"$", "");
+
+        setConnectedWifi(connectedWifi);
     }
 }
 

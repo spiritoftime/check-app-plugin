@@ -5,6 +5,7 @@ import static com.doomscroll.checkapp_plugin.LocationChecker.startLocationUpdate
 import static com.doomscroll.checkapp_plugin.LocationChecker.stopLocationUpdates;
 import static com.doomscroll.checkapp_plugin.ScheduleParser.compileToCheck;
 import static com.doomscroll.checkapp_plugin.WifiScan.getConnectedWiFiSSID;
+import static com.doomscroll.checkapp_plugin.WifiScan.getCurrentWifiBelowApi31;
 import static com.doomscroll.checkapp_plugin.WifiScan.initializeWifiScan;
 
 import android.app.Notification;
@@ -24,6 +25,7 @@ import android.os.IBinder;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
 
@@ -147,6 +149,8 @@ public class AppService extends Service {
 //        should stop location & wifi when no active schedule needs it
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             getConnectedWiFiSSID(context);
+        }else{
+            getCurrentWifiBelowApi31(context);
         }
 
 
