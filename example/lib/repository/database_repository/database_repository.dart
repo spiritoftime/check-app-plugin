@@ -59,60 +59,61 @@ class DatabaseRepository {
       HelperFunctions.tryCatchWrapper(
           operation: () async => await db.transaction((txn) async {
                 await txn.insert('users', {'id': userId},
-                    conflictAlgorithm: ConflictAlgorithm.replace);
+                    conflictAlgorithm: ConflictAlgorithm.ignore);
+
                 final int schedulePk = await txn.insert('schedules', {
                   'userId': userId,
                   'scheduleIcon': schedule.scheduleDetails.iconName,
                   'scheduleName': schedule.scheduleDetails.scheduleName,
                   'isActive': schedule.scheduleDetails.isActive ? 1 : 0,
                 });
+
                 final int timePk =
                     await txn.insert('times', {'scheduleId': schedulePk});
 
                 final int blockPk =
                     await txn.insert('blocks', {'scheduleId': schedulePk});
+
                 Batch batch = txn.batch();
                 // ---------------------- insert components of block --------------------
+
                 for (App app in schedule.block.apps) {
-                  batch.insert('apps', {...app.toJson(), 'blockId': blockPk},
-                      conflictAlgorithm: ConflictAlgorithm.replace);
+                  batch.insert('apps', {...app.toJson(), 'blockId': blockPk});
                 }
 
                 for (Website web in schedule.block.websites) {
                   batch.insert(
-                      'websites', {...web.toJson(), 'blockId': blockPk},
-                      conflictAlgorithm: ConflictAlgorithm.replace);
+                      'websites', {...web.toJson(), 'blockId': blockPk});
                 }
+
                 for (Keyword keyword in schedule.block.keywords) {
                   batch.insert(
-                      'keywords', {...keyword.toJson(), 'blockId': blockPk},
-                      conflictAlgorithm: ConflictAlgorithm.replace);
+                      'keywords', {...keyword.toJson(), 'blockId': blockPk});
                 }
                 // ---------------------- insert components of location --------------------
+
                 for (Location location in schedule.location) {
                   batch.insert('locations',
-                      {...location.toJson(), 'scheduleId': schedulePk},
-                      conflictAlgorithm: ConflictAlgorithm.replace);
+                      {...location.toJson(), 'scheduleId': schedulePk});
                 }
                 // ---------------------- insert components of time --------------------
 
                 for (Timing timing in schedule.time.timings) {
                   batch.insert(
-                      'timings', {...timing.toJson(), 'timeId': timePk},
-                      conflictAlgorithm: ConflictAlgorithm.replace);
+                      'timings', {...timing.toJson(), 'timeId': timePk});
                 }
+
                 for (Day day in schedule.time.days) {
-                  batch.insert('days', {...day.toJson(), 'timeId': timePk},
-                      conflictAlgorithm: ConflictAlgorithm.replace);
+                  batch.insert('days', {...day.toJson(), 'timeId': timePk});
                 }
                 // ---------------------- insert components of wifi --------------------
 
                 for (Wifi wifi in schedule.wifi) {
                   batch.insert(
-                      'wifis', {...wifi.toJson(), 'scheduleId': schedulePk},
-                      conflictAlgorithm: ConflictAlgorithm.replace);
+                      'wifis', {...wifi.toJson(), 'scheduleId': schedulePk});
                 }
-                return await batch.commit(noResult: true);
+
+                await batch.commit(noResult: true);
               }),
           errorMessage: "Unable to create new schedule");
     }
@@ -123,9 +124,8 @@ class DatabaseRepository {
     String? userId = await AuthenticationRepository().userId;
     List<Schedule> scheduleList = [];
     if (userId != null) {
-
-        List<Map<String, dynamic>> schedules = await db
-            .query('schedules', where: 'userId = ?', whereArgs: [userId]);
+      List<Map<String, dynamic>> schedules =
+          await db.query('schedules', where: 'userId = ?', whereArgs: [userId]);
 
       for (final s in schedules) {
         int scheduleId = s['id'];

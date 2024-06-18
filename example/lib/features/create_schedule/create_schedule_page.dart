@@ -357,12 +357,13 @@ class _CreateSchedulePageState extends State<CreateSchedulePage> {
                 }
                 if (scheduleName.isEmpty) {
                   await createAlertDialog(
-                      context,
-                      const Text(
-                        "Error",
-                        style: TextStyle(color: Colors.red),
-                      ),
-                      const Text("Please enter a schedule name"));
+                    context,
+                    const Text(
+                      "Error",
+                      style: TextStyle(color: Colors.red),
+                    ),
+                    const Text("Please enter a schedule name"),
+                  );
                   return;
                 }
                 if (scheduleCubit.state.id != null) {
