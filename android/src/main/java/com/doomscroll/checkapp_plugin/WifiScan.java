@@ -128,7 +128,7 @@ public class WifiScan {
 
 
     }
-
+//need to call in task scheduler
     public static void getCurrentWifiBelowApi31(Context context) {
         WifiManager wifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         WifiInfo wifiInfo;

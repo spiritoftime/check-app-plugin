@@ -84,7 +84,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "(SELECT GROUP_CONCAT('[' || w.wifiName || ']') " +
                 " FROM wifis w WHERE w.scheduleId = s.id GROUP BY w.scheduleId) AS wifis, " +
                 "(SELECT GROUP_CONCAT('[' || tm.startTiming || ', ' || tm.endTiming  ||  ']') " +
-                " FROM timings tm JOIN times t ON tm.timeId = t.id  GROUP BY t.id) AS times, " +
+                " FROM timings tm JOIN times t ON tm.timeId = t.id  GROUP BY t.id) AS timings, " +
                 "(SELECT GROUP_CONCAT('[' || d.day ||  ']') " +
                 " FROM days d JOIN times t ON d.timeId = t.id  GROUP BY t.id) AS days, " +
 
@@ -109,21 +109,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String websites = cursor.getString(cursor.getColumnIndexOrThrow("websites"));
             String keywords = cursor.getString(cursor.getColumnIndexOrThrow("keywords"));
 
-            String times = cursor.getString(cursor.getColumnIndexOrThrow("times"));
+            String timings = cursor.getString(cursor.getColumnIndexOrThrow("timings"));
             String days = cursor.getString(cursor.getColumnIndexOrThrow("days"));
 
 
             List<List<String>> appList = parseStringToArray(apps);
             List<String> websiteList = parseStringToSingleArray(websites);
             List<String> keywordList = parseStringToSingleArray(keywords);
-            List<List<String>> timeList = parseStringToArray(times);
+            List<List<String>> timingList = parseStringToArray(timings);
             List<List<String>> locationList = parseStringToArray(locations);
             List<String> wifiList = parseStringToSingleArray(wifis);
             List<String> dayList = parseStringToSingleArray(days);
             schedule.put("apps", appList);
             schedule.put("websites", websiteList);
             schedule.put("keywords", keywordList);
-            schedule.put("times", timeList);
+            schedule.put("timings", timingList);
             schedule.put("locations", locationList);
             schedule.put("wifis", wifiList);
             schedule.put("days", dayList);

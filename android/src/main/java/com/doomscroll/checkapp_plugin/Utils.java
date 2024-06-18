@@ -1,5 +1,6 @@
 package com.doomscroll.checkapp_plugin;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
@@ -8,9 +9,14 @@ import android.graphics.drawable.PictureDrawable;
 import android.util.Base64;
 
 import java.io.ByteArrayOutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class Utils {
 
@@ -72,10 +78,44 @@ public class Utils {
             return new ArrayList<>();
         }
 
-        // Remove surrounding square brackets and split by ","
-        String[] elements = input.substring(1, input.length() - 1).split(",");
-
+        String[] elements = input.replaceAll("\\s+", "") // Remove all whitespace
+                .replaceAll("[\\[\\]]", "") // Remove square brackets
+                .split(","); // Split by comma
         return Arrays.asList(elements);
     }
 
+    public static List<String>  getCurrentDayTime(){
+        List<String> currentDayTime = new ArrayList<>();
+        // Get the current time
+        Calendar calendar = Calendar.getInstance();
+
+        // Define the desired format for day and 23-hour time
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE HH:mm", Locale.getDefault());
+
+        // Format the current time
+        String formattedTime = sdf.format(calendar.getTime());
+        currentDayTime.add(formattedTime.split(" ")[0]);
+        currentDayTime.add(formattedTime.split(" ")[1]);
+
+return currentDayTime;
+    }
+    public static boolean isCurrentTimeWithinRange(String start, String end, String current) {
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+
+        try {
+            Date startTime = sdf.parse(start);
+            Date endTime = sdf.parse(end);
+            Date currentTime = sdf.parse(current);
+
+            if (startTime.before(endTime)) {
+                return currentTime.after(startTime) && currentTime.before(endTime);
+            } else {
+                // Handles the case where end time is on the next day (e.g., 22:00 - 06:00)
+                return currentTime.after(startTime) || currentTime.before(endTime);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
