@@ -48,7 +48,7 @@ public class AppService extends Service {
     private static String connectedWifi;
     private static double currentLat;
     private static double currentLng;
-    private static Map<String, Object> toCheck;
+    private static Map<String, Object> toCheck = new HashMap<>();
 
     @Nullable
     @Override
@@ -103,24 +103,27 @@ public class AppService extends Service {
     private void start() {
         Notification notification = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL).setContentText("This service runs in the foreground to check your location/wifi/app usage according to your enabled app blocking schedule").build();
         startForeground(1, notification);
-        initializeWifiScan(this);
 
     }
     //        code for starting service
 
     public static void initializeServiceAtFlutter(Context context) {
+        String userId = "user";
         try (DatabaseHelper dbHelper = new DatabaseHelper(context)) {
-            String userId = dbHelper.getUserId();
+            userId = dbHelper.getUserId();
             if (!Objects.equals(userId, "user")) {
                 schedules = dbHelper.getSchedules(userId);
-                ScheduleParser parser = new ScheduleParser(schedules);
-                toCheck = compileToCheck();
+                if(!schedules.isEmpty()){
+                    ScheduleParser parser = new ScheduleParser(schedules);
+                    toCheck = compileToCheck();
 
-                toCheck.put("currentLat", currentLat);
-                toCheck.put("currentLng", currentLng);
-                Timer timer = new Timer();
-                BlockTask blockTask = new BlockTask(toCheck, context);
-                timer.schedule(blockTask, 0, 2000);
+                    toCheck.put("currentLat", currentLat);
+                    toCheck.put("currentLng", currentLng);
+                    Timer timer = new Timer();
+                    BlockTask blockTask = new BlockTask(toCheck, context);
+                    timer.schedule(blockTask, 0, 2000);
+                }
+
 
             }
         } catch (Exception e) {
@@ -143,16 +146,23 @@ public class AppService extends Service {
 
         }
         getFusedLocationClient(context);
-//         queries the active schedules
-        createIntentForService(context, REQUEST_LOCATION); // autostarts location if active schedule demands for it
+        if (!Objects.equals(userId, "user") && !schedules.isEmpty()) {
+            if (Boolean.TRUE.equals(toCheck.get("checkLocation"))) {
+                createIntentForService(context, REQUEST_LOCATION); // autostarts location if active schedule demands for it
+            }
+
 //         autostart wifi if active schedule demands for it
 //        should stop location & wifi when no active schedule needs it
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            getConnectedWiFiSSID(context);
-        }else{
-            getCurrentWifiBelowApi31(context);
-        }
+            if (Boolean.TRUE.equals(toCheck.get("checkWifi"))) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    getConnectedWiFiSSID(context);
+                } else {
+                    getCurrentWifiBelowApi31(context);
+                }
+            }
 
+
+        }
 
     }
 

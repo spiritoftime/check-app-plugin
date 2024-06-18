@@ -53,21 +53,10 @@ class CheckappPlugin {
     return CheckappPluginPlatform.instance.checkLocationPermission();
   }
 
-  Future<bool> checkWifiPermission() {
-    return CheckappPluginPlatform.instance.checkWifiPermission();
-  }
-
-  Future<void> requestWifiPermission() {
-    return CheckappPluginPlatform.instance.requestWifiPermission();
-  }
-
-  Future<bool> checkAboveAPI33() {
-    return CheckappPluginPlatform.instance.checkAboveAPI33();
-  }
-
   Future<List<Map<String, dynamic>>> getNearbyWifi() {
     return CheckappPluginPlatform.instance.getNearbyWifi();
   }
+
 
     Future<bool> checkGPSEnabled() {
     return CheckappPluginPlatform.instance.checkGPSEnabled();

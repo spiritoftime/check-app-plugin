@@ -10,8 +10,7 @@ import static com.doomscroll.checkapp_plugin.Permissions.checkLocationPermission
 import static com.doomscroll.checkapp_plugin.Permissions.checkNotificationPermission;
 import static com.doomscroll.checkapp_plugin.Permissions.checkOverlayPermission;
 import static com.doomscroll.checkapp_plugin.Permissions.checkUsagePermission;
-import static com.doomscroll.checkapp_plugin.Permissions.checkWifiPermission;
-import static com.doomscroll.checkapp_plugin.Permissions.isAboveApi33;
+
 import static com.doomscroll.checkapp_plugin.Permissions.isBackgroundStartActivityPermissionGranted;
 import static com.doomscroll.checkapp_plugin.Permissions.requestBackgroundPermissionForXiaomi;
 import static com.doomscroll.checkapp_plugin.Permissions.requestEnableGPS;
@@ -19,7 +18,6 @@ import static com.doomscroll.checkapp_plugin.Permissions.requestLocationPermissi
 import static com.doomscroll.checkapp_plugin.Permissions.requestNotificationPermission;
 import static com.doomscroll.checkapp_plugin.Permissions.requestOverlayPermission;
 import static com.doomscroll.checkapp_plugin.Permissions.requestUsagePermission;
-import static com.doomscroll.checkapp_plugin.Permissions.requestWifiPermission;
 import static com.doomscroll.checkapp_plugin.WifiScan.getNearbyWifi;
 
 import android.app.Activity;
@@ -42,14 +40,11 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 
-import java.io.ByteArrayOutputStream;
-import java.lang.reflect.Method;
+
 import java.util.ArrayList;
 
-import android.util.Base64;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import io.flutter.embedding.android.FlutterActivity;
@@ -62,7 +57,6 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 
 public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, MethodCallHandler, ActivityAware {
-    private static final String FACEBOOK_PACKAGE_NAME = "com.facebook.katana";
 
     private static final String FLUTTER_CHANNEL_NAME = "com.doomscroll.checkapp";
     private static final String CHANNEL_DETECT_METHOD = "DETECT_APP";
@@ -70,7 +64,6 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
     private static final String REQUEST_NOTIFICATION_PERMISSION = "REQUEST_NOTIFICATION_PERMISSION";
 
     private static final String REQUEST_USAGE_PERMISSION = "REQUEST_USAGE_PERMISSION";
-    private static final String GET_PLATFORM_VERSION = "getPlatformVersion";
     private static final String REQUEST_BACKGROUND_PERMISSION = "REQUEST_BACKGROUND_PERMISSION";
     private static final String REQUEST_LOCATION_PERMISSION = "REQUEST_LOCATION_PERMISSION";
     private static final String CHECK_LOCATION_PERMISSION = "CHECK_LOCATION_PERMISSION";
@@ -79,11 +72,7 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
     private static final String CHECK_USAGE_PERMISSION = "CHECK_USAGE_PERMISSION";
     private static final String CHECK_OVERLAY_PERMISSION = "CHECK_OVERLAY_PERMISSION";
 
-    private static final String CHECK_WIFI_PERMISSION = "CHECK_WIFI_PERMISSION";
 
-    private static final String REQUEST_WIFI_PERMISSION = "REQUEST_WIFI_PERMISSION";
-
-    private static final String CHECK_ABOVE_API_33 = "CHECK_ABOVE_API_33";
     private static final String GET_NEARBY_WIFI = "GET_NEARBY_WIFI";
     private static final String CHECK_GPS_ENABLED = "CHECK_GPS_ENABLED";
     private static final String REQUEST_ENABLE_GPS = "REQUEST_ENABLE_GPS";
@@ -138,9 +127,7 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
             case REQUEST_USAGE_PERMISSION:
                 requestUsagePermission(context, activity);
                 break;
-            case GET_PLATFORM_VERSION:
-                result.success(getPlatformVersion());
-                break;
+
             case CHECK_NOTIFICATION_PERMISSION:
                 result.success(checkNotificationPermission(context));
                 break;
@@ -162,24 +149,8 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
             case REQUEST_LOCATION_PERMISSION:
                 requestLocationPermission(context, activity);
                 break;
-            case CHECK_WIFI_PERMISSION:
-                boolean isWifiEnabled = false;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
-                    isWifiEnabled = checkWifiPermission(context, activity);
-                }
-                result.success(isWifiEnabled);
-
-                break;
-            case REQUEST_WIFI_PERMISSION:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    requestWifiPermission(context, activity);
-                }
-                break;
-            case CHECK_ABOVE_API_33:
-                result.success(isAboveApi33());
-                break;
             case GET_NEARBY_WIFI:
-                getNearbyWifi(result);
+                getNearbyWifi(result,context);
                 break;
             case CHECK_GPS_ENABLED:
                 result.success(checkGPSEnabled(context));
@@ -212,9 +183,6 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
         return false;
     }
 
-    public String getPlatformVersion() {
-        return "Android " + Build.VERSION.RELEASE;
-    }
 
     @Override
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {

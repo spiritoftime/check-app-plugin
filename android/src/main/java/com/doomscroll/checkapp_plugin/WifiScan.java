@@ -54,9 +54,11 @@ public class WifiScan {
         mWifiManager.startScan();
     }
 
-    public static void getNearbyWifi(MethodChannel.Result result) {
-        if (scanResults.isEmpty())
-            result.error("MISSING PERMISSIONS", "Location Services not turned on", null);
+    public static void getNearbyWifi(MethodChannel.Result result,Context context) {
+        initializeWifiScan(context);
+
+        if (!scanResults.isEmpty())
+//            result.error("MISSING PERMISSIONS", "Location Services not turned on", null);
         result.success(scanResultToMap());
     }
 

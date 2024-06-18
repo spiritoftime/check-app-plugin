@@ -82,29 +82,7 @@ class MockCheckappPluginPlatform
     throw UnimplementedError();
   }
   
-  @override
-  Future<bool> checkAboveAPI33() {
-    // TODO: implement checkAboveAPI33
-    throw UnimplementedError();
-  }
-  
-  @override
-  Future<bool> checkWifiPermission() {
-    // TODO: implement checkWifiPermission
-    throw UnimplementedError();
-  }
-  
-  @override
-  Future<List<Map<String, dynamic>>> getNearbyWifi() {
-    // TODO: implement getNearbyWifi
-    throw UnimplementedError();
-  }
-  
-  @override
-  Future<void> requestWifiPermission() {
-    // TODO: implement requestWifiPermission
-    throw UnimplementedError();
-  }
+
   
   @override
   Future<bool> checkGPSEnabled() {
@@ -115,6 +93,12 @@ class MockCheckappPluginPlatform
   @override
   Future<void> requestEnableGPS() {
     // TODO: implement requestEnableGPS
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<List<Map<String, dynamic>>> getNearbyWifi() {
+    // TODO: implement getNearbyWifi
     throw UnimplementedError();
   }
 }

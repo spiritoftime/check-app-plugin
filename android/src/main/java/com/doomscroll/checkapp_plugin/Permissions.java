@@ -162,28 +162,7 @@ public class Permissions {
 
     }
 
-    //    only for api 33 and above
-    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
-    public static boolean checkWifiPermission(Context context, Activity activity) {
-        return ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.NEARBY_WIFI_DEVICES
-        ) == PackageManager.PERMISSION_GRANTED;
 
-    }
 
-    @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.TIRAMISU)
-    public static boolean isAboveApi33() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU;
-    }
 
-    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
-    public static void requestWifiPermission(Context context, Activity activity) {
-        if (!checkWifiPermission(context, activity)) {
-            String[] permissions = {Manifest.permission.NEARBY_WIFI_DEVICES};
-
-            ActivityCompat.requestPermissions(activity, permissions, 123456);
-        }
-
-    }
 }
