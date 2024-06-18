@@ -6,7 +6,6 @@ import static com.doomscroll.checkapp_plugin.LocationChecker.stopLocationUpdates
 import static com.doomscroll.checkapp_plugin.ScheduleParser.compileToCheck;
 import static com.doomscroll.checkapp_plugin.WifiScan.getConnectedWiFiSSID;
 import static com.doomscroll.checkapp_plugin.WifiScan.getCurrentWifiBelowApi31;
-import static com.doomscroll.checkapp_plugin.WifiScan.initializeWifiScan;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -25,7 +24,6 @@ import android.os.IBinder;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
 
@@ -114,7 +112,7 @@ public class AppService extends Service {
             if (!Objects.equals(userId, "user")) {
                 schedules = dbHelper.getSchedules(userId);
                 if(!schedules.isEmpty()){
-                    ScheduleParser parser = new ScheduleParser(schedules);
+                    new ScheduleParser(schedules);
                     toCheck = compileToCheck();
 
                     toCheck.put("currentLat", currentLat);
@@ -128,7 +126,7 @@ public class AppService extends Service {
             }
         } catch (Exception e) {
             // Handle any exceptions that may occur
-            e.printStackTrace();
+            Log.d("Unable to initialize db",e.toString());
         }
         Intent serviceIntent = new Intent(context, AppService.class);
         serviceIntent.setAction(START);
@@ -148,7 +146,7 @@ public class AppService extends Service {
         getFusedLocationClient(context);
         if (!Objects.equals(userId, "user") && !schedules.isEmpty()) {
             if (Boolean.TRUE.equals(toCheck.get("checkLocation"))) {
-                createIntentForService(context, REQUEST_LOCATION); // autostarts location if active schedule demands for it
+                createIntentForService(context, REQUEST_LOCATION); // autostart location if active schedule demands for it
             }
 
 //         autostart wifi if active schedule demands for it

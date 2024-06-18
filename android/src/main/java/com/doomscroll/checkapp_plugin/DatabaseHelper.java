@@ -14,13 +14,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "doomscroll.db";
     private static final int DATABASE_VERSION = 1;
-    private Context context;
+    private final Context context;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -56,20 +55,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "FROM users " +
                 "LIMIT 1";
 
-        Cursor cursor = null;
-
-        try {
-            cursor = db.rawQuery(query, null);
+        try (Cursor cursor = db.rawQuery(query, null)) {
 
             if (cursor != null && cursor.moveToFirst()) {
                 userId = cursor.getString(cursor.getColumnIndexOrThrow("id"));
             }
         } catch (Exception e) {
             Log.d("No User Yet", "Query User Error");
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
         }
 
         return userId;

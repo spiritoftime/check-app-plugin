@@ -17,7 +17,7 @@ public class ScheduleParser {
     private static boolean shouldCheckApp;
 
     public ScheduleParser(List<Map<String, Object>> schedules) {
-        this.schedules = schedules;
+        ScheduleParser.schedules = schedules;
     }
 
     public static List<Map<String, Object>> getCheckLocation() {

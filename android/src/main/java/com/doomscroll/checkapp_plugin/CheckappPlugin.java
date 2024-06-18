@@ -20,6 +20,7 @@ import static com.doomscroll.checkapp_plugin.Permissions.requestOverlayPermissio
 import static com.doomscroll.checkapp_plugin.Permissions.requestUsagePermission;
 import static com.doomscroll.checkapp_plugin.WifiScan.getNearbyWifi;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 
 import android.app.usage.UsageEvents;
@@ -80,7 +81,8 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
 
     private static final String GET_LAUNCHABLE_APPLICATIONS = "GET_LAUNCHABLE_APPLICATIONS";
     private MethodChannel channel;
-    private static Context context;
+    @SuppressLint("StaticFieldLeak") // can suppress as this is application context - https://stackoverflow.com/questions/37709918/warning-do-not-place-android-context-classes-in-static-fields-this-is-a-memory
+    private static  Context context;
     @Nullable
     private Activity activity;
 

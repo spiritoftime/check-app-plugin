@@ -33,8 +33,7 @@ import java.util.TimerTask;
 import io.flutter.plugin.common.MethodChannel;
 
 public class WifiScan {
-    private static boolean isGPSEnabled;
-    public static String connectedWifi;
+
     static List<ScanResult> scanResults;
 
     //gets nearby wifi
@@ -54,12 +53,12 @@ public class WifiScan {
         mWifiManager.startScan();
     }
 
-    public static void getNearbyWifi(MethodChannel.Result result,Context context) {
+    public static void getNearbyWifi(MethodChannel.Result result, Context context) {
         initializeWifiScan(context);
 
-        if (!scanResults.isEmpty())
-//            result.error("MISSING PERMISSIONS", "Location Services not turned on", null);
-        result.success(scanResultToMap());
+        if (!scanResults.isEmpty()) {
+            result.success(scanResultToMap());
+        }
     }
 
     private static List<Map<String, Object>> scanResultToMap() {
@@ -75,12 +74,6 @@ public class WifiScan {
         return wifiList;
     }
 
-    public static class GetCurrentWifiTask extends TimerTask {
-        @Override
-        public void run() {
-        }
-
-    }
 
     @RequiresApi(api = Build.VERSION_CODES.S)
     public static void getConnectedWiFiSSID(Context context) {
@@ -130,7 +123,8 @@ public class WifiScan {
 
 
     }
-//need to call in task scheduler
+
+    //need to call in task scheduler
     public static void getCurrentWifiBelowApi31(Context context) {
         WifiManager wifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         WifiInfo wifiInfo;

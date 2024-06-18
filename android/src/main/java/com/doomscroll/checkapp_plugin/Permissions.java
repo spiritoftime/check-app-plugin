@@ -14,16 +14,13 @@ import android.os.Build;
 import android.provider.Settings;
 import android.util.Log;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.ChecksSdkIntAtLeast;
+
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Collections;
+
 import java.util.Locale;
 
 public class Permissions {
@@ -155,8 +152,7 @@ public class Permissions {
         if (!checkLocationPermission(context, activity)) {
             Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + activity.getPackageName()));
             activity.startActivityForResult(intent, LOCATION_PERMISSION_CODE);
-//            ActivityCompat.requestPermissions(activity,
-//                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+
 
         }
 

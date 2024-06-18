@@ -1,22 +1,19 @@
 package com.doomscroll.checkapp_plugin;
 
-import static com.doomscroll.checkapp_plugin.AppService.REDIRECT_HOME;
-import static com.doomscroll.checkapp_plugin.AppService.createIntentForService;
+
 import static com.doomscroll.checkapp_plugin.CheckappPlugin.isAppInForeground;
 import static com.doomscroll.checkapp_plugin.Utils.getCurrentDayTime;
 import static com.doomscroll.checkapp_plugin.Utils.isCurrentTimeWithinRange;
 
-import android.content.Context;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-//{
+// see DatabaseHelper query - current obj structure{
 //  "currentWifi",  "currentLat","currentLng","locations":[{"longitude","latitude","location"}],"apps":[{"appName","packageName","iconBase64String"}],"wifis":[],"checkWifi","checkLocation","checkApp"
 //        }
 public class AppBlocker {
