@@ -18,7 +18,7 @@ class ExistingCondition extends StatefulWidget {
   });
   final String conditionType;
   final Map<String, dynamic> extra;
-  final Function() onTap;
+    final Function(BuildContext context, Object extra) onTap;
   final Function() updateUI;
   final String text1;
   final String text2;
@@ -31,7 +31,13 @@ class _ExistingConditionState extends State<ExistingCondition> {
   @override
   Widget build(BuildContext context) {
     return HoverInkWell(
-      onTap: widget.onTap,
+      onTap: () async {
+            if (widget.conditionType == 'Location' || widget.conditionType == 'Wi-Fi') {
+              await widget.onTap(context, widget.extra);
+            } else {
+              widget.onTap(context,widget.extra);
+            }
+          },
       inkWellPadding: const EdgeInsets.all(0),
       child: GreyContainer(
         child: Row(

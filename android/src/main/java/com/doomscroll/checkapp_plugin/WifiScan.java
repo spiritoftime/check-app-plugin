@@ -19,6 +19,7 @@ import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
@@ -33,30 +34,40 @@ import java.util.TimerTask;
 import io.flutter.plugin.common.MethodChannel;
 
 public class WifiScan {
-
-    static List<ScanResult> scanResults;
+    static Timer timer;
+    static boolean timerCreated;
+    static List<ScanResult> scanResults = new ArrayList<>();
+    private static BroadcastReceiver mWifiScanReceiver;
 
     //gets nearby wifi
     public static void initializeWifiScan(Context context) {
-        WifiManager mWifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        final BroadcastReceiver mWifiScanReceiver = new BroadcastReceiver() {
+        Thread t1 = new Thread(new Runnable() {
             @Override
-            public void onReceive(Context c, Intent intent) {
-                if (Objects.equals(intent.getAction(), WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)) {
-                    scanResults = mWifiManager.getScanResults();
+            public void run() {
 
-                }
+                WifiManager mWifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+                mWifiScanReceiver = new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context c, Intent intent) {
+                        if (Objects.equals(intent.getAction(), WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)) {
+                            scanResults = mWifiManager.getScanResults();
+
+                        }
+                    }
+                };
+                context.registerReceiver(mWifiScanReceiver,
+                        new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+                mWifiManager.startScan();
             }
-        };
-        context.registerReceiver(mWifiScanReceiver,
-                new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
-        mWifiManager.startScan();
+        });
+        t1.start();
     }
 
     public static void getNearbyWifi(MethodChannel.Result result, Context context) {
-        initializeWifiScan(context);
 
-        if (!scanResults.isEmpty()) {
+        if (scanResults.isEmpty())
+            result.error("MISSING PERMISSIONS", "Location Services not turned on. If you just turned it on, give it a second.", null);
+        else {
             result.success(scanResultToMap());
         }
     }
@@ -77,16 +88,21 @@ public class WifiScan {
 
     @RequiresApi(api = Build.VERSION_CODES.S)
     public static void getConnectedWiFiSSID(Context context) {
-        Timer timer = new Timer();
+        timer = new Timer();
         GPSCheckerTask gpsCheckerTask = new GPSCheckerTask.GPSCheckerTaskBuilder(context, NOTIFICATION_CHANNEL, "wifi", timer).setCallback((Void) -> {
             registerConnectivityManager(context);
 
         }).build();
         timer.schedule(gpsCheckerTask, 0, 5000);
-
+        timerCreated = true;
 
     }
 
+    public static void stopWifiTaskTimer() {
+        if (timerCreated) {
+            timer.cancel();
+        }
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.S)
     public static void registerConnectivityManager(Context context) {
@@ -114,6 +130,7 @@ public class WifiScan {
                     assert wifiInfo != null;
                     String currentWifi = wifiInfo.getSSID();
                     handleNetworkCapabilitiesChanged(currentWifi);
+                    Log.d("Log wifi above api 31",currentWifi);
                 }
             };
             connectivityManager.registerNetworkCallback(request, networkCallback);
@@ -132,6 +149,7 @@ public class WifiScan {
         wifiInfo = wifiManager.getConnectionInfo();
         if (wifiInfo.getSupplicantState() == SupplicantState.COMPLETED) {
             String ssid = wifiInfo.getSSID();
+            Log.d("check wifi", ssid);
             handleNetworkCapabilitiesChanged(ssid);
         }
     }
@@ -141,6 +159,14 @@ public class WifiScan {
         String connectedWifi = currentWifi.replaceAll("^\"|\"$", "");
 
         setConnectedWifi(connectedWifi);
+    }
+
+
+    public static void unregisterWifiScanReceiver(Context context) {
+        if (mWifiScanReceiver != null) {
+            context.unregisterReceiver(mWifiScanReceiver);
+            mWifiScanReceiver = null;
+        }
     }
 }
 

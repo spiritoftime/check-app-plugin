@@ -4,7 +4,9 @@ import static com.doomscroll.checkapp_plugin.AppService.REDIRECT_HOME;
 
 import static com.doomscroll.checkapp_plugin.AppService.REQUEST_LOCATION;
 import static com.doomscroll.checkapp_plugin.AppService.createIntentForService;
-import static com.doomscroll.checkapp_plugin.AppService.initializeServiceAtFlutter;
+import static com.doomscroll.checkapp_plugin.AppService.initializeService;
+import static com.doomscroll.checkapp_plugin.AppService.setSchedulesAfterReQuery;
+import static com.doomscroll.checkapp_plugin.AppService.setToCheck;
 import static com.doomscroll.checkapp_plugin.Permissions.checkGPSEnabled;
 import static com.doomscroll.checkapp_plugin.Permissions.checkLocationPermission;
 import static com.doomscroll.checkapp_plugin.Permissions.checkNotificationPermission;
@@ -18,6 +20,8 @@ import static com.doomscroll.checkapp_plugin.Permissions.requestLocationPermissi
 import static com.doomscroll.checkapp_plugin.Permissions.requestNotificationPermission;
 import static com.doomscroll.checkapp_plugin.Permissions.requestOverlayPermission;
 import static com.doomscroll.checkapp_plugin.Permissions.requestUsagePermission;
+import static com.doomscroll.checkapp_plugin.ScheduleParser.compileToCheck;
+import static com.doomscroll.checkapp_plugin.WifiScan.getConnectedWiFiSSID;
 import static com.doomscroll.checkapp_plugin.WifiScan.getNearbyWifi;
 
 import android.annotation.SuppressLint;
@@ -41,12 +45,13 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 
-
 import java.util.ArrayList;
 
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Timer;
 
 import io.flutter.embedding.android.FlutterActivity;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
@@ -77,12 +82,14 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
     private static final String GET_NEARBY_WIFI = "GET_NEARBY_WIFI";
     private static final String CHECK_GPS_ENABLED = "CHECK_GPS_ENABLED";
     private static final String REQUEST_ENABLE_GPS = "REQUEST_ENABLE_GPS";
+    private static final String REQUERY_ACTIVE_SCHEDULES = "REQUERY_ACTIVE_SCHEDULES";
 
 
     private static final String GET_LAUNCHABLE_APPLICATIONS = "GET_LAUNCHABLE_APPLICATIONS";
     private MethodChannel channel;
-    @SuppressLint("StaticFieldLeak") // can suppress as this is application context - https://stackoverflow.com/questions/37709918/warning-do-not-place-android-context-classes-in-static-fields-this-is-a-memory
-    private static  Context context;
+    @SuppressLint("StaticFieldLeak")
+    // can suppress as this is application context - https://stackoverflow.com/questions/37709918/warning-do-not-place-android-context-classes-in-static-fields-this-is-a-memory
+    private static Context context;
     @Nullable
     private Activity activity;
 
@@ -91,7 +98,7 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
         context = flutterPluginBinding.getApplicationContext();
         channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), FLUTTER_CHANNEL_NAME);
         channel.setMethodCallHandler(this);
-        initializeServiceAtFlutter(context);
+        initializeService(context);
     }
 
     @Override
@@ -152,13 +159,17 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
                 requestLocationPermission(context, activity);
                 break;
             case GET_NEARBY_WIFI:
-                getNearbyWifi(result,context);
+                getNearbyWifi(result, context);
                 break;
             case CHECK_GPS_ENABLED:
                 result.success(checkGPSEnabled(context));
                 break;
             case REQUEST_ENABLE_GPS:
                 requestEnableGPS(context, activity);
+                break;
+            case REQUERY_ACTIVE_SCHEDULES:
+                initializeService(context);
+
                 break;
             default:
                 result.notImplemented();
@@ -189,7 +200,6 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
     @Override
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
         activity = binding.getActivity();
-        createIntentForService(context, REQUEST_LOCATION);
     }
 
     @Override

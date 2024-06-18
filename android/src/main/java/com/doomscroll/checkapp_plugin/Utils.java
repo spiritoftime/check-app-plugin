@@ -78,7 +78,7 @@ public class Utils {
             return new ArrayList<>();
         }
 
-        String[] elements = input.replaceAll("\\s+", "") // Remove all whitespace
+        String[] elements = input // Remove all whitespace
                 .replaceAll("[\\[\\]]", "") // Remove square brackets
                 .split(","); // Split by comma
         return Arrays.asList(elements);

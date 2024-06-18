@@ -4,7 +4,7 @@ import 'package:checkapp_plugin/checkapp_plugin.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/custom_checkbox_group.dart';
 import 'package:checkapp_plugin_example/features/create_wifi/cubit/cubit/wifi_cubit.dart';
 import 'package:checkapp_plugin_example/features/create_wifi/models/wifi.dart';
-import 'package:checkapp_plugin_example/features/create_wifi/widgets/keyword_row.dart';
+import 'package:checkapp_plugin_example/features/create_wifi/widgets/wifi_row.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:go_router/go_router.dart';
@@ -92,7 +92,7 @@ class _WifiLimitState extends State<WifiLimit> {
                               wifi: wifi,
                               key: Key(wifi.wifiName),
                             ),
-                            initialValue: wifiCubit.state,
+                            initialValue: wifiCubit.state.map((w)=>Wifi(wifiName: w.wifiName)).toList(),
                           ),
                         ),
                       );

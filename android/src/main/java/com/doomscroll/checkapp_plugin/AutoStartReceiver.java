@@ -1,6 +1,6 @@
 package com.doomscroll.checkapp_plugin;
 
-import static com.doomscroll.checkapp_plugin.AppService.initializeServiceAtFlutter;
+import static com.doomscroll.checkapp_plugin.AppService.initializeService;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -12,7 +12,7 @@ public class AutoStartReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
             Log.d("BootCompletedReceiver", "Device boot completed");
-            initializeServiceAtFlutter(context);
+            initializeService(context);
         }
 
     }

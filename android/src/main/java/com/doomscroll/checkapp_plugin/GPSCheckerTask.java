@@ -38,14 +38,14 @@ public class GPSCheckerTask extends TimerTask {
         private final String blockType;
         private final Timer timer;
         private Consumer<Void> callback;
-
+//required params
         public GPSCheckerTaskBuilder(Context context, String notificationChannel, String blockType, Timer timer) {
             this.context = context;
             NOTIFICATION_CHANNEL = notificationChannel;
             this.blockType = blockType;
             this.timer = timer;
         }
-
+//optional
         public GPSCheckerTaskBuilder setCallback(Consumer<Void> callback) {
             this.callback = callback;
             return this;
@@ -63,9 +63,12 @@ public class GPSCheckerTask extends TimerTask {
         if (!isGPSEnabled) {
             sendLocationAccessNotification(context, NOTIFICATION_CHANNEL, blockType);
         }
-        if (isGPSEnabled && callback != null) {
-            callback.accept(null);
+        else {
             timer.cancel();
+
+        }
+        if (callback != null) {
+            callback.accept(null);
 
         }
 

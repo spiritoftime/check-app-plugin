@@ -29,6 +29,7 @@ import java.util.Timer;
 
 
 public class LocationChecker {
+    private static boolean requestingLocationUpdates;
     private static FusedLocationProviderClient fusedLocationClient;
     private static final LocationRequest locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000)
             .setMinUpdateIntervalMillis(5000)
@@ -80,6 +81,7 @@ public class LocationChecker {
                         double lat = lastLocation.getLatitude();
                         double lng = lastLocation.getLongitude();
                         setLatLng(lat,lng);
+                        Log.d("llog location", String.valueOf(lat));
                     }
                 }
             };
@@ -91,6 +93,9 @@ public class LocationChecker {
 
     //when there is no active schedule with location, should stop it
     public static void stopLocationUpdates() {
-        fusedLocationClient.removeLocationUpdates(locationCallback);
+        if(requestingLocationUpdates){
+            fusedLocationClient.removeLocationUpdates(locationCallback);
+
+        }
     }
 }

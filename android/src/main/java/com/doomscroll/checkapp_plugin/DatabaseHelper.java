@@ -67,7 +67,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return userId;
     }
 
-    public List<Map<String, Object>> getSchedules(String userId) {
+    public  List<Map<String, Object>> getSchedules(String userId) {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT " +
                 "s.id AS scheduleId, " +

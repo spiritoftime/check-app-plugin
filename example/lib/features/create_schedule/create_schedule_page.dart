@@ -211,9 +211,9 @@ class _CreateSchedulePageState extends State<CreateSchedulePage> {
                                         .map((d) => d.day)
                                         .join(', '),
                                     extra: widget.extra,
-                                    onTap: () => context.pushNamed(
-                                        'create-time',
-                                        extra: widget.extra),
+                                    onTap: (BuildContext context, extra) =>
+                                        context.pushNamed('create-time',
+                                            extra: extra),
                                     text2: timeCubit.state.timings
                                         .map((e) =>
                                             '${e.startTiming} to ${e.endTiming}')
@@ -226,9 +226,20 @@ class _CreateSchedulePageState extends State<CreateSchedulePage> {
                                 ? ExistingCondition(
                                     extra: widget.extra,
                                     conditionType: 'Location',
-                                    onTap: () => context.pushNamed(
-                                        'create-location',
-                                        extra: widget.extra),
+                                    onTap: (BuildContext context, extra) async {
+                                      bool isLocationEnabled =
+                                          await _checkappPlugin
+                                              .checkLocationPermission();
+                                      if (!isLocationEnabled &&
+                                          context.mounted) {
+                                        context.pushNamed(
+                                            'create-location-permission',
+                                            extra: extra);
+                                      } else if (context.mounted) {
+                                        context.pushNamed('create-location',
+                                            extra: extra);
+                                      }
+                                    },
                                     text1: locationCubit.state
                                         .map((l) => l.location)
                                         .join('\n'),
@@ -241,9 +252,33 @@ class _CreateSchedulePageState extends State<CreateSchedulePage> {
                                 ? ExistingCondition(
                                     extra: widget.extra,
                                     conditionType: 'Wifi',
-                                    onTap: () => context.pushNamed(
-                                        'create-wifi',
-                                        extra: widget.extra),
+                                    onTap: (BuildContext context, extra) async {
+                                      List<bool> wifiPermissionsEnabled =
+                                          await Future.wait([
+                                        _checkappPlugin.checkGPSEnabled(),
+                                        _checkappPlugin
+                                            .checkLocationPermission()
+                                      ]);
+                                      final bool isGPSEnabled =
+                                          wifiPermissionsEnabled[0];
+                                      final bool isLocationEnabled =
+                                          wifiPermissionsEnabled[1];
+                                      if (!context.mounted) return;
+
+                                      if (!isLocationEnabled || !isGPSEnabled) {
+                                        context.pushNamed(
+                                          'create-wifi-permission',
+                                          extra: {
+                                            ...extra as Map<String, dynamic>,
+                                            'wifiPermissionsEnabled':
+                                                wifiPermissionsEnabled
+                                          },
+                                        );
+                                        return;
+                                      }
+                                      context.pushNamed('create-wifi',
+                                          extra: extra);
+                                    },
                                     text1: wifiCubit.state
                                         .map((w) => w.wifiName)
                                         .join(', '),
