@@ -2,7 +2,7 @@ package com.doomscroll.checkapp_plugin;
 
 
 import static com.doomscroll.checkapp_plugin.AppService.NOTIFICATION_CHANNEL;
-import static com.doomscroll.checkapp_plugin.AppService.setConnectedWifi;
+import static com.doomscroll.checkapp_plugin.BlockTask.setConnectedWifi;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -81,11 +81,12 @@ public class WifiScan {
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.S)
     public static void getConnectedWiFiSSID(Context context) {
         timer = new Timer();
         GPSCheckerTask gpsCheckerTask = new GPSCheckerTask.GPSCheckerTaskBuilder(context, NOTIFICATION_CHANNEL, "wifi", timer).setCallback((Void) -> {
-            registerConnectivityManager(context);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                registerConnectivityManager(context);
+            }
 
         }).build();
         timer.schedule(gpsCheckerTask, 0, 5000);
@@ -111,28 +112,24 @@ public class WifiScan {
                 context.getSystemService(ConnectivityManager.class);
         ConnectivityManager.NetworkCallback networkCallback;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            networkCallback = new ConnectivityManager.NetworkCallback(ConnectivityManager.NetworkCallback.FLAG_INCLUDE_LOCATION_INFO) {
+        networkCallback = new ConnectivityManager.NetworkCallback(ConnectivityManager.NetworkCallback.FLAG_INCLUDE_LOCATION_INFO) {
 
-                @Override
-                public void onAvailable(Network network) {
-                    // Handle network available
-                }
+            @Override
+            public void onAvailable(Network network) {
+                // Handle network available
+            }
 
-                @Override
-                public void onCapabilitiesChanged(Network network, NetworkCapabilities networkCapabilities) {
-                    WifiInfo wifiInfo = (WifiInfo) networkCapabilities.getTransportInfo();
+            @Override
+            public void onCapabilitiesChanged(Network network, NetworkCapabilities networkCapabilities) {
+                WifiInfo wifiInfo = (WifiInfo) networkCapabilities.getTransportInfo();
 
-                    assert wifiInfo != null;
-                    String currentWifi = wifiInfo.getSSID();
-                    handleNetworkCapabilitiesChanged(currentWifi);
-                    Log.d("Log wifi above api 31", currentWifi);
-                }
-            };
-            connectivityManager.registerNetworkCallback(request, networkCallback);
-
-
-        }
+                assert wifiInfo != null;
+                String currentWifi = wifiInfo.getSSID();
+                handleNetworkCapabilitiesChanged(currentWifi);
+//                Log.d("Log wifi above api 31", currentWifi);
+            }
+        };
+        connectivityManager.registerNetworkCallback(request, networkCallback);
 
 
     }

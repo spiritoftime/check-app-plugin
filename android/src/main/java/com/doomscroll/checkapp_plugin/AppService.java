@@ -230,14 +230,7 @@ public class AppService extends Service {
 
 
 
-    public static String getCurrentConnectedWifi() {
-        return connectedWifi;
-    }
 
-    public static void setConnectedWifi(String currentConnectedWifi) {
-        connectedWifi = currentConnectedWifi;
-
-    }
 
     public static void setSchedulesAfterReQuery(List<Map<String, Object>> newSchedules) {
         schedules = newSchedules;

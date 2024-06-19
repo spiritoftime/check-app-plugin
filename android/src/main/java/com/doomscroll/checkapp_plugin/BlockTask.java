@@ -2,7 +2,6 @@ package com.doomscroll.checkapp_plugin;
 
 import static com.doomscroll.checkapp_plugin.AppService.REDIRECT_HOME;
 import static com.doomscroll.checkapp_plugin.AppService.createIntentForService;
-import static com.doomscroll.checkapp_plugin.AppService.getCurrentConnectedWifi;
 
 
 import android.content.Context;
@@ -22,6 +21,15 @@ public class BlockTask extends TimerTask {
     private static boolean requestCurrentLocation;
     private static double currentLat;
     private static double currentLng;
+    private static String connectedWifi;
+    public static String getCurrentConnectedWifi() {
+        return connectedWifi;
+    }
+
+    public static void setConnectedWifi(String currentConnectedWifi) {
+        connectedWifi = currentConnectedWifi;
+
+    }
 
     public static void setRequestConnectedWifi(boolean requestConnectedWifi) {
         BlockTask.requestConnectedWifi = requestConnectedWifi;

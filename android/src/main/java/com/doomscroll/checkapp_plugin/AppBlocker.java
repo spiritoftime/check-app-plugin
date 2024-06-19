@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.doomscroll.checkapp_plugin.BlockTask.getCurrentConnectedWifi;
 import static com.doomscroll.checkapp_plugin.BlockTask.getCurrentLat;
 import static com.doomscroll.checkapp_plugin.BlockTask.getCurrentLng;
 import static com.doomscroll.checkapp_plugin.CheckappPlugin.isAppInForeground;
@@ -37,61 +38,11 @@ public class AppBlocker {
         boolean shouldCheckDay = safeCast(toCheck.get("checkDay"), booleanTypeToken);
         boolean shouldCheckTiming = safeCast(toCheck.get("checkTiming"), booleanTypeToken);
 
-
-        if (shouldCheckApp) {
-            TypeToken<List<Map<String, Object>>> typeToken = new TypeToken<List<Map<String, Object>>>() {
-            };
-            List<Map<String, Object>> apps = safeCast(toCheck.get("apps"), typeToken);
-            checkAppUsage(apps);
-        }
-
-        if (shouldCheckLocation) {
-            TypeToken<List<Map<String, Object>>> typeToken = new TypeToken<List<Map<String, Object>>>() {
-            };
-            List<Map<String, Object>> locations = safeCast(toCheck.get("locations"), typeToken);
-
-
-            double currentLat = getCurrentLat();
-            double currentLng = getCurrentLng();
-            checkBlockedLocation(locations, currentLat, currentLng);
-
-        } else {
-            atBlockedLocation = true;
-        }
-
-        if (shouldCheckWifi) {
-            TypeToken<List<String>> typeToken = new TypeToken<List<String>>() {
-            };
-            List<String> wifis = safeCast(toCheck.get("wifis"), typeToken);
-            String currentWifi = (String) toCheck.get("currentWifi");
-            checkBlockedWifi(wifis, currentWifi);
-        } else {
-            usingBlockedWifi = true;
-        }
-
-        List<String> currentDayTime = getCurrentDayTime();
-
-        if (shouldCheckDay) {
-            String currentDay = currentDayTime.get(0);
-
-            TypeToken<List<String>> typeToken = new TypeToken<List<String>>() {
-            };
-            List<String> days = safeCast(toCheck.get("days"), typeToken);
-
-            checkDay(days, currentDay);
-        } else {
-            blockedDay = true;
-        }
-
-        if (shouldCheckTiming) {
-            TypeToken<List<Map<String, Object>>> typeToken = new TypeToken<List<Map<String, Object>>>() {
-            };
-            List<Map<String, Object>> timings = safeCast(toCheck.get("timings"), typeToken);
-            String currentTiming24HFormat = currentDayTime.get(1);
-            checkTiming(timings, currentTiming24HFormat);
-        } else {
-            blockedTiming = true;
-        }
+        checkAppUsage(toCheck, shouldCheckApp);
+        checkBlockedLocation(toCheck, shouldCheckLocation);
+        checkBlockedWifi(toCheck, shouldCheckWifi);
+        checkDay(toCheck, shouldCheckDay);
+        checkTiming(toCheck, shouldCheckTiming);
 
         return shouldBlock();
     }
@@ -101,23 +52,36 @@ public class AppBlocker {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
-    private void checkAppUsage(List<Map<String, Object>> apps) {
-        for (Map<String, Object> app : apps) {
-            String packageName = (String) app.get("packageName");
-            blockedAppInUsage = isAppInForeground(packageName);
-            if (blockedAppInUsage) {
-                break;
+    private void checkAppUsage(Map<String, Object> toCheck, boolean shouldCheckApp) {
+        if (shouldCheckApp) {
+            TypeToken<List<Map<String, Object>>> typeToken = new TypeToken<List<Map<String, Object>>>() {
+            };
+            List<Map<String, Object>> apps = safeCast(toCheck.get("apps"), typeToken);
+            for (Map<String, Object> app : apps) {
+                String packageName = (String) app.get("packageName");
+                blockedAppInUsage = isAppInForeground(packageName);
+                if (blockedAppInUsage) {
+                    break;
+                }
             }
         }
+
     }
 
-    private void checkBlockedLocation(List<Map<String, Object>> locations, double currentLat, double currentLng) {
-        for (Map<String, Object> location : locations) {
-            TypeToken<Double> typeToken = new TypeToken<Double>() {
+    private void checkBlockedLocation(Map<String, Object> toCheck, boolean shouldCheckLocation) {
+        if (shouldCheckLocation) {
+            TypeToken<List<Map<String, Object>>> typeToken = new TypeToken<List<Map<String, Object>>>() {
             };
-            double longitude = safeCast(location.get("longitude"), typeToken);
-            double latitude = safeCast(location.get("latitude"), typeToken);
+            List<Map<String, Object>> locations = safeCast(toCheck.get("locations"), typeToken);
 
+
+            double currentLat = getCurrentLat();
+            double currentLng = getCurrentLng();
+            for (Map<String, Object> location : locations) {
+                TypeToken<Double> doubleTypeToken = new TypeToken<Double>() {
+                };
+                double longitude = safeCast(location.get("longitude"), doubleTypeToken);
+                double latitude = safeCast(location.get("latitude"), doubleTypeToken);
 
 //            note: cannot just do equality check.
 //            1 decimal place: This level of precision can identify a region within about 111 kilometers (69 miles).
@@ -129,48 +93,87 @@ public class AppBlocker {
 //            7 decimal places: This can identify a region within about 1.1 centimeters (0.4 inches).
 //            8 decimal places: This can identify a region within about 1.1 millimeters (0.04 inches).
 
-            if (roundToDecimalPlaces(latitude, 3) == roundToDecimalPlaces(currentLat, 3)
-                    && roundToDecimalPlaces(longitude, 3) == roundToDecimalPlaces(currentLng, 3)) {
-                atBlockedLocation = true;
-                break;
-            } else {
-                atBlockedLocation = false;
+                if (roundToDecimalPlaces(latitude, 3) == roundToDecimalPlaces(currentLat, 3)
+                        && roundToDecimalPlaces(longitude, 3) == roundToDecimalPlaces(currentLng, 3)) {
+                    atBlockedLocation = true;
+                    break;
+                } else atBlockedLocation = false;
             }
+
+        } else {
+            atBlockedLocation = true;
         }
+
     }
 
-    private void checkBlockedWifi(List<String> wifis, String currentWifi) {
-        for (String wifi : wifis) {
-            if (Objects.equals(wifi, currentWifi)) {
-                usingBlockedWifi = true;
-                break;
-            } else {
-                usingBlockedWifi = false;
+    private void checkBlockedWifi(Map<String, Object> toCheck, boolean shouldCheckWifi) {
+        if (shouldCheckWifi) {
+            TypeToken<List<String>> typeToken = new TypeToken<List<String>>() {
+            };
+            List<String> wifis = safeCast(toCheck.get("wifis"), typeToken);
+            String currentWifi = (String) getCurrentConnectedWifi();
+            for (String wifi : wifis) {
+                if (Objects.equals(wifi, currentWifi)) {
+                    usingBlockedWifi = true;
+                    break;
+                } else {
+                    usingBlockedWifi = false;
+                }
             }
+        } else {
+            usingBlockedWifi = true;
         }
+
+
     }
 
-    private void checkDay(List<String> days, String currentDay) {
-        for (String day : days) {
-            if (Objects.equals(day, currentDay)) {
-                blockedDay = true;
-                break;
-            } else {
-                blockedDay = false;
+    private void checkDay(Map<String, Object> toCheck, boolean shouldCheckDay) {
+        List<String> currentDayTime = getCurrentDayTime();
+
+        if (shouldCheckDay) {
+            String currentDay = currentDayTime.get(0);
+
+            TypeToken<List<String>> typeToken = new TypeToken<List<String>>() {
+            };
+            List<String> days = safeCast(toCheck.get("days"), typeToken);
+
+            for (String day : days) {
+                if (Objects.equals(day, currentDay)) {
+                    blockedDay = true;
+                    break;
+                } else {
+                    blockedDay = false;
+                }
             }
+        } else {
+            blockedDay = true;
         }
+
     }
 
-    private void checkTiming(List<Map<String, Object>> timings, String currentTiming24HFormat) {
-        for (Map<String, Object> timing : timings) {
-            String startTiming = (String) timing.get("startTiming");
-            String endTiming = (String) timing.get("endTiming");
-            if (isCurrentTimeWithinRange(startTiming, endTiming, currentTiming24HFormat)) {
-                blockedTiming = true;
-                break;
-            } else {
-                blockedTiming = false;
+    private void checkTiming(Map<String, Object> toCheck, boolean shouldCheckTiming) {
+        List<String> currentDayTime = getCurrentDayTime();
+
+        if (shouldCheckTiming) {
+            TypeToken<List<Map<String, Object>>> typeToken = new TypeToken<List<Map<String, Object>>>() {
+            };
+            List<Map<String, Object>> timings = safeCast(toCheck.get("timings"), typeToken);
+            String currentTiming24HFormat = currentDayTime.get(1);
+
+            for (Map<String, Object> timing : timings) {
+                String startTiming = (String) timing.get("startTiming");
+                String endTiming = (String) timing.get("endTiming");
+                if (isCurrentTimeWithinRange(startTiming, endTiming, currentTiming24HFormat)) {
+                    blockedTiming = true;
+                    break;
+                } else {
+                    blockedTiming = false;
+                }
             }
+        } else {
+            blockedTiming = true;
         }
+
+
     }
 }
