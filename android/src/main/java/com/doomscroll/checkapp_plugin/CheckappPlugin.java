@@ -2,11 +2,10 @@ package com.doomscroll.checkapp_plugin;
 
 import static com.doomscroll.checkapp_plugin.AppService.REDIRECT_HOME;
 
-import static com.doomscroll.checkapp_plugin.AppService.REQUEST_LOCATION;
 import static com.doomscroll.checkapp_plugin.AppService.createIntentForService;
 import static com.doomscroll.checkapp_plugin.AppService.initializeService;
 import static com.doomscroll.checkapp_plugin.AppService.setSchedulesAfterReQuery;
-import static com.doomscroll.checkapp_plugin.AppService.setToCheck;
+
 import static com.doomscroll.checkapp_plugin.Permissions.checkGPSEnabled;
 import static com.doomscroll.checkapp_plugin.Permissions.checkLocationPermission;
 import static com.doomscroll.checkapp_plugin.Permissions.checkNotificationPermission;
