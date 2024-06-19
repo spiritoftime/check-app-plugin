@@ -89,12 +89,23 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
     @SuppressLint("StaticFieldLeak")
     // can suppress as this is application context - https://stackoverflow.com/questions/37709918/warning-do-not-place-android-context-classes-in-static-fields-this-is-a-memory
     private static Context context;
+
+
+    public static Context getCheckAppContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        CheckappPlugin.context = context;
+    }
+
     @Nullable
     private Activity activity;
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
-        context = flutterPluginBinding.getApplicationContext();
+        setContext(flutterPluginBinding.getApplicationContext());
+
         channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), FLUTTER_CHANNEL_NAME);
         channel.setMethodCallHandler(this);
         initializeService(context);
@@ -178,8 +189,8 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
 
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
-    public static boolean isAppInForeground( String packageName) {
-        UsageStatsManager usageStatsManager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
+    public static boolean isAppInForeground(String packageName) {
+        UsageStatsManager usageStatsManager = (UsageStatsManager) getCheckAppContext().getSystemService(Context.USAGE_STATS_SERVICE);
         long endTime = System.currentTimeMillis();
         long beginTime = endTime - 60000; // delay in checking wifi/ location when user just turned on gps.
         UsageEvents usageEvents = usageStatsManager.queryEvents(beginTime, endTime);
@@ -201,7 +212,6 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
 
         return lastResumedTime > lastPausedTime && (endTime - lastResumedTime) < 60000;
     }
-
 
 
     @Override

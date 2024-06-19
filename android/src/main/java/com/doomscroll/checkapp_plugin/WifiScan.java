@@ -1,7 +1,6 @@
 package com.doomscroll.checkapp_plugin;
 
 
-
 import static com.doomscroll.checkapp_plugin.AppService.NOTIFICATION_CHANNEL;
 import static com.doomscroll.checkapp_plugin.AppService.setConnectedWifi;
 
@@ -59,9 +58,10 @@ public class WifiScan {
     }
 
     public static void getNearbyWifi(MethodChannel.Result result, Context context) {
-
+        initializeWifiScan(context);
         if (scanResults.isEmpty())
-            result.error("MISSING PERMISSIONS", "Location Services not turned on. If you just turned it on, give it a second.", null);
+//            to fix next time - initially empty since onReceive not triggered initially
+            result.error("POSSIBLE MISSING PERMISSIONS", "Location Services may not be turned on. If you just turned it on, give it a second.", null);
         else {
             result.success(scanResultToMap());
         }
@@ -126,7 +126,7 @@ public class WifiScan {
                     assert wifiInfo != null;
                     String currentWifi = wifiInfo.getSSID();
                     handleNetworkCapabilitiesChanged(currentWifi);
-                    Log.d("Log wifi above api 31",currentWifi);
+                    Log.d("Log wifi above api 31", currentWifi);
                 }
             };
             connectivityManager.registerNetworkCallback(request, networkCallback);

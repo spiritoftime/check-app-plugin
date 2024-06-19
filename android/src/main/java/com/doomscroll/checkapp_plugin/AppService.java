@@ -2,6 +2,7 @@ package com.doomscroll.checkapp_plugin;
 
 import static com.doomscroll.checkapp_plugin.BlockTask.getRequestConnectedWifi;
 import static com.doomscroll.checkapp_plugin.BlockTask.getRequestCurrentLocation;
+import static com.doomscroll.checkapp_plugin.CheckappPlugin.getCheckAppContext;
 import static com.doomscroll.checkapp_plugin.LocationChecker.getFusedLocationClient;
 import static com.doomscroll.checkapp_plugin.LocationChecker.startLocationUpdates;
 import static com.doomscroll.checkapp_plugin.LocationChecker.stopLocationUpdates;
@@ -119,13 +120,13 @@ public class AppService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        initializeWifiScan(this);
+//        initializeWifiScan(this);
     }
 
     public static void initializeService(Context context) {
         String userId = "user";
         //                    ----------------------start foreground service --------------------
-        if (isServiceInitialized) { // need to cancel previous taskTimers when user editted the blocker to give grace period. eg: current time - 7pm. user set schedule to block from 7pm, blocked. user immediately changed to 715pm, will continue to block because previous blockTimer with 7pm timing not cleared and continue blocking.
+        if (isServiceInitialized) { // need to cancel previous taskTimers when user edited the blocker to give grace period. eg: current time - 7pm. user set schedule to block from 7pm, blocked. user immediately changed to 715pm, will continue to block because previous blockTimer with 7pm timing not cleared and continue blocking.
             if (blockAppTimerCreated) {
                 blockAppTimer.cancel();
                 blockAppTimerCreated = false;
@@ -213,7 +214,7 @@ public class AppService extends Service {
     @Override
     public void onDestroy() { // used when user deactivates all active scheules
         super.onDestroy();
-        unregisterWifiScanReceiver(this);
+        unregisterWifiScanReceiver(getCheckAppContext());
         if (blockAppTimerCreated) {
             blockAppTimer.cancel();
             blockAppTimerCreated = false;
