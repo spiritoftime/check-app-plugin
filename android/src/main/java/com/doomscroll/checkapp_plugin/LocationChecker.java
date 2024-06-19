@@ -81,7 +81,6 @@ public class LocationChecker {
                         double lat = lastLocation.getLatitude();
                         double lng = lastLocation.getLongitude();
                         setLatLng(lat,lng);
-                        Log.d("llog location", String.valueOf(lat));
                     }
                 }
             };

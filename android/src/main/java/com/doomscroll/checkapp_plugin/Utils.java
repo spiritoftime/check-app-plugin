@@ -9,6 +9,8 @@ import android.graphics.drawable.PictureDrawable;
 import android.util.Base64;
 
 import java.io.ByteArrayOutputStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -117,5 +119,10 @@ return currentDayTime;
             e.printStackTrace();
             return false;
         }
+    }
+
+    public static double roundToDecimalPlaces(double num, int dp ){
+        BigDecimal bdNum = new BigDecimal(num).setScale(dp, RoundingMode.HALF_UP);
+        return  bdNum.doubleValue();
     }
 }

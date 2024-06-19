@@ -4,6 +4,7 @@ package com.doomscroll.checkapp_plugin;
 import static com.doomscroll.checkapp_plugin.CheckappPlugin.isAppInForeground;
 import static com.doomscroll.checkapp_plugin.Utils.getCurrentDayTime;
 import static com.doomscroll.checkapp_plugin.Utils.isCurrentTimeWithinRange;
+import static com.doomscroll.checkapp_plugin.Utils.roundToDecimalPlaces;
 
 import android.os.Build;
 
@@ -79,15 +80,17 @@ public class AppBlocker {
         return shouldBlock();
 
     }
+
     private static boolean shouldBlock() {
         return usingBlockedWifi && atBlockedLocation && blockedAppInUsage && blockedDay && blockedTiming;
     }
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
     private static void checkAppUsage(List<Map<String, Object>> apps) {
         for (Map<String, Object> app : apps) {
             String packageName = (String) app.get("packageName");
             blockedAppInUsage = isAppInForeground(packageName);
-            if(blockedAppInUsage) {
+            if (blockedAppInUsage) {
                 break;
             }
 
@@ -98,9 +101,21 @@ public class AppBlocker {
         for (Map<String, Object> location : locations) {
             double longitude = (double) location.get("longitude");
             double latitude = (double) location.get("latitude");
-            if (latitude == currentLat && longitude == currentLng) {
+//            note: cannot just do equality check.
+//            1 decimal place: This level of precision can identify a region within about 111 kilometers (69 miles).
+//            2 decimal places: This can identify a region within about 1.1 kilometers (0.69 miles).
+//            3 decimal places: This can identify a region within about 110 meters (361 feet).
+//            4 decimal places: This can identify a region within about 11 meters (36 feet).
+//            5 decimal places: This can identify a region within about 1.1 meters (3.6 feet).
+//            6 decimal places: This can identify a region within about 11 centimeters (4.3 inches).
+//            7 decimal places: This can identify a region within about 1.1 centimeters (0.4 inches).
+//            8 decimal places: This can identify a region within about 1.1 millimeters (0.04 inches).
+
+            if (roundToDecimalPlaces(latitude, 3) == roundToDecimalPlaces(currentLat, 3) && roundToDecimalPlaces(longitude,3 ) == roundToDecimalPlaces(currentLng,3)) {
                 atBlockedLocation = true;
                 break;
+            } else{
+                atBlockedLocation = false;
             }
 
 
@@ -112,6 +127,8 @@ public class AppBlocker {
             if (Objects.equals(wifi, currentWifi)) {
                 usingBlockedWifi = true;
                 break;
+            } else{
+                usingBlockedWifi = false;
             }
         }
     }
@@ -121,6 +138,8 @@ public class AppBlocker {
             if (Objects.equals(day, currentDay)) {
                 blockedDay = true;
                 break;
+            } else{
+                blockedDay = false;
             }
         }
     }
@@ -132,6 +151,8 @@ public class AppBlocker {
             if (isCurrentTimeWithinRange(startTiming, endTiming, currentTiming24HFormat)) {
                 blockedTiming = true;
                 break;
+            } else{
+                blockedTiming = false;
             }
         }
     }

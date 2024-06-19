@@ -101,6 +101,7 @@ public class WifiScan {
     public static void stopWifiTaskTimer() {
         if (timerCreated) {
             timer.cancel();
+            timerCreated = false;
         }
     }
 

@@ -67,7 +67,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return userId;
     }
 
-    public  List<Map<String, Object>> getSchedules(String userId) {
+    public List<Map<String, Object>> getSchedules(String userId) {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT " +
                 "s.id AS scheduleId, " +
@@ -76,18 +76,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "(SELECT GROUP_CONCAT('[' || w.wifiName || ']') " +
                 " FROM wifis w WHERE w.scheduleId = s.id GROUP BY w.scheduleId) AS wifis, " +
                 "(SELECT GROUP_CONCAT('[' || tm.startTiming || ', ' || tm.endTiming  ||  ']') " +
-                " FROM timings tm JOIN times t ON tm.timeId = t.id  GROUP BY t.id) AS timings, " +
+                " FROM timings tm JOIN times t ON tm.timeId = t.id WHERE t.scheduleId = s.id GROUP BY t.id) AS timings, " +
                 "(SELECT GROUP_CONCAT('[' || d.day ||  ']') " +
-                " FROM days d JOIN times t ON d.timeId = t.id  GROUP BY t.id) AS days, " +
-
+                " FROM days d JOIN times t ON d.timeId = t.id WHERE t.scheduleId = s.id GROUP BY t.id) AS days, " +
                 "(SELECT GROUP_CONCAT('[' || a.appName || ', ' || a.packageName || ', ' || a.iconBase64String || ']') " +
-                " FROM apps a JOIN blocks b ON a.blockId = b.id  GROUP BY b.id) AS apps, " +
+                " FROM apps a JOIN blocks b ON a.blockId = b.id JOIN schedules s2 ON b.scheduleId = s2.id WHERE s2.id = s.id GROUP BY b.id) AS apps, " +
                 "(SELECT GROUP_CONCAT('[' || w.url || ']') " +
-                " FROM websites w JOIN blocks b ON w.blockId = b.id WHERE b.scheduleId = s.id GROUP BY b.scheduleId) AS websites, " +
+                " FROM websites w JOIN blocks b ON w.blockId = b.id JOIN schedules s2 ON b.scheduleId = s2.id WHERE s2.id = s.id GROUP BY b.id) AS websites, " +
                 "(SELECT GROUP_CONCAT('[' || k.keyword || ']') " +
-                " FROM keywords k JOIN blocks b ON k.blockId = b.id WHERE b.scheduleId = s.id GROUP BY b.scheduleId) AS keywords " +
+                " FROM keywords k JOIN blocks b ON k.blockId = b.id JOIN schedules s2 ON b.scheduleId = s2.id WHERE s2.id = s.id GROUP BY b.id) AS keywords " +
                 "FROM schedules s WHERE s.userId = ? AND s.isActive = 1;";
-
 
         List<Map<String, Object>> result = new ArrayList<>();
         Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(userId)});
@@ -96,14 +94,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Map<String, Object> schedule = new HashMap<>();
             String locations = cursor.getString(cursor.getColumnIndexOrThrow("locations"));
             String wifis = cursor.getString(cursor.getColumnIndexOrThrow("wifis"));
-
             String apps = cursor.getString(cursor.getColumnIndexOrThrow("apps"));
             String websites = cursor.getString(cursor.getColumnIndexOrThrow("websites"));
             String keywords = cursor.getString(cursor.getColumnIndexOrThrow("keywords"));
-
             String timings = cursor.getString(cursor.getColumnIndexOrThrow("timings"));
             String days = cursor.getString(cursor.getColumnIndexOrThrow("days"));
-
 
             List<List<String>> appList = parseStringToArray(apps);
             List<String> websiteList = parseStringToSingleArray(websites);
@@ -112,6 +107,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             List<List<String>> locationList = parseStringToArray(locations);
             List<String> wifiList = parseStringToSingleArray(wifis);
             List<String> dayList = parseStringToSingleArray(days);
+
             schedule.put("apps", appList);
             schedule.put("websites", websiteList);
             schedule.put("keywords", keywordList);
@@ -120,10 +116,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             schedule.put("wifis", wifiList);
             schedule.put("days", dayList);
 
-
             result.add(schedule);
-
-
         }
 
         cursor.close();

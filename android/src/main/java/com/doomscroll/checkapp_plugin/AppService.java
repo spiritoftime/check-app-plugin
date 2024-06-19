@@ -58,6 +58,7 @@ public class AppService extends Service {
     static Timer blockAppTimer;
     static boolean blockAppTimerCreated;
     static boolean isWifiScanReceiverFirstRegistered = false;
+    static boolean isServiceInitialized = false;
 
     @Nullable
     @Override
@@ -125,7 +126,18 @@ public class AppService extends Service {
     public static void initializeService(Context context) {
         String userId = "user";
         //                    ----------------------start foreground service --------------------
-
+        if (isServiceInitialized) { // need to cancel previous taskTimers when user editted the blocker to give grace period. eg: current time - 7pm. user set schedule to block from 7pm, blocked. user immediately changed to 715pm, will continue to block because previous blockTimer with 7pm timing not cleared and continue blocking.
+            if (blockAppTimerCreated) {
+                blockAppTimer.cancel();
+                blockAppTimerCreated = false;
+            }
+            if (belowAPI31WifiTimerCreated) {
+                belowAPI31WifiTimer.cancel();
+                belowAPI31WifiTimerCreated = false;
+            }
+            stopWifiTaskTimer();
+        }
+        isServiceInitialized = true;
         Intent serviceIntent = new Intent(context, AppService.class);
         serviceIntent.setAction(START);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -156,7 +168,7 @@ public class AppService extends Service {
                     blockAppTimer = new Timer();
                     BlockTask blockTask = new BlockTask(toCheck, context);
                     blockAppTimer.schedule(blockTask, 0, 2000);
-
+blockAppTimerCreated = true;
                     //                    ----------------------start location update --------------------
                     if (!Objects.equals(userId, "user") && !schedules.isEmpty()) {
                         if (Boolean.TRUE.equals(toCheck.get("checkLocation"))) {
@@ -180,14 +192,16 @@ public class AppService extends Service {
                             stopWifiTaskTimer();
                             if (belowAPI31WifiTimerCreated) {
                                 belowAPI31WifiTimer.cancel();
+                                belowAPI31WifiTimerCreated = false;
+
                             }
                         }
 
 
                     }
-                } else{
+                } else {
 
-                    createIntentForService(context,STOP);
+                    createIntentForService(context, STOP);
                 }
 
 
@@ -202,16 +216,19 @@ public class AppService extends Service {
     }
 
     @Override
-    public void onDestroy() {
+    public void onDestroy() { // used when user deactivates all active scheules
         super.onDestroy();
         unregisterWifiScanReceiver(this);
         if (blockAppTimerCreated) {
             blockAppTimer.cancel();
+            blockAppTimerCreated = false;
         }
         if (belowAPI31WifiTimerCreated) {
             belowAPI31WifiTimer.cancel();
+            belowAPI31WifiTimerCreated =false;
         }
         stopWifiTaskTimer();
+        isServiceInitialized = false;
 
     }
 
@@ -233,6 +250,9 @@ public class AppService extends Service {
     public static void setLatLng(double lat, double lng) {
         currentLat = lat;
         currentLng = lng;
+        toCheck.put("currentLat", lat);
+        toCheck.put("currentLng", lng);
+
     }
 
 }
