@@ -8,6 +8,8 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.PictureDrawable;
 import android.util.Base64;
 
+import com.google.gson.reflect.TypeToken;
+
 import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -22,23 +24,23 @@ import java.util.Locale;
 
 public class Utils {
 
-    public static Bitmap drawableToBitmap (Drawable drawable) {
+    public static Bitmap drawableToBitmap(Drawable drawable) {
         Bitmap bitmap = null;
 
         if (drawable instanceof BitmapDrawable) {
             BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
-            if(bitmapDrawable.getBitmap() != null) {
+            if (bitmapDrawable.getBitmap() != null) {
                 return bitmapDrawable.getBitmap();
             }
         }
-        if(drawable instanceof PictureDrawable){
+        if (drawable instanceof PictureDrawable) {
             Bitmap bmp = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(bmp);
             canvas.drawPicture(((PictureDrawable) drawable).getPicture());
             return bmp;
         }
 
-        if(drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
+        if (drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
             bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
         } else {
             bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
@@ -51,12 +53,13 @@ public class Utils {
     }
 
     //    might be inefficient - see https://stackoverflow.com/questions/9224056/android-bitmap-to-base64-string
-    public static String bitmapToBase64(Bitmap bitmap){
+    public static String bitmapToBase64(Bitmap bitmap) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
 
         return Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT);
     }
+
     public static List<List<String>> parseStringToArray(String input) {
         if (input == null || input.isEmpty()) {
             return new ArrayList<>();
@@ -86,7 +89,7 @@ public class Utils {
         return Arrays.asList(elements);
     }
 
-    public static List<String>  getCurrentDayTime(){
+    public static List<String> getCurrentDayTime() {
         List<String> currentDayTime = new ArrayList<>();
         // Get the current time
         Calendar calendar = Calendar.getInstance();
@@ -99,8 +102,9 @@ public class Utils {
         currentDayTime.add(formattedTime.split(" ")[0]);
         currentDayTime.add(formattedTime.split(" ")[1]);
 
-return currentDayTime;
+        return currentDayTime;
     }
+
     public static boolean isCurrentTimeWithinRange(String start, String end, String current) {
         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 
@@ -121,8 +125,23 @@ return currentDayTime;
         }
     }
 
-    public static double roundToDecimalPlaces(double num, int dp ){
+    public static double roundToDecimalPlaces(double num, int dp) {
         BigDecimal bdNum = new BigDecimal(num).setScale(dp, RoundingMode.HALF_UP);
-        return  bdNum.doubleValue();
+        return bdNum.doubleValue();
     }
+
+    public static <T> T safeCast(Object o, TypeToken<T> typeToken) {
+        Class<?> rawType = typeToken.getRawType();
+        if (rawType.isInstance(o)) {
+            try {
+                return (T) rawType.cast(o);
+            } catch (ClassCastException e) {
+                throw new IllegalArgumentException("Object is not of the expected type", e);
+            }
+        }
+        throw new IllegalArgumentException("Type Token type not same as object");
+    }
+
+
+
 }

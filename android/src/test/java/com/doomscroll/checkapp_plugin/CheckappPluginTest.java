@@ -3,9 +3,11 @@ package com.doomscroll.checkapp_plugin;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import org.junit.Test;
+
 
 /**
  * This demonstrates a simple unit test of the Java portion of this plugin's implementation.
@@ -26,4 +28,5 @@ public class CheckappPluginTest {
 
     verify(mockResult).success("Android " + android.os.Build.VERSION.RELEASE);
   }
+
 }

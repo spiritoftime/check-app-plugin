@@ -11,6 +11,7 @@ import android.util.Log;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -104,7 +105,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             List<String> websiteList = parseStringToSingleArray(websites);
             List<String> keywordList = parseStringToSingleArray(keywords);
             List<List<String>> timingList = parseStringToArray(timings);
-            List<List<String>> locationList = parseStringToArray(locations);
+            List<List<String>> locationList = parseLocations(locations);
             List<String> wifiList = parseStringToSingleArray(wifis);
             List<String> dayList = parseStringToSingleArray(days);
 
@@ -121,6 +122,45 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         cursor.close();
         return result;
+    }
+
+    public static List<List<String>> parseLocations(String locationString) {
+        //        [103.8473557, 1.4235911, Blk 419, Yishun Avenue 11, Yishun, Northwest, Singapore, 760418, Singapore],[103.8336942, 1.428136, Yishun, Northwest, Singapore]
+        if (locationString == null || locationString.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        List<List<String>> locations = new ArrayList<>();
+        String[] stringLocations = locationString.split("]");
+        for (int x = 0; x < stringLocations.length; x ++) {
+            String stringLocation = stringLocations[x];
+            List<String> location = new ArrayList<>();
+            String[] l;
+            if(x == 0 ){
+                 l = stringLocation.replace("[", "").replace("]", "").split(",");
+            } else{
+                l = stringLocation.replace("[", "").replace("]", "").substring(1).split(",");
+            }
+
+            String lng = l[0].trim();
+            String lat = l[1].trim();
+            StringBuilder locationBuilder = new StringBuilder();
+            for (int i = 2; i < l.length; i++) {
+                locationBuilder.append(l[i].trim());
+                if (i < l.length - 1) {
+                    locationBuilder.append(", "); // Add comma separator between parts
+                }
+            }
+
+            String locationName = locationBuilder.toString();
+            location.add(lng);
+            location.add(lat);
+            location.add(locationName);
+
+            locations.add(location);
+        }
+        return locations;
+
     }
 
 }
