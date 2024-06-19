@@ -1,16 +1,14 @@
 package com.doomscroll.checkapp_plugin;
 
 
-import static com.doomscroll.checkapp_plugin.AppService.NOTIFICATION_CHANNEL;
-import static com.doomscroll.checkapp_plugin.AppService.setLatLng;
+import static com.doomscroll.checkapp_plugin.BlockTask.setCurrentLat;
+import static com.doomscroll.checkapp_plugin.BlockTask.setCurrentLng;
 
-import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
@@ -72,7 +70,6 @@ public class LocationChecker {
 
                 @Override
                 public void onLocationResult(LocationResult locationResult) {
-//                Log.d("hi", String.valueOf(locationResult));
                     if (locationResult == null) {
                         return;
                     }
@@ -80,7 +77,9 @@ public class LocationChecker {
                     if (lastLocation != null) {
                         double lat = lastLocation.getLatitude();
                         double lng = lastLocation.getLongitude();
-                        setLatLng(lat,lng);
+                        setCurrentLat(lat);
+                        setCurrentLng(lng);
+                        Log.d("pinging location", String.valueOf(lat));
                     }
                 }
             };

@@ -1,7 +1,6 @@
 package com.doomscroll.checkapp_plugin;
 
 
-import static androidx.core.content.ContextCompat.registerReceiver;
 
 import static com.doomscroll.checkapp_plugin.AppService.NOTIFICATION_CHANNEL;
 import static com.doomscroll.checkapp_plugin.AppService.setConnectedWifi;
@@ -29,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import io.flutter.plugin.common.MethodChannel;
 
@@ -41,24 +39,21 @@ public class WifiScan {
 
     //gets nearby wifi
     public static void initializeWifiScan(Context context) {
-        Thread t1 = new Thread(new Runnable() {
-            @Override
-            public void run() {
+        Thread t1 = new Thread(() -> {
 
-                WifiManager mWifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-                mWifiScanReceiver = new BroadcastReceiver() {
-                    @Override
-                    public void onReceive(Context c, Intent intent) {
-                        if (Objects.equals(intent.getAction(), WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)) {
-                            scanResults = mWifiManager.getScanResults();
+            WifiManager mWifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+            mWifiScanReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context c, Intent intent) {
+                    if (Objects.equals(intent.getAction(), WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)) {
+                        scanResults = mWifiManager.getScanResults();
 
-                        }
                     }
-                };
-                context.registerReceiver(mWifiScanReceiver,
-                        new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
-                mWifiManager.startScan();
-            }
+                }
+            };
+            context.registerReceiver(mWifiScanReceiver,
+                    new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+            mWifiManager.startScan();
         });
         t1.start();
     }

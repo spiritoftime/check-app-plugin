@@ -1,5 +1,7 @@
 package com.doomscroll.checkapp_plugin;
 
+import static com.doomscroll.checkapp_plugin.BlockTask.getRequestConnectedWifi;
+import static com.doomscroll.checkapp_plugin.BlockTask.getRequestCurrentLocation;
 import static com.doomscroll.checkapp_plugin.LocationChecker.getFusedLocationClient;
 import static com.doomscroll.checkapp_plugin.LocationChecker.startLocationUpdates;
 import static com.doomscroll.checkapp_plugin.LocationChecker.stopLocationUpdates;
@@ -49,15 +51,12 @@ public class AppService extends Service {
     final static String START = "START";
     final static String STOP = "STOP";
     private static String connectedWifi;
-    private static double currentLat;
-    private static double currentLng;
-    private static Map<String, Object> toCheck = new HashMap<>();
+
     static Timer belowAPI31WifiTimer;
     static boolean belowAPI31WifiTimerCreated;
 
     static Timer blockAppTimer;
     static boolean blockAppTimerCreated;
-    static boolean isWifiScanReceiverFirstRegistered = false;
     static boolean isServiceInitialized = false;
 
     @Nullable
@@ -160,45 +159,41 @@ public class AppService extends Service {
                 schedules = dbHelper.getSchedules(userId);
                 if (!schedules.isEmpty()) {
 //                    ----------------------start creating task to block app--------------------
-                    new ScheduleParser(schedules);
-                    toCheck = compileToCheck();
+                    ScheduleParser scheduleParser = new ScheduleParser(schedules);
+                    List<Map<String, Object>> parsedSchedules = scheduleParser.getSchedules();
 
-                    toCheck.put("currentLat", currentLat);
-                    toCheck.put("currentLng", currentLng);
                     blockAppTimer = new Timer();
-                    BlockTask blockTask = new BlockTask(toCheck, context);
+                    BlockTask blockTask = new BlockTask(parsedSchedules, context);
                     blockAppTimer.schedule(blockTask, 0, 2000);
-blockAppTimerCreated = true;
+                    blockAppTimerCreated = true;
                     //                    ----------------------start location update --------------------
-                    if (!Objects.equals(userId, "user") && !schedules.isEmpty()) {
-                        if (Boolean.TRUE.equals(toCheck.get("checkLocation"))) {
-                            createIntentForService(context, REQUEST_LOCATION); // autostart location if active schedule demands for it
-                        } else {
-                            createIntentForService(context, STOP_REQUEST_LOCATION);
-                        }
-                        //                    ----------------------start wifi update --------------------
+                    if (getRequestCurrentLocation()) {
+                        createIntentForService(context, REQUEST_LOCATION); // autostart location if active schedule demands for it
+                    } else {
+                        createIntentForService(context, STOP_REQUEST_LOCATION);
+                    }
+                    //                    ----------------------start wifi update --------------------
 //         autostart wifi if active schedule demands for it
 //        should stop location & wifi when no active schedule needs it
-                        if (Boolean.TRUE.equals(toCheck.get("checkWifi"))) {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                                getConnectedWiFiSSID(context);
-                            } else {
-                                belowAPI31WifiTimer = new Timer();
-                                BelowApi31WifiCheckerTask belowApi31WifiCheckerTask = new BelowApi31WifiCheckerTask(context);
-                                belowAPI31WifiTimer.schedule(belowApi31WifiCheckerTask, 0, 2000);
-                                belowAPI31WifiTimerCreated = true;
-                            }
+                    if (getRequestConnectedWifi()) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                            getConnectedWiFiSSID(context);
                         } else {
-                            stopWifiTaskTimer();
-                            if (belowAPI31WifiTimerCreated) {
-                                belowAPI31WifiTimer.cancel();
-                                belowAPI31WifiTimerCreated = false;
-
-                            }
+                            belowAPI31WifiTimer = new Timer();
+                            BelowApi31WifiCheckerTask belowApi31WifiCheckerTask = new BelowApi31WifiCheckerTask(context);
+                            belowAPI31WifiTimer.schedule(belowApi31WifiCheckerTask, 0, 2000);
+                            belowAPI31WifiTimerCreated = true;
                         }
+                    } else {
+                        stopWifiTaskTimer();
+                        if (belowAPI31WifiTimerCreated) {
+                            belowAPI31WifiTimer.cancel();
+                            belowAPI31WifiTimerCreated = false;
 
-
+                        }
                     }
+
+
                 } else {
 
                     createIntentForService(context, STOP);
@@ -225,17 +220,22 @@ blockAppTimerCreated = true;
         }
         if (belowAPI31WifiTimerCreated) {
             belowAPI31WifiTimer.cancel();
-            belowAPI31WifiTimerCreated =false;
+            belowAPI31WifiTimerCreated = false;
         }
         stopWifiTaskTimer();
         isServiceInitialized = false;
 
     }
 
+
+
+    public static String getCurrentConnectedWifi() {
+        return connectedWifi;
+    }
+
     public static void setConnectedWifi(String currentConnectedWifi) {
         connectedWifi = currentConnectedWifi;
 
-        toCheck.put("currentWifi", connectedWifi);
     }
 
     public static void setSchedulesAfterReQuery(List<Map<String, Object>> newSchedules) {
@@ -243,17 +243,9 @@ blockAppTimerCreated = true;
 
     }
 
-    public static void setToCheck(Map<String, Object> newToCheck) {
-        toCheck = newToCheck;
-    }
 
-    public static void setLatLng(double lat, double lng) {
-        currentLat = lat;
-        currentLng = lng;
-        toCheck.put("currentLat", lat);
-        toCheck.put("currentLng", lng);
 
-    }
+
 
 }
 

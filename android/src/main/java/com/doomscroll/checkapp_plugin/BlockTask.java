@@ -1,30 +1,81 @@
 package com.doomscroll.checkapp_plugin;
 
-import static com.doomscroll.checkapp_plugin.AppBlocker.shouldBlockApp;
 import static com.doomscroll.checkapp_plugin.AppService.REDIRECT_HOME;
 import static com.doomscroll.checkapp_plugin.AppService.createIntentForService;
+import static com.doomscroll.checkapp_plugin.AppService.getCurrentConnectedWifi;
+
 
 import android.content.Context;
+import android.os.Build;
 
+import androidx.annotation.RequiresApi;
+
+import java.util.List;
 import java.util.Map;
 import java.util.TimerTask;
 
+
 public class BlockTask extends TimerTask {
-    private final Map<String, Object> toCheck;
+    private final List<Map<String, Object>> schedules;
     private final Context context;
+    private static boolean requestConnectedWifi;
+    private static boolean requestCurrentLocation;
+    private static double currentLat;
+    private static double currentLng;
 
-    public BlockTask(Map<String, Object> toCheck, Context context) {
+    public static void setRequestConnectedWifi(boolean requestConnectedWifi) {
+        BlockTask.requestConnectedWifi = requestConnectedWifi;
+    }
 
-        this.toCheck = toCheck;
+    public static void setRequestCurrentLocation(boolean requestCurrentLocation) {
+        BlockTask.requestCurrentLocation = requestCurrentLocation;
+    }
+
+    public static boolean getRequestConnectedWifi() {
+        return requestConnectedWifi;
+    }
+
+    public static boolean getRequestCurrentLocation() {
+        return requestCurrentLocation;
+    }
+    public static double getCurrentLat() {
+        return currentLat;
+    }
+    public static double getCurrentLng() {
+        return currentLng;
+    }
+
+    public static void setCurrentLat(double currentLat) {
+        BlockTask.currentLat = currentLat;
+    }
+    public static void setCurrentLng(double currentLng){
+        BlockTask.currentLng = currentLng;
+    }
+
+    public BlockTask(List<Map<String, Object>> schedules, Context context) {
+        this.schedules = schedules;
         this.context = context;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
     @Override
     public void run() {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP_MR1) {
-            boolean shouldBlockApp = shouldBlockApp(toCheck);
-            if(shouldBlockApp){
+        double currentLat = getCurrentLat();
+        double currentLng = getCurrentLng();
+        String currentWifi = getCurrentConnectedWifi();
+
+        for (Map<String, Object> schedule : schedules) {
+            schedule.put("currentLat", currentLat);
+            schedule.put("currentLng", currentLng);
+            schedule.put("currentWifi", currentWifi);
+
+            AppBlocker appBlocker = new AppBlocker();
+            Map<String, Object> toCheck = ScheduleParser.compileToCheck(schedule);
+            boolean shouldBlock = appBlocker.shouldBlockApp(toCheck);
+
+            if (shouldBlock) {
                 createIntentForService(context, REDIRECT_HOME);
+                break;
             }
         }
     }
