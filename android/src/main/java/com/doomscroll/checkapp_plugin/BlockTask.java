@@ -68,14 +68,9 @@ public class BlockTask extends TimerTask {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
     @Override
     public void run() {
-        double currentLat = getCurrentLat();
-        double currentLng = getCurrentLng();
-        String currentWifi = getCurrentConnectedWifi();
+
 
         for (Map<String, Object> schedule : schedules) {
-            schedule.put("currentLat", currentLat);
-            schedule.put("currentLng", currentLng);
-            schedule.put("currentWifi", currentWifi);
 
             AppBlocker appBlocker = new AppBlocker();
             Map<String, Object> toCheck = ScheduleParser.compileToCheck(schedule);

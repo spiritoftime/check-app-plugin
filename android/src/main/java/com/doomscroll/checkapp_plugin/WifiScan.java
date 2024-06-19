@@ -126,7 +126,6 @@ public class WifiScan {
                 assert wifiInfo != null;
                 String currentWifi = wifiInfo.getSSID();
                 handleNetworkCapabilitiesChanged(currentWifi);
-//                Log.d("Log wifi above api 31", currentWifi);
             }
         };
         connectivityManager.registerNetworkCallback(request, networkCallback);

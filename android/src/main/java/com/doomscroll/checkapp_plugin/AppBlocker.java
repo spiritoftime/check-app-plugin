@@ -111,7 +111,7 @@ public class AppBlocker {
             TypeToken<List<String>> typeToken = new TypeToken<List<String>>() {
             };
             List<String> wifis = safeCast(toCheck.get("wifis"), typeToken);
-            String currentWifi = (String) getCurrentConnectedWifi();
+            String currentWifi =  getCurrentConnectedWifi();
             for (String wifi : wifis) {
                 if (Objects.equals(wifi, currentWifi)) {
                     usingBlockedWifi = true;

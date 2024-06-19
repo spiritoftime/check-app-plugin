@@ -65,7 +65,7 @@ public class Utils {
             return new ArrayList<>();
         }
         // Remove surrounding square brackets and split by "],["
-        String[] pairs = input.substring(1, input.length() - 1).split("\\],\\[");
+        String[] pairs = input.substring(1, input.length() - 1).split("],\\[");
 
         List<List<String>> result = new ArrayList<>();
 
