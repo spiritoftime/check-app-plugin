@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AppOpsManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -158,7 +159,20 @@ public class Permissions {
 
     }
 
+    public static boolean checkAccessibilityPermission(Context context, Activity activity) {
+        String prefString = Settings.Secure.getString(context.getContentResolver(),
+                Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
+        ComponentName componentName = new ComponentName(context, UrlInterceptorService.class);
+        String flattenedName = componentName.flattenToString();
 
+        return prefString != null && prefString.contains(flattenedName);
+
+    }
+
+    public static void requestAccessibilityPermission(Context context, Activity activity) {
+        Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+        activity.startActivityForResult(intent, 2000);
+    }
 
 
 }

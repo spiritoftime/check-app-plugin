@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="accessibility_service_description">Used to detect url typed in browsers for website blocking purposes.</string>
+    <string name="accessibility_service_label">Service to detect url typed in browser.</string>
+
+
+</resources>
