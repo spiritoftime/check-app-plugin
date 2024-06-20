@@ -203,7 +203,7 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
     public static boolean isAppInForeground(String packageName, Context context) {
         UsageStatsManager usageStatsManager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
         long endTime = System.currentTimeMillis();
-        long beginTime = endTime - 80000; // delay in checking wifi/ location when user just turned on gps.
+        long beginTime = endTime - 80000; // delay in checking wifi/ location when user just turned on gps/ reboot.
         UsageEvents usageEvents = usageStatsManager.queryEvents(beginTime, endTime);
         UsageEvents.Event event = new UsageEvents.Event();
         long lastResumedTime = 0;

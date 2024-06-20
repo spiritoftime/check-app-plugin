@@ -8,17 +8,12 @@ import android.content.Intent;
 import android.util.Log;
 
 public class AutoStartReceiver extends BroadcastReceiver {
-    public AutoStartReceiver() {
-        Log.d("BootCompletedReceiver", "AutoStartReceiver constructor called");
-    }
+
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d("BootCompletedReceiver", "onReceive called with action: " + intent.getAction());
         if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
             Log.d("BootCompletedReceiver", "Device boot completed");
             initializeService(context);
-        } else {
-            Log.d("BootCompletedReceiver", "Received non-boot action");
         }
 
     }

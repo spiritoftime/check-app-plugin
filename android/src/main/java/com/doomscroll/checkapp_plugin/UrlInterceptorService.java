@@ -1,5 +1,6 @@
 package com.doomscroll.checkapp_plugin;
 
+
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.content.ActivityNotFoundException;
@@ -16,6 +17,7 @@ import androidx.annotation.RequiresApi;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import android.net.Uri;
 
@@ -52,6 +54,13 @@ public class UrlInterceptorService extends AccessibilityService {
         return url;
     }
 
+    private void redirectToHome() {
+        Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+        homeIntent.addCategory(Intent.CATEGORY_HOME);
+        homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(homeIntent);
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
     public void onAccessibilityEvent(@NonNull AccessibilityEvent event) {
@@ -67,6 +76,20 @@ public class UrlInterceptorService extends AccessibilityService {
 
         }
         String packageName = event.getPackageName().toString();
+        for (PartialBlockingConfig partialBlockingConfig : getSupportedPartialBlockings()) {
+            if (partialBlockingConfig.packageName.equals(packageName)) {
+                for (String blockedId : partialBlockingConfig.ids) {
+                    if (Objects.equals(id, blockedId)) {
+
+
+                        redirectToHome();
+                        break;
+
+                    }
+                }
+            }
+        }
+
         SupportedBrowserConfig browserConfig = null;
         for (SupportedBrowserConfig supportedConfig : getSupportedBrowsers()) {
             if (supportedConfig.packageName.equals(packageName)) {
@@ -162,6 +185,8 @@ public class UrlInterceptorService extends AccessibilityService {
         List<String> idsToBlock = new ArrayList<>();
         idsToBlock.add("youtube:id/reel_player_page_container");
         idsToBlock.add("com.google.android.youtube:id/watch_player");
+        idsToBlock.add("com.google.android.youtube:id/reel_recycler");
+
 
         partialBlockingConfigList.add(new PartialBlockingConfig("com.google.android.youtube", idsToBlock));
         return partialBlockingConfigList;

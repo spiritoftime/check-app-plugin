@@ -164,6 +164,7 @@ class HomeScreen extends StatelessWidget {
                       ),
                       const Gap(12),
                       GreyContainer(
+                        width: double.infinity,
                         padding: const EdgeInsets.symmetric(
                             horizontal: 16.0, vertical: 16.0),
                         child: BlocBuilder<SchedulesBloc, ScheduleState>(
