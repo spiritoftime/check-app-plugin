@@ -109,6 +109,7 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
         channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), FLUTTER_CHANNEL_NAME);
         channel.setMethodCallHandler(this);
         initializeService(context);
+
     }
 
     @Override
