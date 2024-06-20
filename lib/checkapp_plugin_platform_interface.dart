@@ -103,4 +103,14 @@ abstract class CheckappPluginPlatform extends PlatformInterface {
     throw UnimplementedError(
         'reQueryActiveSchedules() has not been implemented.');
   }
+
+      Future<void> requestAccessibilityPermission() {
+    throw UnimplementedError(
+        'requestAccessibilityPermission() has not been implemented.');
+  }
+
+        Future<bool> checkAccessibilityPermission() {
+    throw UnimplementedError(
+        'checkAccessibilityPermission() has not been implemented.');
+  }
 }

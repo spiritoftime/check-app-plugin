@@ -159,7 +159,7 @@ public class Permissions {
 
     }
 
-    public static boolean checkAccessibilityPermission(Context context, Activity activity) {
+    public static boolean checkAccessibilityPermission(Context context) {
         String prefString = Settings.Secure.getString(context.getContentResolver(),
                 Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
         ComponentName componentName = new ComponentName(context, UrlInterceptorService.class);
@@ -170,8 +170,10 @@ public class Permissions {
     }
 
     public static void requestAccessibilityPermission(Context context, Activity activity) {
-        Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-        activity.startActivityForResult(intent, 2000);
+        if (!checkAccessibilityPermission(context)) {
+            Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+            activity.startActivityForResult(intent, 2000);
+        }
     }
 
 

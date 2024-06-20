@@ -6,6 +6,7 @@ import static com.doomscroll.checkapp_plugin.AppService.createIntentForService;
 import static com.doomscroll.checkapp_plugin.AppService.initializeService;
 import static com.doomscroll.checkapp_plugin.AppService.setSchedulesAfterReQuery;
 
+import static com.doomscroll.checkapp_plugin.Permissions.checkAccessibilityPermission;
 import static com.doomscroll.checkapp_plugin.Permissions.checkGPSEnabled;
 import static com.doomscroll.checkapp_plugin.Permissions.checkLocationPermission;
 import static com.doomscroll.checkapp_plugin.Permissions.checkNotificationPermission;
@@ -13,6 +14,7 @@ import static com.doomscroll.checkapp_plugin.Permissions.checkOverlayPermission;
 import static com.doomscroll.checkapp_plugin.Permissions.checkUsagePermission;
 
 import static com.doomscroll.checkapp_plugin.Permissions.isBackgroundStartActivityPermissionGranted;
+import static com.doomscroll.checkapp_plugin.Permissions.requestAccessibilityPermission;
 import static com.doomscroll.checkapp_plugin.Permissions.requestBackgroundPermissionForXiaomi;
 import static com.doomscroll.checkapp_plugin.Permissions.requestEnableGPS;
 import static com.doomscroll.checkapp_plugin.Permissions.requestLocationPermission;
@@ -77,6 +79,8 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
     private static final String CHECK_USAGE_PERMISSION = "CHECK_USAGE_PERMISSION";
     private static final String CHECK_OVERLAY_PERMISSION = "CHECK_OVERLAY_PERMISSION";
 
+    private static final String CHECK_ACCESSIBILITY_PERMISSION = "CHECK_ACCESSIBILITY_PERMISSION";
+    private static final String REQUEST_ACCESSIBILITY_PERMISSION = "REQUEST_ACCESSIBILITY_PERMISSION";
 
     private static final String GET_NEARBY_WIFI = "GET_NEARBY_WIFI";
     private static final String CHECK_GPS_ENABLED = "CHECK_GPS_ENABLED";
@@ -118,6 +122,12 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
             case GET_LAUNCHABLE_APPLICATIONS:
                 List<Map<String, Object>> appList = getInstalledApplications();
                 result.success(appList);
+                break;
+            case CHECK_ACCESSIBILITY_PERMISSION:
+                result.success(checkAccessibilityPermission(context));
+                break;
+            case REQUEST_ACCESSIBILITY_PERMISSION:
+                requestAccessibilityPermission(context,activity);
                 break;
             case CHANNEL_DETECT_METHOD:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

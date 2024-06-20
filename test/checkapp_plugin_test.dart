@@ -107,6 +107,18 @@ class MockCheckappPluginPlatform
     // TODO: implement reQueryActiveSchedules
     throw UnimplementedError();
   }
+  
+  @override
+  Future<bool> checkAccessibilityPermission() {
+    // TODO: implement checkAccessibilityPermission
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> requestAccessibilityPermission() {
+    // TODO: implement requestAccessibilityPermission
+    throw UnimplementedError();
+  }
 }
 
 void main() {

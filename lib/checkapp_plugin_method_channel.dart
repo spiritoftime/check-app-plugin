@@ -61,6 +61,18 @@ class MethodChannelCheckappPlugin extends CheckappPluginPlatform {
   }
 
   @override
+  Future<bool> checkAccessibilityPermission() async {
+    final isPermissionEnabled =
+        await methodChannel.invokeMethod<bool>(CHECK_ACCESSIBILITY_PERMISSION);
+    return isPermissionEnabled ?? false;
+  }
+
+  @override
+  Future<void> requestAccessibilityPermission() async {
+    await methodChannel.invokeMethod<void>(REQUEST_ACCESSIBILITY_PERMISSION);
+  }
+
+  @override
   Future<bool> checkBackgroundPermission() async {
     final isPermissionEnabled =
         await methodChannel.invokeMethod<bool>(CHECK_BACKGROUND_PERMISSION);

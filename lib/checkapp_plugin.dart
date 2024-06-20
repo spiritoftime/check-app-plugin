@@ -53,6 +53,14 @@ class CheckappPlugin {
     return CheckappPluginPlatform.instance.checkLocationPermission();
   }
 
+    Future<void> requestAccessibilityPermission() {
+    return CheckappPluginPlatform.instance.requestAccessibilityPermission();
+  }
+
+  Future<bool> checkAccessibilityPermission() {
+    return CheckappPluginPlatform.instance.checkAccessibilityPermission();
+  }
+
   Future<List<Map<String, dynamic>>> getNearbyWifi() {
     return CheckappPluginPlatform.instance.getNearbyWifi();
   }
