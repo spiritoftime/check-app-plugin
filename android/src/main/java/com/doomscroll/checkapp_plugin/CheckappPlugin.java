@@ -136,7 +136,7 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
                 requestUsagePermission(context, activity);
                 requestBackgroundPermissionForXiaomi(context, activity);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-                    boolean shouldShowPopUp = isAppInForeground("com.facebook.katana");
+                    boolean shouldShowPopUp = isAppInForeground("com.facebook.katana",context);
                     if (shouldShowPopUp) {
                         createIntentForService(context, REDIRECT_HOME);
                     }
@@ -200,10 +200,10 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
 
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
-    public static boolean isAppInForeground(String packageName) {
-        UsageStatsManager usageStatsManager = (UsageStatsManager) getCheckAppContext().getSystemService(Context.USAGE_STATS_SERVICE);
+    public static boolean isAppInForeground(String packageName, Context context) {
+        UsageStatsManager usageStatsManager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
         long endTime = System.currentTimeMillis();
-        long beginTime = endTime - 60000; // delay in checking wifi/ location when user just turned on gps.
+        long beginTime = endTime - 80000; // delay in checking wifi/ location when user just turned on gps.
         UsageEvents usageEvents = usageStatsManager.queryEvents(beginTime, endTime);
         UsageEvents.Event event = new UsageEvents.Event();
         long lastResumedTime = 0;

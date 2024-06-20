@@ -51,7 +51,6 @@ public class AppService extends Service {
 
     final static String START = "START";
     final static String STOP = "STOP";
-    private static String connectedWifi;
 
     static Timer belowAPI31WifiTimer;
     static boolean belowAPI31WifiTimerCreated;
@@ -120,13 +119,13 @@ public class AppService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-//        initializeWifiScan(this);
     }
 
     public static void initializeService(Context context) {
         String userId = "user";
         //                    ----------------------start foreground service --------------------
-        if (isServiceInitialized) { // need to cancel previous taskTimers when user edited the blocker to give grace period. eg: current time - 7pm. user set schedule to block from 7pm, blocked. user immediately changed to 715pm, will continue to block because previous blockTimer with 7pm timing not cleared and continue blocking.
+        if (isServiceInitialized) { // need to cancel previous taskTimers when user edited the blocker to give grace period. eg: current time - 7pm. user set schedule to block from 7pm, blocked. user immediately changed schedule to 715pm, will continue to block because previous blockTimer with 7pm timing not cleared and continue blocking.
+
             if (blockAppTimerCreated) {
                 blockAppTimer.cancel();
                 blockAppTimerCreated = false;

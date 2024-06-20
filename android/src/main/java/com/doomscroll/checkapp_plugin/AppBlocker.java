@@ -1,5 +1,6 @@
 package com.doomscroll.checkapp_plugin;
 
+import android.content.Context;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
@@ -27,7 +28,7 @@ public class AppBlocker {
     private boolean blockedTiming = false;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
-    public boolean shouldBlockApp(Map<String, Object> toCheck) {
+    public boolean shouldBlockApp(Map<String, Object> toCheck, Context context) {
         TypeToken<Boolean> booleanTypeToken = new TypeToken<Boolean>() {
         };
         boolean shouldCheckApp = safeCast(toCheck.get("checkApp"), booleanTypeToken);
@@ -38,7 +39,7 @@ public class AppBlocker {
         boolean shouldCheckDay = safeCast(toCheck.get("checkDay"), booleanTypeToken);
         boolean shouldCheckTiming = safeCast(toCheck.get("checkTiming"), booleanTypeToken);
 
-        checkAppUsage(toCheck, shouldCheckApp);
+        checkAppUsage(toCheck, shouldCheckApp, context);
         checkBlockedLocation(toCheck, shouldCheckLocation);
         checkBlockedWifi(toCheck, shouldCheckWifi);
         checkDay(toCheck, shouldCheckDay);
@@ -52,14 +53,14 @@ public class AppBlocker {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
-    private void checkAppUsage(Map<String, Object> toCheck, boolean shouldCheckApp) {
+    private void checkAppUsage(Map<String, Object> toCheck, boolean shouldCheckApp, Context context) {
         if (shouldCheckApp) {
             TypeToken<List<Map<String, Object>>> typeToken = new TypeToken<List<Map<String, Object>>>() {
             };
             List<Map<String, Object>> apps = safeCast(toCheck.get("apps"), typeToken);
             for (Map<String, Object> app : apps) {
                 String packageName = (String) app.get("packageName");
-                blockedAppInUsage = isAppInForeground(packageName);
+                blockedAppInUsage = isAppInForeground(packageName,context);
                 if (blockedAppInUsage) {
                     break;
                 }

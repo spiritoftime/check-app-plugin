@@ -74,7 +74,7 @@ public class BlockTask extends TimerTask {
 
             AppBlocker appBlocker = new AppBlocker();
             Map<String, Object> toCheck = ScheduleParser.compileToCheck(schedule);
-            boolean shouldBlock = appBlocker.shouldBlockApp(toCheck);
+            boolean shouldBlock = appBlocker.shouldBlockApp(toCheck,context);
 
             if (shouldBlock) {
                 createIntentForService(context, REDIRECT_HOME);
