@@ -4,7 +4,6 @@ import static com.doomscroll.checkapp_plugin.AppService.REDIRECT_HOME;
 
 import static com.doomscroll.checkapp_plugin.AppService.createIntentForService;
 import static com.doomscroll.checkapp_plugin.AppService.initializeService;
-import static com.doomscroll.checkapp_plugin.AppService.setSchedulesAfterReQuery;
 
 import static com.doomscroll.checkapp_plugin.Permissions.checkAccessibilityPermission;
 import static com.doomscroll.checkapp_plugin.Permissions.checkGPSEnabled;
@@ -21,9 +20,9 @@ import static com.doomscroll.checkapp_plugin.Permissions.requestLocationPermissi
 import static com.doomscroll.checkapp_plugin.Permissions.requestNotificationPermission;
 import static com.doomscroll.checkapp_plugin.Permissions.requestOverlayPermission;
 import static com.doomscroll.checkapp_plugin.Permissions.requestUsagePermission;
-import static com.doomscroll.checkapp_plugin.ScheduleParser.compileToCheck;
-import static com.doomscroll.checkapp_plugin.WifiScan.getConnectedWiFiSSID;
+
 import static com.doomscroll.checkapp_plugin.WifiScan.getNearbyWifi;
+import static com.doomscroll.checkapp_plugin.appBlocker.AppBlocker.isAppInForeground;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -200,30 +199,7 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
-    public static boolean isAppInForeground(String packageName, Context context) {
-        UsageStatsManager usageStatsManager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
-        long endTime = System.currentTimeMillis();
-        long beginTime = endTime - 80000; // delay in checking wifi/ location when user just turned on gps/ reboot.
-        UsageEvents usageEvents = usageStatsManager.queryEvents(beginTime, endTime);
-        UsageEvents.Event event = new UsageEvents.Event();
-        long lastResumedTime = 0;
-        long lastPausedTime = 0;
 
-        while (usageEvents.hasNextEvent()) {
-            usageEvents.getNextEvent(event);
-            if (packageName.equals(event.getPackageName())) {
-                if (event.getEventType() == UsageEvents.Event.ACTIVITY_RESUMED) {
-                    lastResumedTime = event.getTimeStamp();
-                } else if (event.getEventType() == UsageEvents.Event.ACTIVITY_PAUSED) {
-                    lastPausedTime = event.getTimeStamp();
-                }
-            }
-        }
-
-
-        return lastResumedTime > lastPausedTime && (endTime - lastResumedTime) < 80000;
-    }
 
 
     @Override
