@@ -2,7 +2,7 @@ package com.doomscroll.checkapp_plugin;
 
 
 import static com.doomscroll.checkapp_plugin.AppService.NOTIFICATION_CHANNEL;
-import static com.doomscroll.checkapp_plugin.BlockTask.setConnectedWifi;
+import static com.doomscroll.checkapp_plugin.appBlocker.BlockTask.setConnectedWifi;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -17,7 +17,6 @@ import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
-import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 

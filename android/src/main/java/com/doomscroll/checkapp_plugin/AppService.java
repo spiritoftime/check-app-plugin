@@ -1,17 +1,15 @@
 package com.doomscroll.checkapp_plugin;
 
-import static com.doomscroll.checkapp_plugin.BlockTask.getRequestConnectedWifi;
-import static com.doomscroll.checkapp_plugin.BlockTask.getRequestCurrentLocation;
+import static com.doomscroll.checkapp_plugin.appBlocker.BlockTask.getRequestConnectedWifi;
+import static com.doomscroll.checkapp_plugin.appBlocker.BlockTask.getRequestCurrentLocation;
 import static com.doomscroll.checkapp_plugin.CheckappPlugin.getCheckAppContext;
 import static com.doomscroll.checkapp_plugin.LocationChecker.getFusedLocationClient;
 import static com.doomscroll.checkapp_plugin.LocationChecker.startLocationUpdates;
 import static com.doomscroll.checkapp_plugin.LocationChecker.stopLocationUpdates;
-import static com.doomscroll.checkapp_plugin.ScheduleParser.compileToCheck;
 //import static com.doomscroll.checkapp_plugin.WifiScan.getConnectedWiFiSSID;
 //import static com.doomscroll.checkapp_plugin.WifiScan.getCurrentWifiBelowApi31;
 import static com.doomscroll.checkapp_plugin.Utils.goToHomeScreen;
 import static com.doomscroll.checkapp_plugin.WifiScan.getConnectedWiFiSSID;
-import static com.doomscroll.checkapp_plugin.WifiScan.initializeWifiScan;
 import static com.doomscroll.checkapp_plugin.WifiScan.stopWifiTaskTimer;
 import static com.doomscroll.checkapp_plugin.WifiScan.unregisterWifiScanReceiver;
 //import static com.doomscroll.checkapp_plugin.WifiScan.stopWifiTaskTimer;
@@ -36,14 +34,15 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 
-import java.util.HashMap;
+import com.doomscroll.checkapp_plugin.appBlocker.BlockTask;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Timer;
 
 public class AppService extends Service {
-    final static String REDIRECT_HOME = "REDIRECT_HOME";
+    final public static String REDIRECT_HOME = "REDIRECT_HOME";
     final static String NOTIFICATION_CHANNEL = "NOTIFICATION_CHANNEL";
 
     static List<Map<String, Object>> schedules;

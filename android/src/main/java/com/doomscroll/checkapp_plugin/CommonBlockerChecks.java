@@ -1,75 +1,45 @@
 package com.doomscroll.checkapp_plugin;
 
-import android.content.Context;
-import android.os.Build;
+import static com.doomscroll.checkapp_plugin.Utils.getCurrentDayTime;
+import static com.doomscroll.checkapp_plugin.Utils.isCurrentTimeWithinRange;
+import static com.doomscroll.checkapp_plugin.Utils.roundToDecimalPlaces;
+import static com.doomscroll.checkapp_plugin.Utils.safeCast;
+import static com.doomscroll.checkapp_plugin.appBlocker.BlockTask.getCurrentConnectedWifi;
+import static com.doomscroll.checkapp_plugin.appBlocker.BlockTask.getCurrentLat;
+import static com.doomscroll.checkapp_plugin.appBlocker.BlockTask.getCurrentLng;
 
-import androidx.annotation.RequiresApi;
+
+import com.google.gson.reflect.TypeToken;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.doomscroll.checkapp_plugin.BlockTask.getCurrentConnectedWifi;
-import static com.doomscroll.checkapp_plugin.BlockTask.getCurrentLat;
-import static com.doomscroll.checkapp_plugin.BlockTask.getCurrentLng;
-import static com.doomscroll.checkapp_plugin.CheckappPlugin.isAppInForeground;
-import static com.doomscroll.checkapp_plugin.Utils.getCurrentDayTime;
-import static com.doomscroll.checkapp_plugin.Utils.isCurrentTimeWithinRange;
-import static com.doomscroll.checkapp_plugin.Utils.roundToDecimalPlaces;
-import static com.doomscroll.checkapp_plugin.Utils.safeCast;
+public abstract class CommonBlockerChecks {
+    protected boolean atBlockedLocation = false;
+    protected boolean usingBlockedWifi = false;
+    protected boolean blockedDay = false;
+    protected boolean blockedTiming = false;
+    protected boolean commonBlockers = false;
+    protected Map<String, Object> toCheck;
 
-import com.google.gson.reflect.TypeToken;
+public CommonBlockerChecks(Map<String, Object> toCheck){
+    this.toCheck = toCheck;
 
-public class AppBlocker {
-    private boolean blockedAppInUsage = false;
-    private boolean atBlockedLocation = false;
-    private boolean usingBlockedWifi = false;
-    private boolean blockedDay = false;
-    private boolean blockedTiming = false;
+}
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
-    public boolean shouldBlockApp(Map<String, Object> toCheck, Context context) {
+    protected void checkCommonBlockers() {
+        checkBlockedLocation();
+        checkTiming();
+        checkBlockedWifi();
+        checkDay();
+        commonBlockers = usingBlockedWifi && atBlockedLocation && blockedDay && blockedTiming;
+    }
+
+    protected void checkBlockedLocation() {
         TypeToken<Boolean> booleanTypeToken = new TypeToken<Boolean>() {
         };
-        boolean shouldCheckApp = safeCast(toCheck.get("checkApp"), booleanTypeToken);
         boolean shouldCheckLocation = safeCast(toCheck.get("checkLocation"), booleanTypeToken);
-
-        boolean shouldCheckWifi = safeCast(toCheck.get("checkWifi"), booleanTypeToken);
-
-        boolean shouldCheckDay = safeCast(toCheck.get("checkDay"), booleanTypeToken);
-        boolean shouldCheckTiming = safeCast(toCheck.get("checkTiming"), booleanTypeToken);
-
-        checkAppUsage(toCheck, shouldCheckApp, context);
-        checkBlockedLocation(toCheck, shouldCheckLocation);
-        checkBlockedWifi(toCheck, shouldCheckWifi);
-        checkDay(toCheck, shouldCheckDay);
-        checkTiming(toCheck, shouldCheckTiming);
-
-        return shouldBlock();
-    }
-
-    private boolean shouldBlock() {
-        return usingBlockedWifi && atBlockedLocation && blockedAppInUsage && blockedDay && blockedTiming;
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
-    private void checkAppUsage(Map<String, Object> toCheck, boolean shouldCheckApp, Context context) {
-        if (shouldCheckApp) {
-            TypeToken<List<Map<String, Object>>> typeToken = new TypeToken<List<Map<String, Object>>>() {
-            };
-            List<Map<String, Object>> apps = safeCast(toCheck.get("apps"), typeToken);
-            for (Map<String, Object> app : apps) {
-                String packageName = (String) app.get("packageName");
-                blockedAppInUsage = isAppInForeground(packageName, context);
-                if (blockedAppInUsage) {
-                    break;
-                }
-            }
-        }
-
-    }
-
-    private void checkBlockedLocation(Map<String, Object> toCheck, boolean shouldCheckLocation) {
         if (shouldCheckLocation) {
             TypeToken<List<Map<String, Object>>> typeToken = new TypeToken<List<Map<String, Object>>>() {
             };
@@ -107,7 +77,11 @@ public class AppBlocker {
 
     }
 
-    private void checkBlockedWifi(Map<String, Object> toCheck, boolean shouldCheckWifi) {
+    protected void checkBlockedWifi() {
+        TypeToken<Boolean> booleanTypeToken = new TypeToken<Boolean>() {
+        };
+
+        boolean shouldCheckWifi = safeCast(toCheck.get("checkWifi"), booleanTypeToken);
         if (shouldCheckWifi) {
             TypeToken<List<String>> typeToken = new TypeToken<List<String>>() {
             };
@@ -128,7 +102,10 @@ public class AppBlocker {
 
     }
 
-    private void checkDay(Map<String, Object> toCheck, boolean shouldCheckDay) {
+    protected void checkDay() {
+        TypeToken<Boolean> booleanTypeToken = new TypeToken<Boolean>() {
+        };
+        boolean shouldCheckDay = safeCast(toCheck.get("checkDay"), booleanTypeToken);
         List<String> currentDayTime = getCurrentDayTime();
 
         if (shouldCheckDay) {
@@ -152,9 +129,13 @@ public class AppBlocker {
 
     }
 
-    private void checkTiming(Map<String, Object> toCheck, boolean shouldCheckTiming) {
+    protected void checkTiming() {
         List<String> currentDayTime = getCurrentDayTime();
+        TypeToken<Boolean> booleanTypeToken = new TypeToken<Boolean>() {
+        };
 
+
+        boolean shouldCheckTiming = safeCast(toCheck.get("checkTiming"), booleanTypeToken);
         if (shouldCheckTiming) {
             TypeToken<List<Map<String, Object>>> typeToken = new TypeToken<List<Map<String, Object>>>() {
             };

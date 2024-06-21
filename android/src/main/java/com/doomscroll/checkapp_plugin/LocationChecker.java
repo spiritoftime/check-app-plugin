@@ -1,8 +1,8 @@
 package com.doomscroll.checkapp_plugin;
 
 
-import static com.doomscroll.checkapp_plugin.BlockTask.setCurrentLat;
-import static com.doomscroll.checkapp_plugin.BlockTask.setCurrentLng;
+import static com.doomscroll.checkapp_plugin.appBlocker.BlockTask.setCurrentLat;
+import static com.doomscroll.checkapp_plugin.appBlocker.BlockTask.setCurrentLng;
 
 import android.app.PendingIntent;
 import android.content.Context;

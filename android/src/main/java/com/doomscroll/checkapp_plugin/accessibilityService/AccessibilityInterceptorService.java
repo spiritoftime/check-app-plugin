@@ -1,6 +1,8 @@
 package com.doomscroll.checkapp_plugin.accessibilityService;
 
 
+import static com.doomscroll.checkapp_plugin.appBlocker.BlockTask.getShouldCheckKeywords;
+import static com.doomscroll.checkapp_plugin.appBlocker.BlockTask.getShouldCheckWebsites;
 import static com.doomscroll.checkapp_plugin.accessibilityService.browserInterceptor.BrowserInterceptor.analyzeCapturedUrl;
 import static com.doomscroll.checkapp_plugin.accessibilityService.browserInterceptor.BrowserInterceptor.captureUrl;
 import static com.doomscroll.checkapp_plugin.accessibilityService.browserInterceptor.BrowserInterceptor.getSupportedBrowsers;
@@ -20,7 +22,6 @@ import androidx.annotation.RequiresApi;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 
 import com.doomscroll.checkapp_plugin.accessibilityService.browserInterceptor.SupportedBrowserConfig;
@@ -49,8 +50,6 @@ public class AccessibilityInterceptorService extends AccessibilityService {
     }
 
 
-
-
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
     public void onAccessibilityEvent(@NonNull AccessibilityEvent event) {
@@ -75,7 +74,7 @@ public class AccessibilityInterceptorService extends AccessibilityService {
         if (browserConfig == null) {
             return;
         }
-
+        if (!getShouldCheckKeywords() && !getShouldCheckWebsites()) return;
         String capturedUrl = captureUrl(parentNodeInfo, browserConfig);
 
         //we can't find a url. Browser either was updated or opened page without url text field

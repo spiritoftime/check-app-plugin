@@ -1,9 +1,9 @@
 package com.doomscroll.checkapp_plugin;
 
-import static com.doomscroll.checkapp_plugin.BlockTask.setRequestConnectedWifi;
-import static com.doomscroll.checkapp_plugin.BlockTask.setRequestCurrentLocation;
-import static com.doomscroll.checkapp_plugin.BlockTask.setShouldCheckKeywords;
-import static com.doomscroll.checkapp_plugin.BlockTask.setShouldCheckWebsites;
+import static com.doomscroll.checkapp_plugin.appBlocker.BlockTask.setRequestConnectedWifi;
+import static com.doomscroll.checkapp_plugin.appBlocker.BlockTask.setRequestCurrentLocation;
+import static com.doomscroll.checkapp_plugin.appBlocker.BlockTask.setShouldCheckKeywords;
+import static com.doomscroll.checkapp_plugin.appBlocker.BlockTask.setShouldCheckWebsites;
 import static com.doomscroll.checkapp_plugin.Utils.safeCast;
 
 import com.google.gson.reflect.TypeToken;
