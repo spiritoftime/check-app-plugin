@@ -9,6 +9,7 @@ import static com.doomscroll.checkapp_plugin.LocationChecker.stopLocationUpdates
 import static com.doomscroll.checkapp_plugin.ScheduleParser.compileToCheck;
 //import static com.doomscroll.checkapp_plugin.WifiScan.getConnectedWiFiSSID;
 //import static com.doomscroll.checkapp_plugin.WifiScan.getCurrentWifiBelowApi31;
+import static com.doomscroll.checkapp_plugin.Utils.goToHomeScreen;
 import static com.doomscroll.checkapp_plugin.WifiScan.getConnectedWiFiSSID;
 import static com.doomscroll.checkapp_plugin.WifiScan.initializeWifiScan;
 import static com.doomscroll.checkapp_plugin.WifiScan.stopWifiTaskTimer;
@@ -69,7 +70,7 @@ public class AppService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         switch (Objects.requireNonNull(intent.getAction())) {
             case REDIRECT_HOME:
-                goToHomeScreen();
+                goToHomeScreen(this);
                 break;
             case START:
                 start();
@@ -93,15 +94,6 @@ public class AppService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
-    private void goToHomeScreen() {
-        Intent startMain = new Intent(Intent.ACTION_MAIN);
-        startMain.addCategory(Intent.CATEGORY_HOME);
-        startMain.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startMain.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-        this.startActivity(startMain);
-
-    }
 
     public static void createIntentForService(Context context, String intentAction) {
         Intent serviceIntent = new Intent(context, AppService.class);
@@ -112,8 +104,6 @@ public class AppService extends Service {
     private void start() {
         Notification notification = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL).setContentText("This service runs in the foreground to check your location/wifi/app usage according to your enabled app blocking schedule").build();
         startForeground(1, notification);
-
-
     }
 
     @Override
@@ -124,21 +114,15 @@ public class AppService extends Service {
     public static void initializeService(Context context) {
         String userId = "user";
         //                    ----------------------start foreground service --------------------
-        if (isServiceInitialized) { // need to cancel previous taskTimers when user edited the blocker to give grace period. eg: current time - 7pm. user set schedule to block from 7pm, blocked. user immediately changed schedule to 715pm, will continue to block because previous blockTimer with 7pm timing not cleared and continue blocking.
-
-            if (blockAppTimerCreated) {
-                blockAppTimer.cancel();
-                blockAppTimerCreated = false;
-            }
-            if (belowAPI31WifiTimerCreated) {
-                belowAPI31WifiTimer.cancel();
-                belowAPI31WifiTimerCreated = false;
-            }
-            stopWifiTaskTimer();
+        // need to cancel previous taskTimers when user edited the blocker to give grace period. eg: current time - 7pm. user set schedule to block from 7pm, blocked. user immediately changed schedule to 715pm, will continue to block because previous blockTimer with 7pm timing not cleared and continue blocking.
+        if (isServiceInitialized) {
+            clearAllTimers();
         }
         isServiceInitialized = true;
         Intent serviceIntent = new Intent(context, AppService.class);
         serviceIntent.setAction(START);
+        getFusedLocationClient(context);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL, "Running Notification", NotificationManager.IMPORTANCE_NONE);
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -146,7 +130,6 @@ public class AppService extends Service {
 
 
             context.startForegroundService(serviceIntent);
-            getFusedLocationClient(context);
 
 
         } else {
@@ -214,6 +197,12 @@ public class AppService extends Service {
     public void onDestroy() { // used when user deactivates all active scheules
         super.onDestroy();
         unregisterWifiScanReceiver(getCheckAppContext());
+
+        isServiceInitialized = false;
+
+    }
+
+    private static void clearAllTimers() {
         if (blockAppTimerCreated) {
             blockAppTimer.cancel();
             blockAppTimerCreated = false;
@@ -223,21 +212,12 @@ public class AppService extends Service {
             belowAPI31WifiTimerCreated = false;
         }
         stopWifiTaskTimer();
-        isServiceInitialized = false;
-
     }
-
-
-
-
 
     public static void setSchedulesAfterReQuery(List<Map<String, Object>> newSchedules) {
         schedules = newSchedules;
 
     }
-
-
-
 
 
 }

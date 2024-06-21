@@ -141,7 +141,6 @@ public class WifiScan {
         wifiInfo = wifiManager.getConnectionInfo();
         if (wifiInfo.getSupplicantState() == SupplicantState.COMPLETED) {
             String ssid = wifiInfo.getSSID();
-            Log.d("check wifi", ssid);
             handleNetworkCapabilitiesChanged(ssid);
         }
     }

@@ -20,6 +20,8 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import com.doomscroll.checkapp_plugin.accessibilityService.AccessibilityInterceptorService;
+
 import java.lang.reflect.Method;
 
 import java.util.Locale;
@@ -162,7 +164,7 @@ public class Permissions {
     public static boolean checkAccessibilityPermission(Context context) {
         String prefString = Settings.Secure.getString(context.getContentResolver(),
                 Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
-        ComponentName componentName = new ComponentName(context, UrlInterceptorService.class);
+        ComponentName componentName = new ComponentName(context, AccessibilityInterceptorService.class);
         String flattenedName = componentName.flattenToString();
 
         return prefString != null && prefString.contains(flattenedName);

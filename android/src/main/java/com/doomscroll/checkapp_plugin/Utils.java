@@ -1,6 +1,8 @@
 package com.doomscroll.checkapp_plugin;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
@@ -141,7 +143,15 @@ public class Utils {
         }
         throw new IllegalArgumentException("Type Token type not same as object");
     }
+    public static void goToHomeScreen(Context context) {
+        Intent startMain = new Intent(Intent.ACTION_MAIN);
+        startMain.addCategory(Intent.CATEGORY_HOME);
+        startMain.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startMain.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
+        context.startActivity(startMain);
+
+    }
 
 
 }
