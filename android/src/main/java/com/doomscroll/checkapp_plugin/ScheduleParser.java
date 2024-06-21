@@ -2,6 +2,8 @@ package com.doomscroll.checkapp_plugin;
 
 import static com.doomscroll.checkapp_plugin.BlockTask.setRequestConnectedWifi;
 import static com.doomscroll.checkapp_plugin.BlockTask.setRequestCurrentLocation;
+import static com.doomscroll.checkapp_plugin.BlockTask.setShouldCheckKeywords;
+import static com.doomscroll.checkapp_plugin.BlockTask.setShouldCheckWebsites;
 import static com.doomscroll.checkapp_plugin.Utils.safeCast;
 
 import com.google.gson.reflect.TypeToken;
@@ -30,6 +32,8 @@ public class ScheduleParser {
     public static Map<String, Object> compileToCheck(Map<String, Object> schedule) {
         List<String> wifisToCheck = getCheckWifi(schedule);
         List<String> daysToCheck = getCheckDays(schedule);
+        List<String> keywordsToCheck = getCheckKeywords(schedule);
+        List<String> websitesToCheck = getCheckWebsites(schedule);
         List<Map<String, Object>> appsToCheck = getCheckApps(schedule);
         List<Map<String, Object>> timingsToCheck = getCheckTiming(schedule);
         List<Map<String, Object>> locationsToCheck = getCheckLocation(schedule);
@@ -45,6 +49,12 @@ public class ScheduleParser {
         toCheck.put("timings", timingsToCheck);
         toCheck.put("checkDay", !daysToCheck.isEmpty());
         toCheck.put("days", daysToCheck);
+        toCheck.put("checkWebsite", !websitesToCheck.isEmpty());
+        toCheck.put("websites", websitesToCheck);
+
+        toCheck.put("checkKeyword", !keywordsToCheck.isEmpty());
+        toCheck.put("keywords", keywordsToCheck);
+
 
         return toCheck;
     }
@@ -129,5 +139,31 @@ public class ScheduleParser {
             daysToCheck.addAll(days);
         }
         return daysToCheck;
+    }
+    private static List<String> getCheckWebsites(Map<String, Object> schedule) {
+
+        List<String> websitesToCheck = new ArrayList<>();
+        TypeToken<List<String>> typeToken = new TypeToken<List<String>>() {
+        };
+
+        List<String> websites = safeCast(schedule.get("websites"), typeToken);
+        if (!websites.isEmpty()) {
+            setShouldCheckWebsites(true);
+            websitesToCheck.addAll(websites);
+        }
+        return websitesToCheck;
+    }
+    private static List<String> getCheckKeywords(Map<String, Object> schedule) {
+
+        List<String> keywordsToCheck = new ArrayList<>();
+        TypeToken<List<String>> typeToken = new TypeToken<List<String>>() {
+        };
+
+        List<String> keywords = safeCast(schedule.get("keywords"), typeToken);
+        if (!keywords.isEmpty()) {
+            setShouldCheckKeywords(true);
+            keywordsToCheck.addAll(keywords);
+        }
+        return keywordsToCheck;
     }
 }

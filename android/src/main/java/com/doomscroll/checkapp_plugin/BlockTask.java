@@ -19,9 +19,21 @@ public class BlockTask extends TimerTask {
     private final Context context;
     private static boolean requestConnectedWifi;
     private static boolean requestCurrentLocation;
+    private static boolean shouldCheckWebsites;
+    private static boolean shouldCheckKeywords;
+
     private static double currentLat;
     private static double currentLng;
     private static String connectedWifi;
+
+    public static void setShouldCheckKeywords(boolean shouldCheckKeywords) {
+        BlockTask.shouldCheckKeywords = shouldCheckKeywords;
+    }
+
+    public static void setShouldCheckWebsites(boolean shouldCheckWebsites) {
+        BlockTask.shouldCheckWebsites = shouldCheckWebsites;
+    }
+
     public static String getCurrentConnectedWifi() {
         return connectedWifi;
     }

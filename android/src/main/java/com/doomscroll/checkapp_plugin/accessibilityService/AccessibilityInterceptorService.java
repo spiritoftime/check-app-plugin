@@ -2,6 +2,7 @@ package com.doomscroll.checkapp_plugin.accessibilityService;
 
 
 import static com.doomscroll.checkapp_plugin.accessibilityService.browserInterceptor.BrowserInterceptor.analyzeCapturedUrl;
+import static com.doomscroll.checkapp_plugin.accessibilityService.browserInterceptor.BrowserInterceptor.captureUrl;
 import static com.doomscroll.checkapp_plugin.accessibilityService.browserInterceptor.BrowserInterceptor.getSupportedBrowsers;
 import static com.doomscroll.checkapp_plugin.accessibilityService.partialInterceptor.PartialAppInterceptor.checkPartiallyBlocked;
 import static com.doomscroll.checkapp_plugin.accessibilityService.partialInterceptor.PartialAppInterceptor.getSupportedPartialBlockings;
@@ -47,20 +48,7 @@ public class AccessibilityInterceptorService extends AccessibilityService {
         this.setServiceInfo(info);
     }
 
-    private String captureUrl(AccessibilityNodeInfo info, SupportedBrowserConfig config) {
-        List<AccessibilityNodeInfo> nodes = info.findAccessibilityNodeInfosByViewId(config.addressBarId);
-        if (nodes == null || ((List<?>) nodes).isEmpty()) {
-            return null;
-        }
 
-        AccessibilityNodeInfo addressBarNodeInfo = nodes.get(0);
-        String url = null;
-        if (addressBarNodeInfo.getText() != null) {
-            url = addressBarNodeInfo.getText().toString();
-        }
-        addressBarNodeInfo.recycle();
-        return url;
-    }
 
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)

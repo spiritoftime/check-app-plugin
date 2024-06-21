@@ -60,7 +60,7 @@ public class AppBlocker {
             List<Map<String, Object>> apps = safeCast(toCheck.get("apps"), typeToken);
             for (Map<String, Object> app : apps) {
                 String packageName = (String) app.get("packageName");
-                blockedAppInUsage = isAppInForeground(packageName,context);
+                blockedAppInUsage = isAppInForeground(packageName, context);
                 if (blockedAppInUsage) {
                     break;
                 }
@@ -112,7 +112,7 @@ public class AppBlocker {
             TypeToken<List<String>> typeToken = new TypeToken<List<String>>() {
             };
             List<String> wifis = safeCast(toCheck.get("wifis"), typeToken);
-            String currentWifi =  getCurrentConnectedWifi();
+            String currentWifi = getCurrentConnectedWifi();
             for (String wifi : wifis) {
                 if (Objects.equals(wifi, currentWifi)) {
                     usingBlockedWifi = true;

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.Browser;
+import android.view.accessibility.AccessibilityNodeInfo;
 
 import androidx.annotation.NonNull;
 
@@ -54,5 +55,20 @@ public class BrowserInterceptor {
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             context.startActivity(i);
         }
+    }
+
+    public static String captureUrl(AccessibilityNodeInfo info, SupportedBrowserConfig config) {
+        List<AccessibilityNodeInfo> nodes = info.findAccessibilityNodeInfosByViewId(config.addressBarId);
+        if (nodes == null || ((List<?>) nodes).isEmpty()) {
+            return null;
+        }
+
+        AccessibilityNodeInfo addressBarNodeInfo = nodes.get(0);
+        String url = null;
+        if (addressBarNodeInfo.getText() != null) {
+            url = addressBarNodeInfo.getText().toString();
+        }
+        addressBarNodeInfo.recycle();
+        return url;
     }
 }

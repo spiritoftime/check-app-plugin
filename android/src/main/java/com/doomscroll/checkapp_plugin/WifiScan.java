@@ -149,7 +149,7 @@ public class WifiScan {
     }
 
     private static void handleNetworkCapabilitiesChanged(String currentWifi) {
-
+//replace " "
         String connectedWifi = currentWifi.replaceAll("^\"|\"$", "");
 
         setConnectedWifi(connectedWifi);
@@ -166,6 +166,8 @@ public class WifiScan {
     public static void unregisterConnectivityManager() {
         if (connectivityManager != null && networkCallback != null) {
             connectivityManager.unregisterNetworkCallback(networkCallback);
+            networkCallback = null;
+            connectivityManager = null;
         }
     }
 }
