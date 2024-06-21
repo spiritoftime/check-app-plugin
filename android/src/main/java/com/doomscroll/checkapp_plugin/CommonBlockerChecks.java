@@ -8,7 +8,6 @@ import static com.doomscroll.checkapp_plugin.appBlocker.BlockTask.getCurrentConn
 import static com.doomscroll.checkapp_plugin.appBlocker.BlockTask.getCurrentLat;
 import static com.doomscroll.checkapp_plugin.appBlocker.BlockTask.getCurrentLng;
 
-
 import com.google.gson.reflect.TypeToken;
 
 import java.util.List;
@@ -23,10 +22,10 @@ public abstract class CommonBlockerChecks {
     protected boolean commonBlockers = false;
     protected Map<String, Object> toCheck;
 
-public CommonBlockerChecks(Map<String, Object> toCheck){
-    this.toCheck = toCheck;
+    public CommonBlockerChecks(Map<String, Object> toCheck) {
+        this.toCheck = toCheck;
 
-}
+    }
 
     protected void checkCommonBlockers() {
         checkBlockedLocation();

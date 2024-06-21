@@ -18,10 +18,12 @@ public class ScheduleParser {
 
     public ScheduleParser(List<Map<String, Object>> schedules) {
         this.schedules = schedules;
-//         service first start set requestConnectedWifi & requestCurrentLocation
+//        at service first start set requestConnectedWifi & requestCurrentLocation so that they wont request if not needed. also set shouldCheckKeywords and shouldCheckWebsites so accessibility doesnt check for no reason.
         for (Map<String, Object> schedule : schedules) {
             getCheckWifi(schedule);
             getCheckLocation(schedule);
+            getCheckKeywords(schedule);
+            getCheckWebsites(schedule);
         }
     }
 

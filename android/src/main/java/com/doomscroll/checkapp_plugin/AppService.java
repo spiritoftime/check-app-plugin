@@ -196,7 +196,7 @@ public class AppService extends Service {
     public void onDestroy() { // used when user deactivates all active scheules
         super.onDestroy();
         unregisterWifiScanReceiver(getCheckAppContext());
-
+        clearAllTimers();
         isServiceInitialized = false;
 
     }
