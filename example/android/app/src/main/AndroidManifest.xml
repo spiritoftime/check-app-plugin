@@ -73,10 +73,11 @@
             </intent-filter>
         </receiver>
         <service android:name="com.doomscroll.checkapp_plugin.UrlInterceptorService"
-            android:exported="false"
+            android:exported="true"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
             android:label="@string/accessibility_service_label">
             <intent-filter>
+
                 <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>
             <meta-data

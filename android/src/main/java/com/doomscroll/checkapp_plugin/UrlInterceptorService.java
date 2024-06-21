@@ -4,6 +4,7 @@ package com.doomscroll.checkapp_plugin;
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Build;
 import android.provider.Browser;
@@ -54,12 +55,6 @@ public class UrlInterceptorService extends AccessibilityService {
         return url;
     }
 
-    private void redirectToHome() {
-        Intent homeIntent = new Intent(Intent.ACTION_MAIN);
-        homeIntent.addCategory(Intent.CATEGORY_HOME);
-        homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(homeIntent);
-    }
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
@@ -121,10 +116,17 @@ public class UrlInterceptorService extends AccessibilityService {
     }
 
     private void analyzeCapturedUrl(@NonNull String capturedUrl, @NonNull String browserPackage) {
-        String redirectUrl = "your redirect url is here";
+        String redirectUrl = "https://doomscroll_redirect.com";
         if (capturedUrl.contains("facebook.com")) {
             performRedirect(redirectUrl, browserPackage);
         }
+    }
+
+    private void redirectToHome() {
+        Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+        homeIntent.addCategory(Intent.CATEGORY_HOME);
+        homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(homeIntent);
     }
 
     /**
@@ -132,15 +134,19 @@ public class UrlInterceptorService extends AccessibilityService {
      * We may use more complicated solution with invisible activity to send a simple intent to open the url
      */
     private void performRedirect(@NonNull String redirectUrl, @NonNull String browserPackage) {
+
         try {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(redirectUrl));
             intent.setPackage(browserPackage);
             intent.putExtra(Browser.EXTRA_APPLICATION_ID, browserPackage);
+
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
             startActivity(intent);
         } catch (ActivityNotFoundException e) {
             // the expected browser is not installed
             Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(redirectUrl));
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(i);
         }
     }
