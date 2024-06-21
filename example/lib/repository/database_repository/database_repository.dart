@@ -226,7 +226,7 @@ class DatabaseRepository {
                   where: 'blockId = ?', whereArgs: [s.block.id]);
               for (Keyword keyword in s.block.keywords) {
                 batch.insert(
-                    'apps', {...keyword.toJson(), 'blockId': s.block.id},
+                    'keywords', {...keyword.toJson(), 'blockId': s.block.id},
                     conflictAlgorithm: ConflictAlgorithm.replace);
               }
               // ---------------------- update components of location --------------------

@@ -35,6 +35,8 @@ public class WifiScan {
     static boolean timerCreated;
     static List<ScanResult> scanResults = new ArrayList<>();
     private static BroadcastReceiver mWifiScanReceiver;
+    private static ConnectivityManager connectivityManager;
+    private static ConnectivityManager.NetworkCallback networkCallback;
 
     //gets nearby wifi
     public static void initializeWifiScan(Context context) {
@@ -84,7 +86,8 @@ public class WifiScan {
     public static void getConnectedWiFiSSID(Context context) {
         timer = new Timer();
         GPSCheckerTask gpsCheckerTask = new GPSCheckerTask.GPSCheckerTaskBuilder(context, NOTIFICATION_CHANNEL, "wifi", timer).setCallback((Void) -> {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ) {
+                unregisterConnectivityManager();
                 registerConnectivityManager(context);
             }
 
@@ -99,6 +102,7 @@ public class WifiScan {
             timer.cancel();
             timerCreated = false;
         }
+        unregisterConnectivityManager();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.S)
@@ -108,9 +112,8 @@ public class WifiScan {
                 new NetworkRequest.Builder()
                         .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
                         .build();
-        final ConnectivityManager connectivityManager =
+        connectivityManager =
                 context.getSystemService(ConnectivityManager.class);
-        ConnectivityManager.NetworkCallback networkCallback;
 
         networkCallback = new ConnectivityManager.NetworkCallback(ConnectivityManager.NetworkCallback.FLAG_INCLUDE_LOCATION_INFO) {
 
@@ -157,6 +160,12 @@ public class WifiScan {
         if (mWifiScanReceiver != null) {
             context.unregisterReceiver(mWifiScanReceiver);
             mWifiScanReceiver = null;
+        }
+    }
+
+    public static void unregisterConnectivityManager() {
+        if (connectivityManager != null && networkCallback != null) {
+            connectivityManager.unregisterNetworkCallback(networkCallback);
         }
     }
 }
