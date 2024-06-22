@@ -1,5 +1,7 @@
 package com.doomscroll.checkapp_plugin;
 
+import static com.doomscroll.checkapp_plugin.accessibilityService.browserInterceptor.BrowserInterceptor.getShouldCheckKeywords;
+import static com.doomscroll.checkapp_plugin.accessibilityService.browserInterceptor.BrowserInterceptor.getShouldCheckWebsites;
 import static com.doomscroll.checkapp_plugin.appBlocker.BlockTask.getRequestConnectedWifi;
 import static com.doomscroll.checkapp_plugin.appBlocker.BlockTask.getRequestCurrentLocation;
 import static com.doomscroll.checkapp_plugin.CheckappPlugin.getCheckAppContext;
@@ -34,6 +36,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 
+import com.doomscroll.checkapp_plugin.accessibilityService.browserInterceptor.BrowserInterceptor;
 import com.doomscroll.checkapp_plugin.appBlocker.BlockTask;
 
 import java.util.List;
@@ -154,6 +157,10 @@ public class AppService extends Service {
                     } else {
                         createIntentForService(context, STOP_REQUEST_LOCATION);
                     }
+//                    website blocker
+                    if(getShouldCheckWebsites() ||getShouldCheckKeywords() ){
+                         BrowserInterceptor.getInstance(parsedSchedules);
+                    }
                     //                    ----------------------start wifi update --------------------
 //         autostart wifi if active schedule demands for it
 //        should stop location & wifi when no active schedule needs it
@@ -211,11 +218,6 @@ public class AppService extends Service {
             belowAPI31WifiTimerCreated = false;
         }
         stopWifiTaskTimer();
-    }
-
-    public static void setSchedulesAfterReQuery(List<Map<String, Object>> newSchedules) {
-        schedules = newSchedules;
-
     }
 
 

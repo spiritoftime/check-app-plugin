@@ -72,10 +72,12 @@
 
             </intent-filter>
         </receiver>
-        <service android:name="com.doomscroll.checkapp_plugin.accessibilityService.AccessibilityInterceptorService"
+
+        <service
+            android:name="com.doomscroll.checkapp_plugin.accessibilityService.AccessibilityInterceptorService"
             android:exported="true"
-            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
-            android:label="@string/accessibility_service_label">
+            android:label="@string/accessibility_service_label"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
 
                 <action android:name="android.accessibilityservice.AccessibilityService" />
@@ -90,6 +92,7 @@
             android:exported="true"
             android:foregroundServiceType="specialUse"
             tools:ignore="ForegroundServicePermission" />
+
         <property
             android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
             android:value="Redirects user to home page when they access blocked application" />

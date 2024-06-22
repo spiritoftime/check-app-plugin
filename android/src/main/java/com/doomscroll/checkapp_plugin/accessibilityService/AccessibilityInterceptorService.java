@@ -1,10 +1,10 @@
 package com.doomscroll.checkapp_plugin.accessibilityService;
 
 
-import static com.doomscroll.checkapp_plugin.appBlocker.BlockTask.getShouldCheckKeywords;
-import static com.doomscroll.checkapp_plugin.appBlocker.BlockTask.getShouldCheckWebsites;
 import static com.doomscroll.checkapp_plugin.accessibilityService.browserInterceptor.BrowserInterceptor.analyzeCapturedUrl;
 import static com.doomscroll.checkapp_plugin.accessibilityService.browserInterceptor.BrowserInterceptor.captureUrl;
+import static com.doomscroll.checkapp_plugin.accessibilityService.browserInterceptor.BrowserInterceptor.getShouldCheckKeywords;
+import static com.doomscroll.checkapp_plugin.accessibilityService.browserInterceptor.BrowserInterceptor.getShouldCheckWebsites;
 import static com.doomscroll.checkapp_plugin.accessibilityService.browserInterceptor.BrowserInterceptor.getSupportedBrowsers;
 import static com.doomscroll.checkapp_plugin.accessibilityService.partialInterceptor.PartialAppInterceptor.checkPartiallyBlocked;
 import static com.doomscroll.checkapp_plugin.accessibilityService.partialInterceptor.PartialAppInterceptor.getSupportedPartialBlockings;
@@ -36,6 +36,7 @@ public class AccessibilityInterceptorService extends AccessibilityService {
 
     @Override
     protected void onServiceConnected() {
+
         AccessibilityServiceInfo info = getServiceInfo();
         info.eventTypes = AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED;
         info.packageNames = packageNames();
@@ -64,6 +65,8 @@ public class AccessibilityInterceptorService extends AccessibilityService {
 
         checkPartiallyBlocked(nodeId, packageName, this);
 
+        if (!getShouldCheckKeywords() && !getShouldCheckWebsites()) return;
+
         SupportedBrowserConfig browserConfig = null;
         for (SupportedBrowserConfig supportedConfig : getSupportedBrowsers()) {
             if (supportedConfig.packageName.equals(packageName)) {
@@ -74,11 +77,10 @@ public class AccessibilityInterceptorService extends AccessibilityService {
         if (browserConfig == null) {
             return;
         }
-        if (!getShouldCheckKeywords() && !getShouldCheckWebsites()) return;
         String capturedUrl = captureUrl(parentNodeInfo, browserConfig);
 
         //we can't find a url. Browser either was updated or opened page without url text field
-        if (capturedUrl == null) {
+        if (capturedUrl == null || capturedUrl.equals("doomscroll_redirect.com")) {
             return;
         }
 
@@ -89,7 +91,7 @@ public class AccessibilityInterceptorService extends AccessibilityService {
         //some kind of redirect throttling
         if (eventTime - lastRecordedTime > 2000) {
             previousUrlDetections.put(detectionId, eventTime);
-            analyzeCapturedUrl(capturedUrl, browserConfig.packageName, "facebook.com", this);
+            analyzeCapturedUrl(capturedUrl, browserConfig.packageName,  this);
         }
     }
 

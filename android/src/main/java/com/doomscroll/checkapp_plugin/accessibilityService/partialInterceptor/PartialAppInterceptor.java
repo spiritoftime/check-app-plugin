@@ -26,15 +26,14 @@ public class PartialAppInterceptor {
 
 
     public static void checkPartiallyBlocked( String nodeId,@NonNull String packageName, Context context){
-        if (nodeId != null) {
-            for (PartialBlockingConfig partialBlockingConfig : getSupportedPartialBlockings()) {
-                if (partialBlockingConfig.packageName.equals(packageName)) {
-                    for (String blockedId : partialBlockingConfig.ids) {
-                        if (Objects.equals(nodeId, blockedId)) {
-                            goToHomeScreen(context);
-                            break;
+        if (nodeId== null) return;
+        for (PartialBlockingConfig partialBlockingConfig : getSupportedPartialBlockings()) {
+            if (partialBlockingConfig.packageName.equals(packageName)) {
+                for (String blockedId : partialBlockingConfig.ids) {
+                    if (Objects.equals(nodeId, blockedId)) {
+                        goToHomeScreen(context);
+                        break;
 
-                        }
                     }
                 }
             }
