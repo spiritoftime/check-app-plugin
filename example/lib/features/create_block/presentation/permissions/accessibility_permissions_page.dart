@@ -37,6 +37,7 @@ class _AccessibilityPermissionsPageState
       resumeCallBack: () async {
         List<bool> arePermissionsEnabled = await Future.wait([
           checkappPlugin.checkAccessibilityPermission(),
+          checkappPlugin.checkBatteryOptimizationDisabled(),
         ]);
         setState(() {
           accessibilityPermissions = arePermissionsEnabled;
@@ -108,7 +109,8 @@ class _AccessibilityPermissionsPageState
                       ),
                       const PermissionExplanation(
                         permissions: [
-                          "An accessibility service is needed to detect the url you type in your browsers, as well as to detect whether a YT short is opened"
+                          "An accessibility service is needed to detect the url you type in your browsers, as well as to detect whether a YT short is opened",
+                          "Battery Optimization may prevent accessibility service from working properly"
                         ],
                       ),
                     ],

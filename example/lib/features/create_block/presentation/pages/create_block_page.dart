@@ -206,6 +206,7 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
                       blockCubit.state.websites.isNotEmpty) {
                     List<bool> arePermissionsEnabled = await Future.wait([
                       checkappPlugin.checkAccessibilityPermission(),
+                      checkappPlugin.checkBatteryOptimizationDisabled(),
                     ]);
                     if (arePermissionsEnabled.contains(false) &&
                         context.mounted) {

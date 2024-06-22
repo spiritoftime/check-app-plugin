@@ -12,6 +12,7 @@ class AccordionWrapper extends StatelessWidget {
     return Accordion(
       disableScrolling: true,
       headerBorderColor: Colors.black,
+      paddingListHorizontal: 0,
       // headerBorderColorOpened: Colors.black,
       headerBorderWidth: 0,
       headerBackgroundColorOpened: Colors.black,
