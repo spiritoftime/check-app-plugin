@@ -75,7 +75,7 @@ dev_dependencies:
   flutter_app_name: ^0.1.0
 
 flutter_app_name:
-  name: "ScreenSentry"
+  name: "Abstainify"
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
