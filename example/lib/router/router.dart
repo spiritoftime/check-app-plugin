@@ -2,6 +2,7 @@ import 'package:checkapp_plugin_example/features/basic/presentation/basic_screen
 import 'package:checkapp_plugin_example/features/blocking_conditions/presentation/blocking_conditions_page.dart';
 import 'package:checkapp_plugin_example/features/create_block/bloc/app/app_bloc.dart';
 import 'package:checkapp_plugin_example/features/create_block/cubit/cubit/block_cubit.dart';
+import 'package:checkapp_plugin_example/features/create_block/presentation/permissions/accessibility_permissions_page.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/permissions/block_permissions_page.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/pages/create_block_page.dart';
 import 'package:checkapp_plugin_example/features/create_launch_count/launch_limit.dart';
@@ -19,16 +20,7 @@ import 'package:checkapp_plugin_example/features/home/presentation/widgets/actio
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-final List<RouteBase> _createScheduleRouter = <RouteBase>[
-  GoRoute(
-    name: 'create-block',
-    path: 'create-schedule',
-    builder: (BuildContext context, GoRouterState state) {
-      final extra = state.extra as Map<String, dynamic>;
-
-      return CreateBlockPage(extra: extra);
-    },
-  ),
+final List<RouteBase> _permissionsRouter = <RouteBase>[
   GoRoute(
     name: 'create-block-permission',
     path: 'block-permission',
@@ -38,6 +30,15 @@ final List<RouteBase> _createScheduleRouter = <RouteBase>[
       return BlockPermissionsPage(extra: extra);
     },
   ),
+   GoRoute(
+    name: 'create-accessibility-permission',
+    path: 'accessibility-permission',
+    builder: (BuildContext context, GoRouterState state) {
+      final extra = state.extra as Map<String, dynamic>;
+
+      return AccessibilityPermissionsPage(extra: extra);
+    },
+  ),
   GoRoute(
     name: 'create-location-permission',
     path: 'location-permission',
@@ -45,6 +46,28 @@ final List<RouteBase> _createScheduleRouter = <RouteBase>[
       final extra = state.extra as Map<String, dynamic>;
 
       return LocationPermission(extra: extra);
+    },
+  ),
+  GoRoute(
+    name: 'create-wifi-permission',
+    path: 'wifi-permission',
+    builder: (BuildContext context, GoRouterState state) {
+      final extra = (state.extra as Map<String, dynamic>);
+
+      return WifiPermissionPage(
+        extra: extra,
+      );
+    },
+  ),
+];
+final List<RouteBase> _createScheduleRouter = <RouteBase>[
+  GoRoute(
+    name: 'create-block',
+    path: 'create-schedule',
+    builder: (BuildContext context, GoRouterState state) {
+      final extra = state.extra as Map<String, dynamic>;
+
+      return CreateBlockPage(extra: extra);
     },
   ),
   GoRoute(
@@ -81,17 +104,6 @@ final List<RouteBase> _createScheduleRouter = <RouteBase>[
       final extra = state.extra as Map<String, dynamic>;
 
       return WifiLimit(extra: extra);
-    },
-  ),
-  GoRoute(
-    name: 'create-wifi-permission',
-    path: 'wifi-permission',
-    builder: (BuildContext context, GoRouterState state) {
-      final extra = (state.extra as Map<String, dynamic>);
-
-      return WifiPermissionPage(
-        extra: extra,
-      );
     },
   ),
   GoRoute(
@@ -143,7 +155,8 @@ final GoRouter _router = GoRouter(
             builder: (BuildContext context, GoRouterState state) {
               return BasicScreen();
             }),
-        ..._createScheduleRouter
+        ..._createScheduleRouter,
+        ..._permissionsRouter
       ],
     ),
   ],

@@ -20,10 +20,11 @@ packages:
   accordion:
     dependency: "direct main"
     description:
-      name: accordion
-      sha256: "0eca3d1c619c6df63d6e384010fd2ef1164e7385d7102f88a6b56f658f160cd0"
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: "590e13fc190fb3b6d9ccf1bc082c36d6a9a025ff"
+      url: "https://github.com/spiritoftime/accordion-fork"
+    source: git
     version: "2.6.0"
   analyzer:
     dependency: transitive

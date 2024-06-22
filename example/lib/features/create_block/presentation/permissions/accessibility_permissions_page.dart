@@ -1,45 +1,54 @@
 import 'package:checkapp_plugin/checkapp_plugin.dart';
+import 'package:checkapp_plugin_example/features/create_block/cubit/cubit/block_cubit.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/permissions/widgets/number_permission.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/permissions/widgets/permission_explanation.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/utils.dart';
 import 'package:checkapp_plugin_example/shared/widgets/lifecycle_handler.dart';
-
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
-class BlockPermissionsPage extends StatefulWidget {
+class AccessibilityPermissionsPage extends StatefulWidget {
   final Map<String, dynamic> extra;
 
-  const BlockPermissionsPage({super.key, required this.extra});
+  const AccessibilityPermissionsPage({super.key, required this.extra});
 
   @override
-  State<BlockPermissionsPage> createState() => _BlockPermissionsPageState();
+  State<AccessibilityPermissionsPage> createState() =>
+      _AccessibilityPermissionsPageState();
 }
 
-class _BlockPermissionsPageState extends State<BlockPermissionsPage> {
-  List<bool> get blockPermissions => widget.extra['blockPermissions'];
-  set blockPermissions(List<bool> value) =>
-      widget.extra['blockPermissions'] = value;
+class _AccessibilityPermissionsPageState
+    extends State<AccessibilityPermissionsPage> {
+  List<bool> get accessibilityPermissions =>
+      widget.extra['accessibilityPermissions'];
+  set accessibilityPermissions(List<bool> value) =>
+      widget.extra['accessibilityPermissions'] = value;
   final CheckappPlugin checkappPlugin = CheckappPlugin();
   late final LifecycleEventHandler _lifecycleEventHandler;
+  late BlockCubit blockCubit;
 
   @override
   void initState() {
     super.initState();
+    blockCubit = widget.extra['blockCubit'] ?? BlockCubit();
+
     _lifecycleEventHandler = LifecycleEventHandler(
       resumeCallBack: () async {
         List<bool> arePermissionsEnabled = await Future.wait([
-          checkappPlugin.checkUsagePermission(),
-          checkappPlugin.checkOverlayPermission(),
-          checkappPlugin.checkNotificationPermission(),
-          checkappPlugin.checkBackgroundPermission(),
+          checkappPlugin.checkAccessibilityPermission(),
         ]);
         setState(() {
-          blockPermissions = arePermissionsEnabled;
+          accessibilityPermissions = arePermissionsEnabled;
         });
         if (mounted && arePermissionsEnabled.every((e) => e)) {
-          context.goNamed('create-block', extra: widget.extra);
+          if (widget.extra.containsKey('blockCubit')) {
+            context.goNamed('confirm-schedule',
+                extra: {...widget.extra, 'blockCubit': blockCubit});
+          } else {
+            context.goNamed('create-blocking-conditions',
+                extra: {...widget.extra, 'blockCubit': blockCubit});
+          }
         }
       },
     );
@@ -80,7 +89,8 @@ class _BlockPermissionsPageState extends State<BlockPermissionsPage> {
                           child: Icon(Icons.settings,
                               size: 200, color: Colors.yellow)),
                       const Gap(16),
-                      NumberPermissions(blockPermissions: blockPermissions),
+                      NumberPermissions(
+                          blockPermissions: accessibilityPermissions),
                       const Gap(16),
                       const Text(
                         "Please follow these instructions:",
@@ -90,17 +100,15 @@ class _BlockPermissionsPageState extends State<BlockPermissionsPage> {
                       ListView(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
-                        children: blockInstructionList(
-                                blockPermissions: blockPermissions)
+                        children: accessibilityInstructionlist(
+                                accessibilityPermissions:
+                                    accessibilityPermissions)
                             .map((i) => i)
                             .toList(),
                       ),
                       const PermissionExplanation(
                         permissions: [
-                          "Usage Permission is required to monitor your app usage",
-                          "Overlay permission is needed to display the overlay when we exit a forbidden app",
-                          "Notification permission is needed to prompt you to enable needed settings (eg. gps for location tracking) or to notify you that Doomscroll is running in the foreground.",
-                          "Background permission is needed to actually be able to run this app in the background to check if forbidden apps are running based on your schedule."
+                          "An accessibility service is needed to detect the url you type in your browsers, as well as to detect whether a YT short is opened"
                         ],
                       ),
                     ],

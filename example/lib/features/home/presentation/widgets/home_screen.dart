@@ -1,4 +1,5 @@
 import 'package:checkapp_plugin/checkapp_plugin.dart';
+import 'package:checkapp_plugin_example/features/create_block/presentation/permissions/widgets/permission_explanation.dart';
 import 'package:checkapp_plugin_example/features/create_schedule/models/schedule/schedule.dart';
 import 'package:checkapp_plugin_example/features/home/bloc/schedule_bloc.dart';
 import 'package:checkapp_plugin_example/features/home/bloc/schedule_state.dart';

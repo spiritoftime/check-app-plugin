@@ -36,7 +36,7 @@ public class AccessibilityInterceptorService extends AccessibilityService {
 
     @Override
     protected void onServiceConnected() {
-
+//NOTE: on debug mode you may need to enable twice. not an issue in prod
         AccessibilityServiceInfo info = getServiceInfo();
         info.eventTypes = AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED;
         info.packageNames = packageNames();
@@ -91,7 +91,7 @@ public class AccessibilityInterceptorService extends AccessibilityService {
         //some kind of redirect throttling
         if (eventTime - lastRecordedTime > 2000) {
             previousUrlDetections.put(detectionId, eventTime);
-            analyzeCapturedUrl(capturedUrl, browserConfig.packageName,  this);
+            analyzeCapturedUrl(capturedUrl, browserConfig.packageName, this);
         }
     }
 

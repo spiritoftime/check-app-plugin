@@ -1,4 +1,5 @@
 import 'package:buttons_tabbar/buttons_tabbar.dart';
+import 'package:checkapp_plugin/checkapp_plugin.dart';
 
 import 'package:checkapp_plugin_example/features/create_block/cubit/cubit/block_cubit.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/app_screen.dart';
@@ -20,12 +21,13 @@ class CreateBlockPage extends StatefulWidget {
 }
 
 class _CreateBlockPageState extends State<CreateBlockPage> {
+  final CheckappPlugin checkappPlugin = CheckappPlugin();
+
   late BlockCubit blockCubit;
   @override
   void initState() {
     super.initState();
     blockCubit = widget.extra['blockCubit'] ?? BlockCubit();
-
   }
 
   bool _isAppScreen = true;
@@ -188,11 +190,11 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
               ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor:  Colors.blue ,
+                  backgroundColor: Colors.blue,
                   padding: const EdgeInsets.symmetric(
                       vertical: 16.0, horizontal: 16.0),
                 ),
-                onPressed: () {
+                onPressed: () async {
                   if (blockCubit.state.apps.isEmpty &&
                       blockCubit.state.keywords.isEmpty &&
                       blockCubit.state.websites.isEmpty) {
@@ -200,11 +202,28 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
                         const Text("Please select at least one item to block"));
                     return;
                   }
+                  if (blockCubit.state.keywords.isNotEmpty ||
+                      blockCubit.state.websites.isNotEmpty) {
+                    List<bool> arePermissionsEnabled = await Future.wait([
+                      checkappPlugin.checkAccessibilityPermission(),
+                    ]);
+                    if (arePermissionsEnabled.contains(false) &&
+                        context.mounted) {
+                      context.goNamed('create-accessibility-permission',
+                          extra: <String, dynamic>{
+                            'accessibilityPermissions': arePermissionsEnabled,
+                            'blockCubit': blockCubit,
+                            ...widget.extra
+                          });
+                          return;
+                    }
+                  }
 
-                  if (widget.extra.containsKey('blockCubit')) {
+                  if (widget.extra.containsKey('blockCubit') &&
+                      context.mounted) {
                     context.goNamed('confirm-schedule',
                         extra: {...widget.extra, 'blockCubit': blockCubit});
-                  } else {
+                  } else if (context.mounted) {
                     context.goNamed('create-blocking-conditions',
                         extra: {...widget.extra, 'blockCubit': blockCubit});
                   }

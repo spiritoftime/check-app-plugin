@@ -5,8 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 class PermissionExplanation extends StatelessWidget {
+  final List<String> permissions;
+
   const PermissionExplanation({
     super.key,
+    required this.permissions,
   });
 
   @override
@@ -14,45 +17,21 @@ class PermissionExplanation extends StatelessWidget {
     return AccordionWrapper(
       header: const Row(
         children: [
-          Icon(Icons.quiz, color: Colors.blue, size: 24),
-          Gap(16),
-          Text("Why do i need to do so?")
+          Icon(Icons.help, color: Colors.blue, size: 24),
+          SizedBox(width: 16),
+          Text("Why do I need to do so?"),
         ],
       ),
       content: Column(
-        children: [
-          Container(
-              margin: const EdgeInsets.only(bottom: 8),
-              child: const Instruction(
-                instructionNumber: '1',
-                instruction: Text(
-                    "Usage Permission is required to monitor your app usage"),
-              )),
-          Container(
+        children: permissions.map((permission) {
+          return Container(
             margin: const EdgeInsets.only(bottom: 8),
-            child: const Instruction(
-              instructionNumber: '2',
-              instruction: Text(
-                  "Overlay permission is needed to display the overlay when we exit a forbidden app"),
+            child: Instruction(
+              instructionNumber: '${permissions.indexOf(permission) + 1}',
+              instruction: Text(permission),
             ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(bottom: 8),
-            child: const Instruction(
-              instructionNumber: '3',
-              instruction: Text(
-                  "Notification permission is needed to prompt you to enable needed settings (eg. gps for location tracking) or to notify you that Doomscroll is running in the foreground."),
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(bottom: 8),
-            child: const Instruction(
-              instructionNumber: '4',
-              instruction: Text(
-                  "Background permission is needed to actually be able to run this app in the background to check if forbidden apps are running based on your schedule."),
-            ),
-          ),
-        ],
+          );
+        }).toList(),
       ),
     );
   }
