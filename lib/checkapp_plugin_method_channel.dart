@@ -139,4 +139,17 @@ class MethodChannelCheckappPlugin extends CheckappPluginPlatform {
   Future<void> requestEnableGPS() async {
     await methodChannel.invokeMethod<void>(REQUEST_ENABLE_GPS);
   }
+
+  @override
+  Future<bool> checkBatteryOptimizationDisabled() async {
+    bool? isPermissionEnabled = await methodChannel
+        .invokeMethod<bool>(CHECK_BATTERY_OPTIMIZATION_PERMISSION);
+    return isPermissionEnabled ?? false;
+  }
+
+  @override
+  Future<void> requestDisableBatteryOptimization() async {
+    await methodChannel
+        .invokeMethod<void>(REQUEST_BATTERY_OPTIMIZATION_PERMISSION);
+  }
 }

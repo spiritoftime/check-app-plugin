@@ -70,20 +70,16 @@ public class BrowserInterceptor {
         BrowserInterceptor.shouldCheckWebsites = shouldCheckWebsites;
     }
 
+    private static List<SupportedBrowserConfig> supportedBrowserConfigs;
 
-    /**
-     * @return a list of supported browser configs
-     * This list could be instead obtained from remote server to support future browser updates without updating an app
-     */
-    @NonNull
-    public static List<SupportedBrowserConfig> getSupportedBrowsers() {
-        List<SupportedBrowserConfig> browsers = new ArrayList<>();
-        browsers.add(new SupportedBrowserConfig("com.android.chrome", "com.android.chrome:id/url_bar"));
-        browsers.add(new SupportedBrowserConfig("org.mozilla.firefox", "org.mozilla.firefox:id/url_bar_title")); // to update
-        browsers.add(new SupportedBrowserConfig("com.brave.browser", "com.brave.browser:id/url_bar"));
-
-        return browsers;
+    public static List<SupportedBrowserConfig> getSupportedBrowserConfigs() {
+        return supportedBrowserConfigs;
     }
+
+    public static void setSupportedBrowserConfigs(List<SupportedBrowserConfig> supportedBrowserConfigs) {
+        BrowserInterceptor.supportedBrowserConfigs = supportedBrowserConfigs;
+    }
+
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
     public static void analyzeCapturedUrl(@NonNull String capturedUrl, @NonNull String browserPackage, @NonNull Context context) {

@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.PowerManager;
 import android.provider.Settings;
 import android.util.Log;
 
@@ -176,6 +177,27 @@ public class Permissions {
             Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
             activity.startActivityForResult(intent, 2000);
         }
+    }
+
+    public static boolean checkIsBatteryOptimizationDisabled(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            String packageName = context.getPackageName();
+            PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+            return powerManager.isIgnoringBatteryOptimizations(packageName);
+        }
+        return false;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public static void requestDisableBatteryOptimization(Context context, Activity activity) {
+        if(!checkIsBatteryOptimizationDisabled(context)) {
+            Intent intent = new Intent();
+            String packageName = activity.getPackageName();
+            intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+            intent.setData(Uri.parse("package:" + packageName));
+            activity.startActivityForResult(intent, 2000);
+        }
+
     }
 
 

@@ -61,6 +61,15 @@ class CheckappPlugin {
     return CheckappPluginPlatform.instance.checkAccessibilityPermission();
   }
 
+  
+    Future<void> requestDisableBatteryOptimization() {
+    return CheckappPluginPlatform.instance.requestDisableBatteryOptimization();
+  }
+
+  Future<bool> checkBatteryOptimizationDisabled() {
+    return CheckappPluginPlatform.instance.checkBatteryOptimizationDisabled();
+  }
+
   Future<List<Map<String, dynamic>>> getNearbyWifi() {
     return CheckappPluginPlatform.instance.getNearbyWifi();
   }

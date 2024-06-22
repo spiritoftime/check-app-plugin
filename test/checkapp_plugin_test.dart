@@ -119,6 +119,20 @@ class MockCheckappPluginPlatform
     // TODO: implement requestAccessibilityPermission
     throw UnimplementedError();
   }
+  
+
+  
+  @override
+  Future<void> requestDisableBatteryOptimization() {
+    // TODO: implement requestDisableBatteryOptimization
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<bool> checkBatteryOptimizationDisabled() {
+    // TODO: implement checkBatteryOptimizationDisabled
+    throw UnimplementedError();
+  }
 }
 
 void main() {

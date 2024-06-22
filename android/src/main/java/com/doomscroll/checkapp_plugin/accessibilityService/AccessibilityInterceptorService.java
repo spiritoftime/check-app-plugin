@@ -5,7 +5,7 @@ import static com.doomscroll.checkapp_plugin.accessibilityService.browserInterce
 import static com.doomscroll.checkapp_plugin.accessibilityService.browserInterceptor.BrowserInterceptor.captureUrl;
 import static com.doomscroll.checkapp_plugin.accessibilityService.browserInterceptor.BrowserInterceptor.getShouldCheckKeywords;
 import static com.doomscroll.checkapp_plugin.accessibilityService.browserInterceptor.BrowserInterceptor.getShouldCheckWebsites;
-import static com.doomscroll.checkapp_plugin.accessibilityService.browserInterceptor.BrowserInterceptor.getSupportedBrowsers;
+import static com.doomscroll.checkapp_plugin.accessibilityService.browserInterceptor.BrowserInterceptor.getSupportedBrowserConfigs;
 import static com.doomscroll.checkapp_plugin.accessibilityService.partialInterceptor.PartialAppInterceptor.checkPartiallyBlocked;
 import static com.doomscroll.checkapp_plugin.accessibilityService.partialInterceptor.PartialAppInterceptor.getSupportedPartialBlockings;
 
@@ -68,7 +68,7 @@ public class AccessibilityInterceptorService extends AccessibilityService {
         if (!getShouldCheckKeywords() && !getShouldCheckWebsites()) return;
 
         SupportedBrowserConfig browserConfig = null;
-        for (SupportedBrowserConfig supportedConfig : getSupportedBrowsers()) {
+        for (SupportedBrowserConfig supportedConfig : getSupportedBrowserConfigs()) {
             if (supportedConfig.packageName.equals(packageName)) {
                 browserConfig = supportedConfig;
             }
@@ -103,7 +103,7 @@ public class AccessibilityInterceptorService extends AccessibilityService {
     @NonNull
     private static String[] packageNames() {
         List<String> packageNames = new ArrayList<>();
-        for (SupportedBrowserConfig config : getSupportedBrowsers()) {
+        for (SupportedBrowserConfig config : getSupportedBrowserConfigs()) {
             packageNames.add(config.packageName);
         }
         for (PartialBlockingConfig config : getSupportedPartialBlockings()) {

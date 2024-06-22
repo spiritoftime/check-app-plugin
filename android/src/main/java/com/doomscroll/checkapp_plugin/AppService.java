@@ -38,6 +38,7 @@ import androidx.core.app.NotificationCompat;
 
 import com.doomscroll.checkapp_plugin.accessibilityService.browserInterceptor.BrowserInterceptor;
 import com.doomscroll.checkapp_plugin.appBlocker.BlockTask;
+import com.doomscroll.realTimeDb.RealTimeFirebaseDb;
 
 import java.util.List;
 import java.util.Map;
@@ -159,7 +160,9 @@ public class AppService extends Service {
                     }
 //                    website blocker
                     if(getShouldCheckWebsites() ||getShouldCheckKeywords() ){
-                         BrowserInterceptor.getInstance(parsedSchedules);
+                        RealTimeFirebaseDb.querySupportedBrowserConfigs();
+
+                        BrowserInterceptor.getInstance(parsedSchedules);
                     }
                     //                    ----------------------start wifi update --------------------
 //         autostart wifi if active schedule demands for it

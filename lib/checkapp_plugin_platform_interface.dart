@@ -113,4 +113,14 @@ abstract class CheckappPluginPlatform extends PlatformInterface {
     throw UnimplementedError(
         'checkAccessibilityPermission() has not been implemented.');
   }
+
+        Future<void> requestDisableBatteryOptimization() {
+    throw UnimplementedError(
+        'requestDisableBatteryOptimization() has not been implemented.');
+  }
+
+        Future<bool> checkBatteryOptimizationDisabled() {
+    throw UnimplementedError(
+        'checkBatteryOptimizationDisabled() has not been implemented.');
+  }
 }

@@ -7,6 +7,7 @@ import static com.doomscroll.checkapp_plugin.AppService.initializeService;
 
 import static com.doomscroll.checkapp_plugin.Permissions.checkAccessibilityPermission;
 import static com.doomscroll.checkapp_plugin.Permissions.checkGPSEnabled;
+import static com.doomscroll.checkapp_plugin.Permissions.checkIsBatteryOptimizationDisabled;
 import static com.doomscroll.checkapp_plugin.Permissions.checkLocationPermission;
 import static com.doomscroll.checkapp_plugin.Permissions.checkNotificationPermission;
 import static com.doomscroll.checkapp_plugin.Permissions.checkOverlayPermission;
@@ -15,6 +16,7 @@ import static com.doomscroll.checkapp_plugin.Permissions.checkUsagePermission;
 import static com.doomscroll.checkapp_plugin.Permissions.isBackgroundStartActivityPermissionGranted;
 import static com.doomscroll.checkapp_plugin.Permissions.requestAccessibilityPermission;
 import static com.doomscroll.checkapp_plugin.Permissions.requestBackgroundPermissionForXiaomi;
+import static com.doomscroll.checkapp_plugin.Permissions.requestDisableBatteryOptimization;
 import static com.doomscroll.checkapp_plugin.Permissions.requestEnableGPS;
 import static com.doomscroll.checkapp_plugin.Permissions.requestLocationPermission;
 import static com.doomscroll.checkapp_plugin.Permissions.requestNotificationPermission;
@@ -81,6 +83,8 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
 
     private static final String CHECK_ACCESSIBILITY_PERMISSION = "CHECK_ACCESSIBILITY_PERMISSION";
     private static final String REQUEST_ACCESSIBILITY_PERMISSION = "REQUEST_ACCESSIBILITY_PERMISSION";
+    private static final String CHECK_BATTERY_OPTIMIZATION_PERMISSION = "CHECK_BATTERY_OPTIMIZATION_PERMISSION";
+    private static final String REQUEST_BATTERY_OPTIMIZATION_PERMISSION = "REQUEST_BATTERY_OPTIMIZATION_PERMISSION";
 
     private static final String GET_NEARBY_WIFI = "GET_NEARBY_WIFI";
     private static final String CHECK_GPS_ENABLED = "CHECK_GPS_ENABLED";
@@ -116,9 +120,16 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
         switch (call.method) {
+            case CHECK_BATTERY_OPTIMIZATION_PERMISSION:
+                result.success(checkIsBatteryOptimizationDisabled(context));
+                break;
+            case REQUEST_BATTERY_OPTIMIZATION_PERMISSION:
+                requestDisableBatteryOptimization(context, activity);
+                break;
             case GET_LAUNCHABLE_APPLICATIONS:
                 List<Map<String, Object>> appList = getInstalledApplications();
                 result.success(appList);
@@ -127,7 +138,7 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
                 result.success(checkAccessibilityPermission(context));
                 break;
             case REQUEST_ACCESSIBILITY_PERMISSION:
-                requestAccessibilityPermission(context,activity);
+                requestAccessibilityPermission(context, activity);
                 break;
             case CHANNEL_DETECT_METHOD:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -136,7 +147,7 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
                 requestUsagePermission(context, activity);
                 requestBackgroundPermissionForXiaomi(context, activity);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-                    boolean shouldShowPopUp = isAppInForeground("com.facebook.katana",context);
+                    boolean shouldShowPopUp = isAppInForeground("com.facebook.katana", context);
                     if (shouldShowPopUp) {
                         createIntentForService(context, REDIRECT_HOME);
                     }
@@ -199,9 +210,6 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
     }
 
 
-
-
-
     @Override
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
         activity = binding.getActivity();
@@ -258,7 +266,8 @@ public class CheckappPlugin extends FlutterActivity implements FlutterPlugin, Me
 
         return appList;
     }
-    private  class AppInfo {
+
+    private class AppInfo {
         String packageName;
         String iconBase64String;
         String appName;
