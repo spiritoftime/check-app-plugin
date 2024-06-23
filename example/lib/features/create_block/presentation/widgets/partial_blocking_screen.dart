@@ -20,15 +20,12 @@ class _PartialBlockingScreenState extends State<PartialBlockingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<PartialBlocker> partialBlockers = [
+    List<PartialBlocker> partialBlockers = const [
       PartialBlocker(
           appName: "Youtube",
           feature: "Shorts",
-          imagePath: 'assets/images/yt_logo.png'),
-      PartialBlocker(
-          appName: "Youtube",
-          feature: "Long Form Videos",
-          imagePath: 'assets/images/yt_logo.png'),
+          imagePath: 'assets/images/yt_logo.png', packageName: 'com.google.android.youtube'),
+
     ];
 
     return SingleChildScrollView(
@@ -49,7 +46,8 @@ class _PartialBlockingScreenState extends State<PartialBlockingScreen> {
                   .map((p) => PartialBlocker(
                       appName: p.appName,
                       feature: p.feature,
-                      imagePath: p.imagePath))
+                      imagePath: p.imagePath,
+                      packageName: p.packageName))
                   .toList())
         ],
       ),

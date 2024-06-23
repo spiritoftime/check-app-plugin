@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:geocoder_buddy/geocoder_buddy.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'location.g.dart';
 

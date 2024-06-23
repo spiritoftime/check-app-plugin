@@ -3,8 +3,6 @@ import 'package:checkapp_plugin_example/features/home/bloc/schedule_event.dart';
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/home_screen.dart';
 import 'package:checkapp_plugin_example/firebase_options.dart';
 import 'package:checkapp_plugin_example/repository/auth_repository/authentication_repository.dart';
-import 'package:checkapp_plugin_example/repository/background_repository/background_repository.dart';
-import 'package:checkapp_plugin_example/features/basic/presentation/basic_screen.dart';
 import 'package:checkapp_plugin_example/features/create_block/bloc/app/app_bloc.dart';
 import 'package:checkapp_plugin_example/features/create_block/bloc/app/app_event.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/pages/create_block_page.dart';

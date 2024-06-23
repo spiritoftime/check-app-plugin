@@ -22,7 +22,6 @@ class CreateBlockPage extends StatefulWidget {
 }
 
 class _CreateBlockPageState extends State<CreateBlockPage> {
-  final CheckappPlugin checkappPlugin = CheckappPlugin();
 
   late BlockCubit blockCubit;
   @override
@@ -216,24 +215,7 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
                         const Text("Please select at least one item to block"));
                     return;
                   }
-                  if (blockCubit.state.keywords.isNotEmpty ||
-                      blockCubit.state.websites.isNotEmpty ||
-                      blockCubit.state.partialBlockers.isNotEmpty) {
-                    List<bool> arePermissionsEnabled = await Future.wait([
-                      checkappPlugin.checkAccessibilityPermission(),
-                      checkappPlugin.checkBatteryOptimizationDisabled(),
-                    ]);
-                    if (arePermissionsEnabled.contains(false) &&
-                        context.mounted) {
-                      context.goNamed('create-accessibility-permission',
-                          extra: <String, dynamic>{
-                            'accessibilityPermissions': arePermissionsEnabled,
-                            'blockCubit': blockCubit,
-                            ...widget.extra
-                          });
-                      return;
-                    }
-                  }
+                 
 
                   if (widget.extra.containsKey('blockCubit') &&
                       context.mounted) {

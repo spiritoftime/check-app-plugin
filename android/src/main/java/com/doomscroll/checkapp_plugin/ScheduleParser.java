@@ -2,6 +2,7 @@ package com.doomscroll.checkapp_plugin;
 
 import static com.doomscroll.checkapp_plugin.accessibilityService.browserInterceptor.BrowserInterceptor.setShouldCheckKeywords;
 import static com.doomscroll.checkapp_plugin.accessibilityService.browserInterceptor.BrowserInterceptor.setShouldCheckWebsites;
+import static com.doomscroll.checkapp_plugin.accessibilityService.partialInterceptor.PartialAppInterceptor.setShouldCheckPartialBlockers;
 import static com.doomscroll.checkapp_plugin.appBlocker.BlockTask.setRequestConnectedWifi;
 import static com.doomscroll.checkapp_plugin.appBlocker.BlockTask.setRequestCurrentLocation;
 
@@ -25,6 +26,7 @@ public class ScheduleParser {
             getCheckLocation(schedule);
             getCheckKeywords(schedule);
             getCheckWebsites(schedule);
+            getCheckPartialBlockers(schedule);
         }
     }
 
@@ -40,22 +42,30 @@ public class ScheduleParser {
         List<Map<String, Object>> appsToCheck = getCheckApps(schedule);
         List<Map<String, Object>> timingsToCheck = getCheckTiming(schedule);
         List<Map<String, Object>> locationsToCheck = getCheckLocation(schedule);
+        List<Map<String, Object>> partialBlockersToCheck = getCheckPartialBlockers(schedule);
 
         Map<String, Object> toCheck = new HashMap<>();
-        toCheck.put("wifis", wifisToCheck);
-        toCheck.put("apps", appsToCheck);
-        toCheck.put("locations", locationsToCheck);
         toCheck.put("checkWifi", !wifisToCheck.isEmpty());
         toCheck.put("checkLocation", !locationsToCheck.isEmpty());
         toCheck.put("checkApp", !appsToCheck.isEmpty());
         toCheck.put("checkTiming", !timingsToCheck.isEmpty());
+        toCheck.put("checkWebsite", !websitesToCheck.isEmpty());
+        toCheck.put("checkKeyword", !keywordsToCheck.isEmpty());
+        toCheck.put("checkPartialBlockers", !partialBlockersToCheck.isEmpty());
+
+
+        toCheck.put("wifis", wifisToCheck);
+        toCheck.put("apps", appsToCheck);
+        toCheck.put("partialBlockers", partialBlockersToCheck);
+
+
+        toCheck.put("locations", locationsToCheck);
+
         toCheck.put("timings", timingsToCheck);
         toCheck.put("checkDay", !daysToCheck.isEmpty());
         toCheck.put("days", daysToCheck);
-        toCheck.put("checkWebsite", !websitesToCheck.isEmpty());
         toCheck.put("websites", websitesToCheck);
 
-        toCheck.put("checkKeyword", !keywordsToCheck.isEmpty());
         toCheck.put("keywords", keywordsToCheck);
 
 
@@ -112,6 +122,25 @@ public class ScheduleParser {
             }
         }
         return appsToCheck;
+    }
+    private static List<Map<String, Object>> getCheckPartialBlockers(Map<String, Object> schedule) {
+        List<Map<String, Object>> partialBlockersToCheck = new ArrayList<>();
+        TypeToken<List<List<String>>> typeToken = new TypeToken<List<List<String>>>() {
+        };
+        List<List<String>> partialBlockers = safeCast(schedule.get("partialBlockers"), typeToken);
+
+        if (!partialBlockers.isEmpty()) {
+            setShouldCheckPartialBlockers(true);
+            for (List<String> pb : partialBlockers) {
+                Map<String, Object> pbMap = new HashMap<>();
+                pbMap.put("appName", pb.get(0));
+                pbMap.put("feature", pb.get(1));
+                pbMap.put("packageName", pb.get(2).replaceAll("\\s+", ""));
+
+                partialBlockersToCheck.add(pbMap);
+            }
+        }
+        return partialBlockersToCheck;
     }
 
     private static List<Map<String, Object>> getCheckTiming(Map<String, Object> schedule) {

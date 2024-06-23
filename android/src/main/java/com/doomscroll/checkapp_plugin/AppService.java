@@ -40,6 +40,7 @@ import com.doomscroll.checkapp_plugin.accessibilityService.browserInterceptor.Br
 import com.doomscroll.checkapp_plugin.appBlocker.BlockTask;
 import com.doomscroll.realTimeDb.RealTimeFirebaseDb;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -158,8 +159,9 @@ public class AppService extends Service {
                     } else {
                         createIntentForService(context, STOP_REQUEST_LOCATION);
                     }
+
 //                    website blocker
-                    if(getShouldCheckWebsites() ||getShouldCheckKeywords() ){
+                    if (getShouldCheckWebsites() || getShouldCheckKeywords()) {
                         RealTimeFirebaseDb.querySupportedBrowserConfigs();
 
                         BrowserInterceptor.getInstance(parsedSchedules);
@@ -208,6 +210,8 @@ public class AppService extends Service {
         unregisterWifiScanReceiver(getCheckAppContext());
         clearAllTimers();
         isServiceInitialized = false;
+        List<Map<String, Object>> noActiveSchedules = new ArrayList<>();
+        BrowserInterceptor.getInstance(noActiveSchedules);
 
     }
 

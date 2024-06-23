@@ -74,16 +74,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT " +
                 "s.id AS scheduleId, " +
-                "(SELECT GROUP_CONCAT('[' || l.longitude || ', ' || l.latitude || ', ' || l.location || ']') " +
+                "(SELECT GROUP_CONCAT('[' || l.longitude || ',' || l.latitude || ',' || l.location || ']') " +
                 " FROM locations l WHERE l.scheduleId = s.id GROUP BY l.scheduleId) AS locations, " +
                 "(SELECT GROUP_CONCAT('[' || w.wifiName || ']') " +
                 " FROM wifis w WHERE w.scheduleId = s.id GROUP BY w.scheduleId) AS wifis, " +
-                "(SELECT GROUP_CONCAT('[' || tm.startTiming || ', ' || tm.endTiming  ||  ']') " +
+                "(SELECT GROUP_CONCAT('[' || tm.startTiming || ',' || tm.endTiming  ||  ']') " +
                 " FROM timings tm JOIN times t ON tm.timeId = t.id WHERE t.scheduleId = s.id GROUP BY t.id) AS timings, " +
                 "(SELECT GROUP_CONCAT('[' || d.day ||  ']') " +
                 " FROM days d JOIN times t ON d.timeId = t.id WHERE t.scheduleId = s.id GROUP BY t.id) AS days, " +
-                "(SELECT GROUP_CONCAT('[' || a.appName || ', ' || a.packageName || ', ' || a.iconBase64String || ']') " +
+                "(SELECT GROUP_CONCAT('[' || a.appName || ',' || a.packageName || ',' || a.iconBase64String || ']') " +
                 " FROM apps a JOIN blocks b ON a.blockId = b.id JOIN schedules s2 ON b.scheduleId = s2.id WHERE s2.id = s.id GROUP BY b.id) AS apps, " +
+                "(SELECT GROUP_CONCAT('[' || pb.appName || ',' || pb.feature  || ',' || pb.packageName  || ']') " +
+                " FROM partialblockers pb JOIN blocks b ON pb.blockId = b.id JOIN schedules s2 ON b.scheduleId = s2.id WHERE s2.id = s.id GROUP BY b.id) AS partialblockers, " +
                 "(SELECT GROUP_CONCAT('[' || w.url || ']') " +
                 " FROM websites w JOIN blocks b ON w.blockId = b.id JOIN schedules s2 ON b.scheduleId = s2.id WHERE s2.id = s.id GROUP BY b.id) AS websites, " +
                 "(SELECT GROUP_CONCAT('[' || k.keyword || ']') " +
@@ -97,6 +99,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Map<String, Object> schedule = new HashMap<>();
             String locations = cursor.getString(cursor.getColumnIndexOrThrow("locations"));
             String wifis = cursor.getString(cursor.getColumnIndexOrThrow("wifis"));
+            String partialblockers = cursor.getString(cursor.getColumnIndexOrThrow("partialblockers"));
+
             String apps = cursor.getString(cursor.getColumnIndexOrThrow("apps"));
             String websites = cursor.getString(cursor.getColumnIndexOrThrow("websites"));
             String keywords = cursor.getString(cursor.getColumnIndexOrThrow("keywords"));
@@ -104,6 +108,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String days = cursor.getString(cursor.getColumnIndexOrThrow("days"));
 
             List<List<String>> appList = parseStringToArray(apps);
+            List<List<String>> partialBlockerList = parseStringToArray(partialblockers);
+
             List<String> websiteList = parseStringToSingleArray(websites);
             List<String> keywordList = parseStringToSingleArray(keywords);
             List<List<String>> timingList = parseStringToArray(timings);
@@ -112,6 +118,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             List<String> dayList = parseStringToSingleArray(days);
 
             schedule.put("apps", appList);
+            schedule.put("partialBlockers", partialBlockerList);
+
             schedule.put("websites", websiteList);
             schedule.put("keywords", keywordList);
             schedule.put("timings", timingList);

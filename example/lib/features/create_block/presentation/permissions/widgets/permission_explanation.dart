@@ -2,7 +2,6 @@
 import 'package:checkapp_plugin_example/shared/widgets/accordion_wrapper.dart';
 import 'package:checkapp_plugin_example/shared/widgets/instruction.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 
 class PermissionExplanation extends StatelessWidget {
   final List<String> permissions;

@@ -8,6 +8,7 @@ part of 'partial_blocker.dart';
 
 PartialBlocker _$PartialBlockerFromJson(Map<String, dynamic> json) =>
     PartialBlocker(
+      packageName: json['packageName'] as String,
       appName: json['appName'] as String,
       feature: json['feature'] as String,
       blockId: (json['blockId'] as num?)?.toInt(),
@@ -20,6 +21,7 @@ Map<String, dynamic> _$PartialBlockerToJson(PartialBlocker instance) =>
       'id': instance.id,
       'imagePath': instance.imagePath,
       'appName': instance.appName,
+      'packageName': instance.packageName,
       'feature': instance.feature,
       'blockId': instance.blockId,
     };

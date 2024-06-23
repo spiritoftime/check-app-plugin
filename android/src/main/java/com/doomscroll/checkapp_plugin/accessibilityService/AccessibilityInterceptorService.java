@@ -6,7 +6,8 @@ import static com.doomscroll.checkapp_plugin.accessibilityService.browserInterce
 import static com.doomscroll.checkapp_plugin.accessibilityService.browserInterceptor.BrowserInterceptor.getShouldCheckKeywords;
 import static com.doomscroll.checkapp_plugin.accessibilityService.browserInterceptor.BrowserInterceptor.getShouldCheckWebsites;
 import static com.doomscroll.checkapp_plugin.accessibilityService.browserInterceptor.BrowserInterceptor.getSupportedBrowserConfigs;
-import static com.doomscroll.checkapp_plugin.accessibilityService.partialInterceptor.PartialAppInterceptor.checkPartiallyBlocked;
+import static com.doomscroll.checkapp_plugin.accessibilityService.partialInterceptor.PartialAppInterceptor.checkPartialApplicationBlocked;
+import static com.doomscroll.checkapp_plugin.accessibilityService.partialInterceptor.PartialAppInterceptor.getShouldCheckPartialBlockers;
 import static com.doomscroll.checkapp_plugin.accessibilityService.partialInterceptor.PartialAppInterceptor.getSupportedPartialBlockings;
 
 import android.accessibilityservice.AccessibilityService;
@@ -34,9 +35,8 @@ import com.doomscroll.checkapp_plugin.accessibilityService.partialInterceptor.Pa
 public class AccessibilityInterceptorService extends AccessibilityService {
     private final HashMap<String, Long> previousUrlDetections = new HashMap<>();
 
-    @Override
-    protected void onServiceConnected() {
-//NOTE: on debug mode you may need to enable twice. not an issue in prod
+    private  void setServiceInfo() {
+
         AccessibilityServiceInfo info = getServiceInfo();
         info.eventTypes = AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED;
         info.packageNames = packageNames();
@@ -48,6 +48,13 @@ public class AccessibilityInterceptorService extends AccessibilityService {
                 AccessibilityServiceInfo.FLAG_RETRIEVE_INTERACTIVE_WINDOWS;
 
         this.setServiceInfo(info);
+
+    }
+
+    @Override
+    protected void onServiceConnected() {
+//NOTE: on debug mode you may need to enable twice. not an issue in prod
+        setServiceInfo();
     }
 
 
@@ -62,9 +69,9 @@ public class AccessibilityInterceptorService extends AccessibilityService {
         }
         String nodeId = parentNodeInfo.getViewIdResourceName();
         String packageName = event.getPackageName().toString();
-
-        checkPartiallyBlocked(nodeId, packageName, this);
-
+        if (getShouldCheckPartialBlockers()) {
+            checkPartialApplicationBlocked(nodeId, packageName, this);
+        }
         if (!getShouldCheckKeywords() && !getShouldCheckWebsites()) return;
 
         SupportedBrowserConfig browserConfig = null;
@@ -79,7 +86,7 @@ public class AccessibilityInterceptorService extends AccessibilityService {
         }
         String capturedUrl = captureUrl(parentNodeInfo, browserConfig);
 
-        //we can't find a url. Browser either was updated or opened page without url text field
+
         if (capturedUrl == null || capturedUrl.equals("doomscroll_redirect.com")) {
             return;
         }
@@ -106,9 +113,7 @@ public class AccessibilityInterceptorService extends AccessibilityService {
         for (SupportedBrowserConfig config : getSupportedBrowserConfigs()) {
             packageNames.add(config.packageName);
         }
-        for (PartialBlockingConfig config : getSupportedPartialBlockings()) {
-            packageNames.add(config.packageName);
-        }
+        packageNames.addAll(getSupportedPartialBlockings().keySet());
         return packageNames.toArray(new String[0]);
     }
 

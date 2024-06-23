@@ -1,7 +1,6 @@
 import 'package:checkapp_plugin_example/features/blocking_conditions/presentation/utils.dart';
 import 'package:checkapp_plugin_example/features/blocking_conditions/presentation/widgets/blocking_condition.dart';
-import 'package:checkapp_plugin_example/features/create_block/cubit/cubit/block_cubit.dart';
-import 'package:checkapp_plugin_example/features/create_time/cubit/cubit/time_cubit.dart';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';

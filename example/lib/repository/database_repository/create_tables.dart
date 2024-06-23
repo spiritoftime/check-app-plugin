@@ -14,15 +14,14 @@ Future<void> createTables(Database db) async {
     {'create': createDaysTable, 'tableName': 'days'},
     {'create': createTimesTable, 'tableName': 'times'},
     {'create': createSchedulesTable, 'tableName': 'schedules'},
-        {'create': createPartialBlockersTable, 'tableName': 'partialblockers'},
-
+    {'create': createPartialBlockersTable, 'tableName': 'partialblockers'},
   ];
 
   for (var createStatement in createTables) {
     final Future<void> Function(Database) createTable =
         createStatement['create'] as Future<void> Function(Database);
     await HelperFunctions.tryCatchWrapper(
-      operation: ()async => await createTable(db),
+      operation: () async => await createTable(db),
       errorMessage: "Unable to create table ${createStatement['tableName']}",
     );
   }
@@ -59,11 +58,13 @@ Future<void> createAppsTable(Database db) async {
     ')',
   );
 }
+
 Future<void> createPartialBlockersTable(Database db) async {
   await db.execute(
     'CREATE TABLE partialblockers('
     'id INTEGER PRIMARY KEY AUTOINCREMENT, '
     'imagePath TEXT, '
+    'packageName TEXT, '
     'feature TEXT, '
     'appName TEXT, '
     'blockId INTEGER, '

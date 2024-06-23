@@ -1,5 +1,4 @@
 import 'package:checkapp_plugin/checkapp_plugin.dart';
-import 'package:checkapp_plugin_example/features/create_block/presentation/permissions/block_permissions_page.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/permissions/widgets/number_permission.dart';
 import 'package:checkapp_plugin_example/features/create_wifi/utils.dart';
 import 'package:checkapp_plugin_example/shared/widgets/accordion_wrapper.dart';

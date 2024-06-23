@@ -1,8 +1,6 @@
-import 'package:checkapp_plugin_example/features/create_schedule/models/schedule/schedule.dart';
 import 'package:checkapp_plugin_example/features/home/bloc/schedule_event.dart';
 import 'package:checkapp_plugin_example/features/home/bloc/schedule_state.dart';
 import 'package:checkapp_plugin_example/repository/database_repository/database_repository.dart';
-import 'package:checkapp_plugin_example/shared/helper_functions/helper_functions.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SchedulesBloc extends Bloc<ScheduleEvent, ScheduleState> {

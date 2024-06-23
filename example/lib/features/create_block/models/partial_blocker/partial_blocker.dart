@@ -7,9 +7,10 @@ class PartialBlocker extends Equatable {
   final int? id;
   final String imagePath;
   final String appName;
+  final String packageName;
   final String feature;
   final int? blockId;
-  const PartialBlocker({
+  const PartialBlocker( {required this.packageName,
     required this.appName,
     required this.feature,
     this.blockId,

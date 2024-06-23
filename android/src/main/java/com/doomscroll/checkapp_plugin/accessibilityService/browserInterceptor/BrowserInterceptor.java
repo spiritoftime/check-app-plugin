@@ -26,10 +26,10 @@ import java.util.Map;
 public class BrowserInterceptor {
     private static BrowserInterceptor instance;
 
-    private List<Map<String, Object>> parsedSchedules;
+    private static List<Map<String, Object>> parsedSchedules;
 
     private BrowserInterceptor(List<Map<String, Object>> parsedSchedules) {
-        this.parsedSchedules = parsedSchedules;
+        BrowserInterceptor.parsedSchedules = parsedSchedules;
     }
 
     public static synchronized BrowserInterceptor getInstance(List<Map<String, Object>> parsedSchedules) {
@@ -43,11 +43,11 @@ public class BrowserInterceptor {
 
     // Method to update parsedSchedules
     private void updateParsedSchedules(List<Map<String, Object>> parsedSchedules) {
-        this.parsedSchedules = parsedSchedules;
+        BrowserInterceptor.parsedSchedules = parsedSchedules;
     }
 
     // Getter for parsedSchedules
-    public List<Map<String, Object>> getParsedSchedules() {
+    public static List<Map<String, Object>> getParsedSchedules() {
         return parsedSchedules;
     }
 
@@ -70,7 +70,7 @@ public class BrowserInterceptor {
         BrowserInterceptor.shouldCheckWebsites = shouldCheckWebsites;
     }
 
-    private static List<SupportedBrowserConfig> supportedBrowserConfigs;
+    private static List<SupportedBrowserConfig> supportedBrowserConfigs = new ArrayList<>();
 
     public static List<SupportedBrowserConfig> getSupportedBrowserConfigs() {
         return supportedBrowserConfigs;
@@ -84,7 +84,7 @@ public class BrowserInterceptor {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
     public static void analyzeCapturedUrl(@NonNull String capturedUrl, @NonNull String browserPackage, @NonNull Context context) {
         String redirectUrl = "https://doomscroll_redirect.com";
-        for (Map<String, Object> schedule : instance.parsedSchedules) {
+        for (Map<String, Object> schedule : parsedSchedules) {
             Map<String, Object> toCheck = ScheduleParser.compileToCheck(schedule);
             WebsiteBlocker websiteBlocker = new WebsiteBlocker(toCheck);
 

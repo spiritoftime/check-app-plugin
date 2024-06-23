@@ -1,5 +1,4 @@
 import 'package:checkapp_plugin_example/features/create_location/models/location/location.dart';
-import 'package:checkapp_plugin_example/features/create_time/cubit/cubit/time_cubit.dart';
 import 'package:checkapp_plugin_example/features/create_wifi/models/wifi.dart';
 import 'package:checkapp_plugin_example/shared/widgets/grey_container.dart';
 import 'package:checkapp_plugin_example/shared/widgets/hover_ink_well.dart';
