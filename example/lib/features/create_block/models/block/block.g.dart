@@ -7,6 +7,9 @@ part of 'block.dart';
 // **************************************************************************
 
 Block _$BlockFromJson(Map<String, dynamic> json) => Block(
+      partialBlockers: (json['partialBlockers'] as List<dynamic>)
+          .map((e) => PartialBlocker.fromJson(e as Map<String, dynamic>))
+          .toList(),
       scheduleId: (json['scheduleId'] as num?)?.toInt(),
       id: (json['id'] as num?)?.toInt(),
       apps: (json['apps'] as List<dynamic>)
@@ -22,6 +25,8 @@ Block _$BlockFromJson(Map<String, dynamic> json) => Block(
 
 Map<String, dynamic> _$BlockToJson(Block instance) => <String, dynamic>{
       'id': instance.id,
+      'partialBlockers':
+          instance.partialBlockers.map((e) => e.toJson()).toList(),
       'apps': instance.apps.map((e) => e.toJson()).toList(),
       'websites': instance.websites.map((e) => e.toJson()).toList(),
       'keywords': instance.keywords.map((e) => e.toJson()).toList(),

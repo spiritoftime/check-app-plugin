@@ -6,33 +6,11 @@ CheckappPlugin _checkappPlugin = CheckappPlugin();
 List<Widget> accessibilityInstructionlist(
         {required List<bool> accessibilityPermissions}) =>
     [
+     
       Container(
         margin: const EdgeInsets.only(bottom: 8.0),
         child: Instruction(
           instructionNumber: '1',
-          instruction: const Text("Enable accessibility permission"),
-          actionButton: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor:
-                  !accessibilityPermissions[0] ? Colors.blue : Colors.grey,
-            ),
-            onPressed: () async {
-              await _checkappPlugin.requestAccessibilityPermission();
-            },
-            child: Text(
-              "Enable",
-              style: TextStyle(
-                  color: accessibilityPermissions[0]
-                      ? Colors.white70
-                      : Colors.white),
-            ),
-          ),
-        ),
-      ),
-      Container(
-        margin: const EdgeInsets.only(bottom: 8.0),
-        child: Instruction(
-          instructionNumber: '2',
           instruction: const Text("Disable battery optimization "),
           actionButton: ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -46,6 +24,28 @@ List<Widget> accessibilityInstructionlist(
               "Disable",
               style: TextStyle(
                   color: accessibilityPermissions[1]
+                      ? Colors.white70
+                      : Colors.white),
+            ),
+          ),
+        ),
+      ), Container(
+        margin: const EdgeInsets.only(bottom: 8.0),
+        child: Instruction(
+          instructionNumber: '2',
+          instruction: const Text("Enable accessibility permission"),
+          actionButton: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor:
+                  !accessibilityPermissions[0] ? Colors.blue : Colors.grey,
+            ),
+            onPressed: () async {
+              await _checkappPlugin.requestAccessibilityPermission();
+            },
+            child: Text(
+              "Enable",
+              style: TextStyle(
+                  color: accessibilityPermissions[0]
                       ? Colors.white70
                       : Colors.white),
             ),

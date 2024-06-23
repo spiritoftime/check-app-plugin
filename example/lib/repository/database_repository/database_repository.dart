@@ -1,6 +1,7 @@
 import 'package:checkapp_plugin_example/features/create_block/models/app/app.dart';
 import 'package:checkapp_plugin_example/features/create_block/models/block/block.dart';
 import 'package:checkapp_plugin_example/features/create_block/models/keyword/keyword.dart';
+import 'package:checkapp_plugin_example/features/create_block/models/partial_blocker/partial_blocker.dart';
 import 'package:checkapp_plugin_example/features/create_block/models/website/website.dart';
 import 'package:checkapp_plugin_example/features/create_location/models/location/location.dart';
 import 'package:checkapp_plugin_example/features/create_schedule/models/schedule/schedule.dart';
@@ -80,6 +81,10 @@ class DatabaseRepository {
                 for (App app in schedule.block.apps) {
                   batch.insert('apps', {...app.toJson(), 'blockId': blockPk});
                 }
+                
+                for (PartialBlocker partialBlocker in schedule.block.partialBlockers) {
+                  batch.insert('partialblockers', {...partialBlocker.toJson(), 'blockId': blockPk});
+                }
 
                 for (Website web in schedule.block.websites) {
                   batch.insert(
@@ -143,6 +148,10 @@ class DatabaseRepository {
 
         List<Map<String, dynamic>> apps = await db.query('apps',
             where: 'blockId = ?', whereArgs: [blockQuery[0]['id']]);
+        List<Map<String, dynamic>> partialBlockers = await db.query(
+            'partialblockers',
+            where: 'blockId = ?',
+            whereArgs: [blockQuery[0]['id']]);
         List<App> appList = apps.map((a) => App.fromJson(a)).toList();
         List<Map<String, dynamic>> websites = await db.query('websites',
             where: 'blockId = ?', whereArgs: [blockQuery[0]['id']]);
@@ -152,11 +161,15 @@ class DatabaseRepository {
             where: 'blockId = ?', whereArgs: [blockQuery[0]['id']]);
         List<Keyword> keywordList =
             keywords.map((k) => Keyword.fromJson(k)).toList();
+
+        List<PartialBlocker> partialBlockerList =
+            partialBlockers.map((k) => PartialBlocker.fromJson(k)).toList();
         Block block = Block(
           id: blockQuery[0]['id'],
           apps: appList,
           websites: websiteList,
           keywords: keywordList,
+          partialBlockers: partialBlockerList,
         );
 
         List<Map<String, dynamic>> timeQuery = await db

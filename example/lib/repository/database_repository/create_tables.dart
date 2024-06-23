@@ -14,6 +14,8 @@ Future<void> createTables(Database db) async {
     {'create': createDaysTable, 'tableName': 'days'},
     {'create': createTimesTable, 'tableName': 'times'},
     {'create': createSchedulesTable, 'tableName': 'schedules'},
+        {'create': createPartialBlockersTable, 'tableName': 'partialblockers'},
+
   ];
 
   for (var createStatement in createTables) {
@@ -51,6 +53,18 @@ Future<void> createAppsTable(Database db) async {
     'id INTEGER PRIMARY KEY AUTOINCREMENT, '
     'packageName TEXT, '
     'iconBase64String TEXT, '
+    'appName TEXT, '
+    'blockId INTEGER, '
+    'FOREIGN KEY(blockId) REFERENCES blocks(id) ON DELETE CASCADE'
+    ')',
+  );
+}
+Future<void> createPartialBlockersTable(Database db) async {
+  await db.execute(
+    'CREATE TABLE partialblockers('
+    'id INTEGER PRIMARY KEY AUTOINCREMENT, '
+    'imagePath TEXT, '
+    'feature TEXT, '
     'appName TEXT, '
     'blockId INTEGER, '
     'FOREIGN KEY(blockId) REFERENCES blocks(id) ON DELETE CASCADE'

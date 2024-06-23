@@ -4,6 +4,7 @@ import 'package:checkapp_plugin/checkapp_plugin.dart';
 import 'package:checkapp_plugin_example/features/create_block/cubit/cubit/block_cubit.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/app_screen.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/keyword_screen.dart';
+import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/partial_blocking_screen.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/website_screen.dart';
 import 'package:checkapp_plugin_example/shared/widgets/show_dialog.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +37,12 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
   final _formKey = GlobalKey<FormBuilderState>();
 
   String? _searchApplicationTerm;
-  final List<String> tabs = ["Apps", "Websites", "Keywords"];
+  final List<String> tabs = [
+    "Apps",
+    "Websites",
+    "Keywords",
+    "Partial Blocking"
+  ];
 
   void _onScreenChanged(TabController controller) {
     if (!controller.indexIsChanging) {
@@ -140,25 +146,29 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              ButtonsTabBar(
-                                buttonMargin: const EdgeInsets.only(right: 16),
-                                contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 8),
-                                backgroundColor: Colors.blue[600],
-                                unselectedBackgroundColor: Colors.grey[700],
-                                labelStyle: const TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: ButtonsTabBar(
+                                  buttonMargin:
+                                      const EdgeInsets.only(right: 16),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 8),
+                                  backgroundColor: Colors.blue[600],
+                                  unselectedBackgroundColor: Colors.grey[700],
+                                  labelStyle: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  unselectedLabelStyle: TextStyle(
+                                    color: Colors.white.withOpacity(0.8),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  borderWidth: 1,
+                                  radius: 20,
+                                  tabs: tabs
+                                      .map((e) => Tab(key: Key(e), text: e))
+                                      .toList(),
                                 ),
-                                unselectedLabelStyle: TextStyle(
-                                  color: Colors.white.withOpacity(0.8),
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                borderWidth: 1,
-                                radius: 20,
-                                tabs: tabs
-                                    .map((e) => Tab(key: Key(e), text: e))
-                                    .toList(),
                               ),
                               Expanded(
                                 child: FormBuilder(
@@ -174,6 +184,9 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
                                         blockCubit: blockCubit,
                                       ),
                                       KeywordScreen(
+                                        blockCubit: blockCubit,
+                                      ),
+                                      PartialBlockingScreen(
                                         blockCubit: blockCubit,
                                       )
                                     ],
@@ -197,13 +210,15 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
                 onPressed: () async {
                   if (blockCubit.state.apps.isEmpty &&
                       blockCubit.state.keywords.isEmpty &&
-                      blockCubit.state.websites.isEmpty) {
+                      blockCubit.state.websites.isEmpty &&
+                      blockCubit.state.partialBlockers.isEmpty) {
                     createAlertDialog(context, const Text("No item selected"),
                         const Text("Please select at least one item to block"));
                     return;
                   }
                   if (blockCubit.state.keywords.isNotEmpty ||
-                      blockCubit.state.websites.isNotEmpty) {
+                      blockCubit.state.websites.isNotEmpty ||
+                      blockCubit.state.partialBlockers.isNotEmpty) {
                     List<bool> arePermissionsEnabled = await Future.wait([
                       checkappPlugin.checkAccessibilityPermission(),
                       checkappPlugin.checkBatteryOptimizationDisabled(),
@@ -216,7 +231,7 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
                             'blockCubit': blockCubit,
                             ...widget.extra
                           });
-                          return;
+                      return;
                     }
                   }
 

@@ -3,6 +3,7 @@ import 'package:checkapp_plugin_example/features/create_block/cubit/cubit/block_
 import 'package:checkapp_plugin_example/features/create_block/models/app/app.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/app_row.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/keyword_row.dart';
+import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/partial_blocking_row.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/website_row.dart';
 import 'package:checkapp_plugin_example/features/create_location/cubit/location_cubit.dart';
 import 'package:checkapp_plugin_example/features/create_schedule/cubit/schedule_cubit.dart';
@@ -100,6 +101,21 @@ class _CreateSchedulePageState extends State<CreateSchedulePage> {
                   key: Key(keyword.keyword),
                 ),
               ))
+          .toList();
+    } else {
+      return [Container()];
+    }
+  }
+
+  List<Widget> partialBlockerWidgets() {
+    if (blockCubit.state.partialBlockers.isNotEmpty) {
+      return blockCubit.state.partialBlockers
+          .map((partialBlocker) => Container(
+              margin: const EdgeInsets.only(bottom: 8),
+              child: PartialBlockingRow(
+                partialBlocker: partialBlocker,
+                imageSize: 50,
+              )))
           .toList();
     } else {
       return [Container()];
@@ -319,6 +335,13 @@ class _CreateSchedulePageState extends State<CreateSchedulePage> {
                               blockCubit: blockCubit,
                               blockType: "Keywords",
                               widgets: keywordWidgets,
+                            ),
+                            const Gap(16),
+                            ExistingBlocks(
+                              extra: widget.extra,
+                              blockCubit: blockCubit,
+                              blockType: "partial blockers",
+                              widgets: partialBlockerWidgets,
                             ),
                           ],
                         ),

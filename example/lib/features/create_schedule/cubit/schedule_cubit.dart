@@ -13,7 +13,8 @@ class ScheduleCubit extends Cubit<Schedule> {
                 location: [],
                 scheduleDetails: ScheduleDetails(
                     isActive: false, scheduleName: '', iconName: ''),
-                block: Block(apps: [], websites: [], keywords: []),
+                block: Block(
+                    apps: [], websites: [], keywords: [], partialBlockers: []),
                 time: Time(days: [], timings: [])));
   void update({required Schedule s}) {
     emit(s);

@@ -17,7 +17,7 @@ final List<Widget> _children = [
       HomeScreen(),
      StrictBlockScreen(),
     const StatisticsScreen(),
-    const ProfileScreen(),
+    const FAQScreen(),
   ];
   void _onItemTapped(int index) {
     setState(() {

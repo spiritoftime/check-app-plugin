@@ -108,9 +108,9 @@ class _AccessibilityPermissionsPageState
                             .toList(),
                       ),
                       const PermissionExplanation(
-                        permissions: [
+                        permissions: [                          "Battery Optimization may prevent accessibility service from working properly",
+
                           "An accessibility service is needed to detect the url you type in your browsers, as well as to detect whether a YT short is opened",
-                          "Battery Optimization may prevent accessibility service from working properly"
                         ],
                       ),
                     ],
