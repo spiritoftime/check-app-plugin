@@ -377,17 +377,6 @@ class _CreateSchedulePageState extends State<CreateSchedulePage> {
                   );
                   return;
                 }
-                if (scheduleName.isEmpty) {
-                  await createAlertDialog(
-                    context,
-                    const Text(
-                      "Error",
-                      style: TextStyle(color: Colors.red),
-                    ),
-                    const Text("Please enter a schedule name"),
-                  );
-                  return;
-                }
                 if (blockCubit.state.keywords.isNotEmpty ||
                     blockCubit.state.websites.isNotEmpty ||
                     blockCubit.state.partialBlockers.isNotEmpty) {
@@ -405,6 +394,17 @@ class _CreateSchedulePageState extends State<CreateSchedulePage> {
                         });
                     return;
                   }
+                }
+                if (scheduleName.isEmpty) {
+                  await createAlertDialog(
+                    context,
+                    const Text(
+                      "Error",
+                      style: TextStyle(color: Colors.red),
+                    ),
+                    const Text("Please enter a schedule name"),
+                  );
+                  return;
                 }
 
                 if (scheduleCubit.state.id != null && context.mounted) {

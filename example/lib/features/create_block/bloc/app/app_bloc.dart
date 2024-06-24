@@ -10,9 +10,7 @@ class AppsBloc extends Bloc<AppEvent, AppsState> {
 
   AppsBloc(this._appRepository) : super(const AppsLoaded()) { // initializes state with AppsLoaded - empty list. AppsBloc(this._appRepository) means this.appRepository = _appRepository
     on<LoadApps>(_onLoadApp); // register events - on loadApp event call _onLoadApp
-    // on<AddTask>(_onAddTask);
-    // on<DeleteTask>(_onDeleteTask);
-    // on<UpdateTask>(_onUpdateTask);
+
   }
 
   Future<void> _onLoadApp(LoadApps event, Emitter<AppsState> emit) async {
@@ -26,30 +24,4 @@ class AppsBloc extends Bloc<AppEvent, AppsState> {
     }
   }
   
-  // void _onAddTask(AddTask event, Emitter<TasksState> emit) {
-  //   final state = this.state;
-  //   if (state is TasksLoaded) {
-  //     emit(TasksLoaded(tasks: List.from(state.tasks)..add(event.task)));
-  //   }
-  // }
-
-  // void _onDeleteTask(DeleteTask event, Emitter<TasksState> emit) {
-  //   final state = this.state;
-  //   if (state is TasksLoaded) {
-  //     List<Task> tasks = state.tasks.where((task) {
-  //       return task.id != event.task.id;
-  //     }).toList();
-  //     emit(TasksLoaded(tasks: tasks));
-  //   }
-  // }
-
-  // void _onUpdateTask(UpdateTask event, Emitter<TasksState> emit) {
-  //   final state = this.state;
-  //   if (state is TasksLoaded) {
-  //     List<Task> tasks = (state.tasks.map((task) {
-  //       return task.id == event.task.id ? event.task : task;
-  //     })).toList();
-  //     emit(TasksLoaded(tasks: tasks));
-  //   }
-  // }
 }

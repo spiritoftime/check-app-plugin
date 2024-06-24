@@ -1,5 +1,5 @@
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/home_screen.dart';
-import 'package:checkapp_plugin_example/features/profile/presentation/profile.dart';
+import 'package:checkapp_plugin_example/features/support/presentation/support.dart';
 import 'package:checkapp_plugin_example/features/presentation/statistics.dart';
 import 'package:checkapp_plugin_example/strict/presentation/strict_block_page.dart';
 import 'package:flutter/material.dart';

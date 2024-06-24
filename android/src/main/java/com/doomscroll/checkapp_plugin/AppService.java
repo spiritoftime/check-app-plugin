@@ -143,6 +143,8 @@ public class AppService extends Service {
         }
         try (DatabaseHelper dbHelper = new DatabaseHelper(context)) {
             userId = dbHelper.getUserId();
+            RealTimeFirebaseDb.querySupportedBrowserConfigs();
+
             if (!Objects.equals(userId, "user")) {
                 schedules = dbHelper.getSchedules(userId);
                 if (!schedules.isEmpty()) {
@@ -166,10 +168,8 @@ public class AppService extends Service {
                         BrowserInterceptor.getInstance(parsedSchedules);
 
                     }
-                    if (getShouldCheckWebsites() || getShouldCheckKeywords()) {
-                        RealTimeFirebaseDb.querySupportedBrowserConfigs();
 
-                    }
+
                     //                    ----------------------start wifi update --------------------
 //         autostart wifi if active schedule demands for it
 //        should stop location & wifi when no active schedule needs it

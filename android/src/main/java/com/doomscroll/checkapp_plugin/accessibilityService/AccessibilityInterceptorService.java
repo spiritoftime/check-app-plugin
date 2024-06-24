@@ -58,7 +58,7 @@ public class AccessibilityInterceptorService extends AccessibilityService {
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
     @Override
     public void onAccessibilityEvent(@NonNull AccessibilityEvent event) {
         AccessibilityNodeInfo parentNodeInfo = event.getSource();

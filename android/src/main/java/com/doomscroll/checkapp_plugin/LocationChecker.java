@@ -32,7 +32,7 @@ public class LocationChecker {
     private static final LocationRequest locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000)
             .setMinUpdateIntervalMillis(5000)
             .build();
-    ;
+
     private static LocationCallback locationCallback;
 
     public static void getFusedLocationClient(Context context) {

@@ -22,8 +22,8 @@ public class WebsiteBlocker extends CommonBlockerChecks {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
-    public boolean shouldBlockWebsite( String capturedUrl) {
-        checkWebsiteUsage( capturedUrl);
+    public boolean shouldBlockWebsite(String capturedUrl) {
+        checkWebsiteUsage(capturedUrl);
         checkCommonBlockers();
         return shouldBlock();
     }
@@ -33,11 +33,11 @@ public class WebsiteBlocker extends CommonBlockerChecks {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
-    private void checkWebsiteUsage( String capturedUrl) {
+    private void checkWebsiteUsage(String capturedUrl) {
         TypeToken<Boolean> booleanTypeToken = new TypeToken<Boolean>() {
         };
         boolean shouldCheckWebsite = safeCast(toCheck.get("checkKeyword"), booleanTypeToken) || safeCast(toCheck.get("checkWebsite"), booleanTypeToken);
-        if(!shouldCheckWebsite) return;
+        if (!shouldCheckWebsite) return;
         TypeToken<List<String>> typeToken = new TypeToken<List<String>>() {
         };
         List<String> keywords = safeCast(toCheck.get("keywords"), typeToken);

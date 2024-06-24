@@ -10,7 +10,6 @@ class SchedulesBloc extends Bloc<ScheduleEvent, ScheduleState> {
     on<LoadSchedules>(_onLoadSchedule);
     on<AddSchedule>(_onAddSchedule);
     on<DeleteSchedule>(_onDeleteSchedule);
-    // on<DeleteTask>(_onDeleteTask);
     on<UpdateSchedule>(_onUpdateSchedule);
   }
 
@@ -53,13 +52,3 @@ void _onDeleteSchedule(
     emit(ScheduleError(e.toString()));
   }
 }
-
-  // void _onUpdateTask(UpdateTask event, Emitter<TasksState> emit) {
-  //   final state = this.state;
-  //   if (state is TasksLoaded) {
-  //     List<Task> tasks = (state.tasks.map((task) {
-  //       return task.id == event.task.id ? event.task : task;
-  //     })).toList();
-  //     emit(TasksLoaded(tasks: tasks));
-  //   }
-  // }

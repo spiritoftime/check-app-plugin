@@ -273,123 +273,16 @@ class DatabaseRepository {
               return await batch.commit(noResult: true, continueOnError: true);
             }),
         errorMessage: "Unable to update schedule");
-    // await db.update(tableName, data, where: 'id = ?', whereArgs: [model.id]);
   }
-  // // A method that deletes a breed data from the breeds table.
-  // Future<void> deleteBreed(int id) async {
-  //   // Get a reference to the database.
-  //   final db = await _databaseRepository.database;
-
-  //   // Remove the Breed from the database.
-  //   await db.delete(
-  //     'breeds',
-  //     // Use a `where` clause to delete a specific breed.
-  //     where: 'id = ?',
-  //     // Pass the Breed's id as a whereArg to prevent SQL injection.
-  //     whereArgs: [id],
-  //   );
-  // }
-  // A method that deletes a breed data from the breeds table.
+ 
   Future<void> deleteSchedule({required int scheduleId}) async {
-    // Get a reference to the database.
     final db = await _databaseRepository.database;
 
-    // Remove the Breed from the database.
     await db.delete(
       'schedules',
-      // Use a `where` clause to delete a specific breed.
       where: 'id = ?',
-      // Pass the Breed's id as a whereArg to prevent SQL injection.
       whereArgs: [scheduleId],
     );
   }
-  // // A method that updates a breed data from the breeds table.
-  // Future<void> updateBreed(Breed breed) async {
-  //   // Get a reference to the database.
-  //   final db = await _databaseRepository.database;
 
-  //   // Update the given breed
-  //   await db.update(
-  //     'breeds',
-  //     breed.toMap(),
-  //     // Ensure that the Breed has a matching id.
-  //     where: 'id = ?',
-  //     // Pass the Breed's id as a whereArg to prevent SQL injection.
-  //     whereArgs: [breed.id],
-  //   );
-  // }
-  // // Define a function that inserts breeds into the database
-  // Future<void> insertBreed(Breed breed) async {
-  //   // Get a reference to the database.
-  //   final db = await _databaseRepository.database;
-
-  //   // Insert the Breed into the correct table. You might also specify the
-  //   // `conflictAlgorithm` to use in case the same breed is inserted twice.
-  //   //
-  //   // In this case, replace any previous data.
-  //   await db.insert(
-  //     'breeds',
-  //     breed.toMap(),
-  //     conflictAlgorithm: ConflictAlgorithm.replace,
-  //   );
-  // }
-
-  // Future<void> insertDog(Dog dog) async {
-  //   final db = await _databaseRepository.database;
-  //   await db.insert(
-  //     'dogs',
-  //     dog.toMap(),
-  //     conflictAlgorithm: ConflictAlgorithm.replace,
-  //   );
-  // }
-
-  // // A method that retrieves all the breeds from the breeds table.
-  // Future<List<Breed>> breeds() async {
-  //   // Get a reference to the database.
-  //   final db = await _databaseRepository.database;
-
-  //   // Query the table for all the Breeds.
-  //   final List<Map<String, dynamic>> maps = await db.query('breeds');
-
-  //   // Convert the List<Map<String, dynamic> into a List<Breed>.
-  //   return List.generate(maps.length, (index) => Breed.fromMap(maps[index]));
-  // }
-
-  // Future<Breed> breed(int id) async {
-  //   final db = await _databaseRepository.database;
-  //   final List<Map<String, dynamic>> maps =
-  //       await db.query('breeds', where: 'id = ?', whereArgs: [id]);
-  //   return Breed.fromMap(maps[0]);
-  // }
-
-  // Future<List<Dog>> dogs() async {
-  //   final db = await _databaseRepository.database;
-  //   final List<Map<String, dynamic>> maps = await db.query('dogs');
-  //   return List.generate(maps.length, (index) => Dog.fromMap(maps[index]));
-  // }
-
-  // Future<void> updateDog(Dog dog) async {
-  //   final db = await _databaseRepository.database;
-  //   await db.update('dogs', dog.toMap(), where: 'id = ?', whereArgs: [dog.id]);
-  // }
-
-  // // A method that deletes a breed data from the breeds table.
-  // Future<void> deleteBreed(int id) async {
-  //   // Get a reference to the database.
-  //   final db = await _databaseRepository.database;
-
-  //   // Remove the Breed from the database.
-  //   await db.delete(
-  //     'breeds',
-  //     // Use a `where` clause to delete a specific breed.
-  //     where: 'id = ?',
-  //     // Pass the Breed's id as a whereArg to prevent SQL injection.
-  //     whereArgs: [id],
-  //   );
-  // }
-
-  // Future<void> deleteDog(int id) async {
-  //   final db = await _databaseRepository.database;
-  //   await db.delete('dogs', where: 'id = ?', whereArgs: [id]);
-  // }
 }

@@ -20,7 +20,7 @@ class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
   final CheckappPlugin checkappPlugin = CheckappPlugin();
 
-  void  redirectToCreateBlock(BuildContext context) async {
+  void redirectToCreateBlock(BuildContext context) async {
     try {
       List<bool> arePermissionsEnabled = await Future.wait([
         checkappPlugin.checkUsagePermission(),
