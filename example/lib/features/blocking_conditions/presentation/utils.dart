@@ -54,18 +54,18 @@ final List<Map<String, dynamic>> conditions = [
       context.pushNamed('create-wifi', extra: extra);
     }
   },
-  {
-    'text': 'Launch Count',
-    'description': 'Max 20 times a day',
-    'icon': const Icon(Icons.power_settings_new, size: 24),
-    'onTap': (BuildContext context, extra) =>
-        context.pushNamed('create-launch-count', extra: extra),
-  },
-  {
-    'text': 'Usage Limit',
-    'description': '30 mins a day',
-    'icon': const Icon(Icons.battery_alert, size: 24),
-    'onTap': (BuildContext context, extra) =>
-        context.pushNamed('create-usage-limit', extra: extra),
-  },
+  // {
+  //   'text': 'Launch Count',
+  //   'description': 'Max 20 times a day',
+  //   'icon': const Icon(Icons.power_settings_new, size: 24),
+  //   'onTap': (BuildContext context, extra) =>
+  //       context.pushNamed('create-launch-count', extra: extra),
+  // },
+  // {
+  //   'text': 'Usage Limit',
+  //   'description': '30 mins a day',
+  //   'icon': const Icon(Icons.battery_alert, size: 24),
+  //   'onTap': (BuildContext context, extra) =>
+  //       context.pushNamed('create-usage-limit', extra: extra),
+  // },
 ];

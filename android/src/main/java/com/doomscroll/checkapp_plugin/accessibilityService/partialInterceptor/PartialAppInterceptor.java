@@ -35,7 +35,7 @@ public class PartialAppInterceptor {
         List<String> idsToBlock = new ArrayList<>();
         idsToBlock.add("youtube:id/reel_player_page_container");
         idsToBlock.add("com.google.android.youtube:id/reel_recycler");
-        
+
 
         partialBlockingConfigs.add(new PartialBlockingConfig("com.google.android.youtube", idsToBlock, "Shorts"));
 

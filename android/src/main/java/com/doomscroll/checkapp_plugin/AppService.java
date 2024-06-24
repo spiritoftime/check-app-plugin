@@ -2,6 +2,7 @@ package com.doomscroll.checkapp_plugin;
 
 import static com.doomscroll.checkapp_plugin.accessibilityService.browserInterceptor.BrowserInterceptor.getShouldCheckKeywords;
 import static com.doomscroll.checkapp_plugin.accessibilityService.browserInterceptor.BrowserInterceptor.getShouldCheckWebsites;
+import static com.doomscroll.checkapp_plugin.accessibilityService.partialInterceptor.PartialAppInterceptor.getShouldCheckPartialBlockers;
 import static com.doomscroll.checkapp_plugin.appBlocker.BlockTask.getRequestConnectedWifi;
 import static com.doomscroll.checkapp_plugin.appBlocker.BlockTask.getRequestCurrentLocation;
 import static com.doomscroll.checkapp_plugin.CheckappPlugin.getCheckAppContext;
@@ -161,10 +162,13 @@ public class AppService extends Service {
                     }
 
 //                    website blocker
+                    if (getShouldCheckKeywords() || getShouldCheckWebsites() || getShouldCheckPartialBlockers()) {
+                        BrowserInterceptor.getInstance(parsedSchedules);
+
+                    }
                     if (getShouldCheckWebsites() || getShouldCheckKeywords()) {
                         RealTimeFirebaseDb.querySupportedBrowserConfigs();
 
-                        BrowserInterceptor.getInstance(parsedSchedules);
                     }
                     //                    ----------------------start wifi update --------------------
 //         autostart wifi if active schedule demands for it

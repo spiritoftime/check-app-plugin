@@ -16,10 +16,32 @@ import 'package:gap/gap.dart';
 /// The home screen
 class HomeScreen extends StatelessWidget {
   /// Constructs a [HomeScreen]
-  // final DatabaseRepository _databaseService = DatabaseRepository();
 
   HomeScreen({super.key});
   final CheckappPlugin checkappPlugin = CheckappPlugin();
+
+  void  redirectToCreateBlock(BuildContext context) async {
+    try {
+      List<bool> arePermissionsEnabled = await Future.wait([
+        checkappPlugin.checkUsagePermission(),
+        checkappPlugin.checkOverlayPermission(),
+        checkappPlugin.checkNotificationPermission(),
+        checkappPlugin.checkBackgroundPermission(),
+      ]);
+      if (arePermissionsEnabled.contains(false) && context.mounted) {
+        context.goNamed('create-block-permission', extra: <String, dynamic>{
+          'blockPermissions': arePermissionsEnabled
+        });
+      } else if (context.mounted) {
+        context.goNamed('create-block', extra: <String, dynamic>{});
+      } else {
+        print('context not mounted');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,19 +55,26 @@ class HomeScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Row(
+                      Row(
                         children: [
                           Padding(
-                            padding: EdgeInsets.only(left: 8.0),
-                            child: Icon(
-                              Icons.shield,
-                              color: Colors.blue,
-                              size: 32.0,
-                              semanticLabel: 'App Icon',
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Image.asset(
+                                'assets/images/play_store_512_removed.png',
+                                width: 48.0,
+                                height: 48.0,
+                                fit: BoxFit.contain,
+                              ),
                             ),
                           ),
-                          Text(
-                            'Doomscroll',
+                          const Gap(4),
+                          const Text(
+                            'Abstainify',
                             style: TextStyle(
                                 fontSize: 24.0,
                                 color: Color(0xff4F8FE9),
@@ -77,17 +106,7 @@ class HomeScreen extends StatelessWidget {
                                   backgroundColor: const Color(0xff5094F5),
                                 ),
                                 onPressed: () async {
-                                  // print(await getDatabasesPath());
-                                  // print(await AuthenticationRepository().userId);
-                                  // await DatabaseRepository().database;
-                                  // context.go('/basic');
-                                  // List<Schedule> schedules =
-                                  //     await DatabaseRepository().schedules();
-
-                                  // for (final s in schedules) {
-                                  //   print(s.toJson());
-                                  // }
-                                  // context.go('/test');
+                                  redirectToCreateBlock(context);
                                 },
                                 child: const Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -126,31 +145,7 @@ class HomeScreen extends StatelessWidget {
                                 backgroundColor: const Color(0xff5094F5),
                               ),
                               onPressed: () async {
-                                try {
-                                  List<bool> arePermissionsEnabled =
-                                      await Future.wait([
-                                    checkappPlugin.checkUsagePermission(),
-                                    checkappPlugin.checkOverlayPermission(),
-                                    checkappPlugin
-                                        .checkNotificationPermission(),
-                                    checkappPlugin.checkBackgroundPermission(),
-                                  ]);
-                                  if (arePermissionsEnabled.contains(false) &&
-                                      context.mounted) {
-                                    context.goNamed('create-block-permission',
-                                        extra: <String, dynamic>{
-                                          'blockPermissions':
-                                              arePermissionsEnabled
-                                        });
-                                  } else if (context.mounted) {
-                                    context.goNamed('create-block',
-                                        extra: <String, dynamic>{});
-                                  } else {
-                                    print('context not mounted');
-                                  }
-                                } catch (e) {
-                                  print(e);
-                                }
+                                redirectToCreateBlock(context);
                               },
                               icon: const Icon(Icons.add,
                                   color: Colors.white, size: 24),
@@ -224,5 +219,3 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-
-

@@ -13,10 +13,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
-final List<Widget> _children = [
-      HomeScreen(),
-     StrictBlockScreen(),
-    const StatisticsScreen(),
+  final List<Widget> _children = [
+    HomeScreen(),
+    //  StrictBlockScreen(),
+    // const StatisticsScreen(),
     const FAQScreen(),
   ];
   void _onItemTapped(int index) {
@@ -28,25 +28,25 @@ final List<Widget> _children = [
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: _children[_selectedIndex],
+      body: _children[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(
-            icon:  Icon(Icons.shield_sharp),
+            icon: Icon(Icons.shield_sharp),
             label: 'Block',
           ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.block),
+          //   label: 'Strict Block ',
+          // ),
+          // BottomNavigationBarItem(
+          //   icon:  Icon(Icons.bar_chart),
+          //   label: 'Statistics',
+          // ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.block),
-            label: 'Strict Block ',
-          ),
-          BottomNavigationBarItem(
-            icon:  Icon(Icons.bar_chart),
-            label: 'Statistics',
-          ),
-          BottomNavigationBarItem(
-            icon:  Icon(Icons.person),
-            label: 'Profile',
+            icon: Icon(Icons.contact_support),
+            label: 'Support',
           ),
         ],
         currentIndex: _selectedIndex,
@@ -58,4 +58,3 @@ final List<Widget> _children = [
     );
   }
 }
-

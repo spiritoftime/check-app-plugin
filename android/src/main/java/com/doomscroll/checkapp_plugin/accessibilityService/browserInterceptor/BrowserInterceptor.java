@@ -26,7 +26,7 @@ import java.util.Map;
 public class BrowserInterceptor {
     private static BrowserInterceptor instance;
 
-    private static List<Map<String, Object>> parsedSchedules;
+    private static List<Map<String, Object>> parsedSchedules = new ArrayList<>();
 
     private BrowserInterceptor(List<Map<String, Object>> parsedSchedules) {
         BrowserInterceptor.parsedSchedules = parsedSchedules;

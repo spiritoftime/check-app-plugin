@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:checkapp_plugin/checkapp_plugin.dart';
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/carousel_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -16,14 +17,35 @@ class ScheduleTemplateCarousel extends StatefulWidget {
 class _CarouselWithIndicatorState extends State<ScheduleTemplateCarousel> {
   int _current = 0;
   final CarouselController _controller = CarouselController();
-
+  CheckappPlugin checkappPlugin = CheckappPlugin();
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Material(
           child: InkWell(
-            onTap: () => context.go('/create-block'),
+            onTap: () async {
+              try {
+                List<bool> arePermissionsEnabled = await Future.wait([
+                  checkappPlugin.checkUsagePermission(),
+                  checkappPlugin.checkOverlayPermission(),
+                  checkappPlugin.checkNotificationPermission(),
+                  checkappPlugin.checkBackgroundPermission(),
+                ]);
+                if (arePermissionsEnabled.contains(false) && context.mounted) {
+                  context.goNamed('create-block-permission',
+                      extra: <String, dynamic>{
+                        'blockPermissions': arePermissionsEnabled
+                      });
+                } else if (context.mounted) {
+                  context.goNamed('create-block', extra: <String, dynamic>{});
+                } else {
+                  print('context not mounted');
+                }
+              } catch (e) {
+                print(e);
+              }
+            },
             child: Ink(
               color: Colors.black,
               child: Container(
