@@ -143,6 +143,7 @@ public class Utils {
         }
         throw new IllegalArgumentException("Type Token type not same as object");
     }
+
     public static void goToHomeScreen(Context context) {
         Intent startMain = new Intent(Intent.ACTION_MAIN);
         startMain.addCategory(Intent.CATEGORY_HOME);

@@ -1,6 +1,7 @@
 package com.doomscroll.checkapp_plugin;
 
 import static com.doomscroll.checkapp_plugin.Utils.getCurrentDayTime;
+import static com.doomscroll.checkapp_plugin.Utils.isCurrentTimeWithinRange;
 import static com.doomscroll.checkapp_plugin.Utils.parseStringToArray;
 import static com.doomscroll.checkapp_plugin.Utils.parseStringToSingleArray;
 import static com.doomscroll.checkapp_plugin.Utils.safeCast;
@@ -20,6 +21,16 @@ import java.util.List;
 import java.util.Locale;
 
 public class UtilsTest extends TestCase {
+    public void testCurrentTimeWithinDateRange() {
+//        tc 1 : outside range
+        assertFalse(isCurrentTimeWithinRange("11:00", "15:00", "04:00"));
+//        within range
+        assertTrue(isCurrentTimeWithinRange("11:00", "15:00", "12:00"));
+//        within range - next day
+        assertTrue(isCurrentTimeWithinRange("23:00", "04:00", "01:00"));
+
+    }
+
     public void testSafeCast() {
         TypeToken<List<String>> typeToken = new TypeToken<List<String>>() {
         };
@@ -32,7 +43,7 @@ public class UtilsTest extends TestCase {
 
 
         assertEquals(wifisToInsert, wifis);
-
+//fail case
         TypeToken<Integer> failToken = new TypeToken<Integer>() {
         };
 
@@ -58,7 +69,7 @@ public class UtilsTest extends TestCase {
 
         String tc3 = "invalid input";
         List<List<String>> tc3List = parseStringToArray(tc3);
-        assertEquals("nvalid inpu",tc3List.get(0).get(0));
+        assertEquals("nvalid inpu", tc3List.get(0).get(0));
 
         String tc4 = "[00:38]";
         List<List<String>> tc4List = parseStringToArray(tc4);
@@ -81,7 +92,7 @@ public class UtilsTest extends TestCase {
 
         String tc3 = "invalid input";
         List<String> tc3List = parseStringToSingleArray(tc3);
-        assertEquals(tc3,tc3List.get(0));
+        assertEquals(tc3, tc3List.get(0));
 
         String tc4 = "[Monday]";
         List<String> tc4List = parseStringToSingleArray(tc4);
