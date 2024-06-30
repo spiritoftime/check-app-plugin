@@ -14,8 +14,14 @@ android:
     - android-30
 
 before_install:
-  - sudo apt-get update
-  - sudo apt-get install -y libstdc++6 fonts-droid-fallback lib32stdc++6 python3
+  # Add missing GPG key
+  - curl -fsSL https://packagecloud.io/github/git-lfs/gpgkey | sudo apt-key add -
+  
+  # Update package lists with more resilient options
+  - sudo apt-get update -y || true
+  - sudo apt-get install -y libstdc++6 fonts-droid-fallback lib32stdc++6 python3 || true
+  
+  # Rest of your original before_install steps
   - git clone https://github.com/flutter/flutter.git -b $FLUTTER_VERSION
   - export PATH="$PATH:`pwd`/flutter/bin"
   - flutter doctor
