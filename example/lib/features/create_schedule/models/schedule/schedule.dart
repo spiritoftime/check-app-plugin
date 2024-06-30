@@ -33,7 +33,6 @@ class Schedule {
       ScheduleDetails? scheduleDetails}) {
     return Schedule(
         location: location ?? this.location,
-        
         id: id,
         userId: userId,
         block: block ?? this.block,
