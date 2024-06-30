@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:checkapp_plugin/checkapp_plugin.dart';
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/carousel_icons.dart';
+import 'package:checkapp_plugin_example/router/route_names.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -33,12 +34,12 @@ class _CarouselWithIndicatorState extends State<ScheduleTemplateCarousel> {
                   checkappPlugin.checkBackgroundPermission(),
                 ]);
                 if (arePermissionsEnabled.contains(false) && context.mounted) {
-                  context.goNamed('create-block-permission',
+                  context.goNamed(RouteNames.createBlockPermission,
                       extra: <String, dynamic>{
                         'blockPermissions': arePermissionsEnabled
                       });
                 } else if (context.mounted) {
-                  context.goNamed('create-block', extra: <String, dynamic>{});
+                  context.goNamed(RouteNames.createBlock, extra: <String, dynamic>{});
                 } else {
                   print('context not mounted');
                 }

@@ -18,6 +18,7 @@ import 'package:checkapp_plugin_example/features/create_time/cubit/cubit/time_cu
 import 'package:checkapp_plugin_example/features/create_wifi/cubit/cubit/wifi_cubit.dart';
 import 'package:checkapp_plugin_example/features/home/bloc/schedule_bloc.dart';
 import 'package:checkapp_plugin_example/features/home/bloc/schedule_event.dart';
+import 'package:checkapp_plugin_example/router/route_names.dart';
 import 'package:checkapp_plugin_example/shared/widgets/accordion_wrapper.dart';
 import 'package:checkapp_plugin_example/shared/widgets/hover_ink_well.dart';
 import 'package:checkapp_plugin_example/shared/widgets/show_dialog.dart';
@@ -386,7 +387,7 @@ class _CreateSchedulePageState extends State<CreateSchedulePage> {
                   ]);
                   if (arePermissionsEnabled.contains(false) &&
                       context.mounted) {
-                    context.goNamed('create-accessibility-permission',
+                    context.goNamed(RouteNames.createAccessibilityPermission,
                         extra: <String, dynamic>{
                           'accessibilityPermissions': arePermissionsEnabled,
                           'blockCubit': blockCubit,
@@ -439,7 +440,7 @@ class _CreateSchedulePageState extends State<CreateSchedulePage> {
                 }
                 if (context.mounted) {
                   context.read<SchedulesBloc>().add(LoadSchedules());
-                  context.goNamed('home');
+                  context.goNamed(RouteNames.home);
                 }
               },
               child: const Text(

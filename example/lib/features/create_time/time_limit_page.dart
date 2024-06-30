@@ -3,6 +3,7 @@ import 'package:checkapp_plugin_example/features/create_time/models/timing/timin
 import 'package:checkapp_plugin_example/features/create_time/widgets/day_row.dart';
 import 'package:checkapp_plugin_example/features/create_time/widgets/all_day_timing_row.dart';
 import 'package:checkapp_plugin_example/features/create_time/widgets/timing_row.dart';
+import 'package:checkapp_plugin_example/router/route_names.dart';
 import 'package:checkapp_plugin_example/shared/helper_functions/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -197,7 +198,7 @@ class _TimeLimitPageState extends State<TimeLimitPage> {
                   }
                   timeCubit.updateTime(timings: finalTimings);
 
-                  context.goNamed('confirm-schedule',
+                  context.goNamed(RouteNames.confirmSchedule,
                       extra: {...widget.extra, 'timeCubit': timeCubit});
                 },
                 color: Colors.blue,

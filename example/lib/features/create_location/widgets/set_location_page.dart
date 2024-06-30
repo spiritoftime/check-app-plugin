@@ -2,6 +2,7 @@ import 'package:checkapp_plugin_example/features/create_block/presentation/widge
 import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/keyword_row.dart';
 import 'package:checkapp_plugin_example/features/create_location/cubit/location_cubit.dart';
 import 'package:checkapp_plugin_example/features/create_location/models/location/location.dart';
+import 'package:checkapp_plugin_example/router/route_names.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:geocoder_buddy/geocoder_buddy.dart';
@@ -127,7 +128,7 @@ class _SetLocationPageState extends State<SetLocationPage> {
               child: const Text('Save Location List',
                   style: TextStyle(color: Colors.white)),
               onPressed: () {
-                context.goNamed('confirm-schedule',
+                context.goNamed(RouteNames.confirmSchedule,
                     extra: {...widget.extra, 'locationCubit': locationCubit});
               },
             ),

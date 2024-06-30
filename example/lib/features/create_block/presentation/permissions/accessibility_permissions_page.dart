@@ -3,6 +3,7 @@ import 'package:checkapp_plugin_example/features/create_block/cubit/cubit/block_
 import 'package:checkapp_plugin_example/features/create_block/presentation/permissions/widgets/number_permission.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/permissions/widgets/permission_explanation.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/utils.dart';
+import 'package:checkapp_plugin_example/router/route_names.dart';
 import 'package:checkapp_plugin_example/shared/widgets/lifecycle_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -44,10 +45,10 @@ class _AccessibilityPermissionsPageState
         });
         if (mounted && arePermissionsEnabled.every((e) => e)) {
           if (widget.extra.containsKey('blockCubit')) {
-            context.goNamed('confirm-schedule',
+            context.goNamed(RouteNames.confirmSchedule,
                 extra: {...widget.extra, 'blockCubit': blockCubit});
           } else {
-            context.goNamed('create-blocking-conditions',
+            context.goNamed(RouteNames.createBlockingConditions,
                 extra: {...widget.extra, 'blockCubit': blockCubit});
           }
         }

@@ -1,4 +1,5 @@
 import 'package:checkapp_plugin_example/features/create_location/utils.dart';
+import 'package:checkapp_plugin_example/router/route_names.dart';
 import 'package:checkapp_plugin_example/shared/widgets/accordion_wrapper.dart';
 import 'package:checkapp_plugin_example/shared/widgets/lifecycle_handler.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +32,7 @@ class _LocationPermissionState extends State<LocationPermission> {
         resumeCallBack: () async {
           isPermissionEnabled = await isLocationPermissionEnabled();
           if (mounted && isPermissionEnabled) {
-            context.goNamed('create-location', extra: widget.extra);
+            context.goNamed(RouteNames.createLocation, extra: widget.extra);
           }
         },
       );

@@ -1,6 +1,7 @@
 import 'package:checkapp_plugin/checkapp_plugin.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/permissions/widgets/number_permission.dart';
 import 'package:checkapp_plugin_example/features/create_wifi/utils.dart';
+import 'package:checkapp_plugin_example/router/route_names.dart';
 import 'package:checkapp_plugin_example/shared/widgets/accordion_wrapper.dart';
 import 'package:checkapp_plugin_example/shared/widgets/instruction.dart';
 import 'package:checkapp_plugin_example/shared/widgets/lifecycle_handler.dart';
@@ -38,7 +39,7 @@ class _WifiPermissionPageState extends State<WifiPermissionPage> {
         });
         if (mounted &&
             wifiPermissionsEnabled.every((element) => element == true)) {
-          context.goNamed('create-wifi', extra: widget.extra);
+          context.goNamed(RouteNames.createWifi, extra: widget.extra);
         }
       },
     );

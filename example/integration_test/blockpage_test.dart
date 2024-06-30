@@ -14,7 +14,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:integration_test/integration_test.dart';
 
-Future<void> loadBlockPage(WidgetTester tester) async {
+Future<void> loadPage(WidgetTester tester,String routeName) async {
   // Load app widget.
   await tester.pumpWidget(
     MultiRepositoryProvider(
@@ -51,7 +51,7 @@ Future<void> loadBlockPage(WidgetTester tester) async {
       ),
     ),
   );
-  GoRouter.of(tester.element(find.byType(Navigator))).goNamed('create-block');
+  GoRouter.of(tester.element(find.byType(Navigator))).goNamed(routeName);
 
   await tester.pumpAndSettle();
 }
@@ -62,7 +62,7 @@ void main() {
     testWidgets(
         'verify search icon exists at app screen and filter works correctly',
         (tester) async {
-      await loadBlockPage(tester);
+      await loadPage(tester,'create-block');
 //  verify search icon exists  at app screen
       expect(find.byIcon(Icons.search), findsOneWidget);
       // Click on the search icon
@@ -79,7 +79,7 @@ void main() {
     testWidgets(
         'end-to-end test for create block page, navigating between screens',
         (tester) async {
-      await loadBlockPage(tester);
+      await loadPage(tester,'create-block');
       Future<void> navigateScreen(String text, String screenKey) async {
         final websiteTabFinder = find.descendant(
           of: find.byKey(const Key("Tab Bar")),
@@ -101,7 +101,7 @@ void main() {
 
     testWidgets('end-to-end test for create block page, submitting block page',
         (tester) async {
-      await loadBlockPage(tester);
+      await loadPage(tester,'create-block');
 
       await tester.tap(find.text("Save Blocklist"));
       await tester.pumpAndSettle();

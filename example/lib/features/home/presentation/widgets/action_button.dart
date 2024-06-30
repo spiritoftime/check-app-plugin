@@ -7,6 +7,7 @@ import 'package:checkapp_plugin_example/features/create_time/cubit/cubit/time_cu
 import 'package:checkapp_plugin_example/features/create_wifi/cubit/cubit/wifi_cubit.dart';
 import 'package:checkapp_plugin_example/features/home/bloc/schedule_bloc.dart';
 import 'package:checkapp_plugin_example/features/home/bloc/schedule_event.dart';
+import 'package:checkapp_plugin_example/router/route_names.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -112,7 +113,7 @@ abstract class MenuItems {
 
     switch (item) {
       case MenuItems.edit:
-        context.goNamed('confirm-schedule', extra: {
+        context.goNamed(RouteNames.confirmSchedule, extra: {
           'blockCubit': BlockCubit(initialBlock: s.block),
           'timeCubit': TimeCubit(initialTime: s.time),
           'locationCubit': LocationCubit(initialLocation: s.location),

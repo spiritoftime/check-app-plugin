@@ -6,6 +6,7 @@ import 'package:checkapp_plugin_example/features/create_block/presentation/widge
 import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/keyword_screen.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/partial_blocking_screen.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/widgets/website_screen.dart';
+import 'package:checkapp_plugin_example/router/route_names.dart';
 import 'package:checkapp_plugin_example/shared/widgets/show_dialog.dart';
 import 'package:flutter/material.dart';
 
@@ -224,10 +225,10 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
 
                   if (widget.extra.containsKey('blockCubit') &&
                       context.mounted) {
-                    context.goNamed('confirm-schedule',
+                    context.goNamed(RouteNames.confirmSchedule,
                         extra: {...widget.extra, 'blockCubit': blockCubit});
                   } else if (context.mounted) {
-                    context.goNamed('create-blocking-conditions',
+                    context.goNamed(RouteNames.confirmSchedule,
                         extra: {...widget.extra, 'blockCubit': blockCubit});
                   }
                 },

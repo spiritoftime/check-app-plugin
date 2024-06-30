@@ -5,6 +5,7 @@ import 'package:checkapp_plugin_example/features/create_block/presentation/widge
 import 'package:checkapp_plugin_example/features/create_wifi/cubit/cubit/wifi_cubit.dart';
 import 'package:checkapp_plugin_example/features/create_wifi/models/wifi.dart';
 import 'package:checkapp_plugin_example/features/create_wifi/widgets/wifi_row.dart';
+import 'package:checkapp_plugin_example/router/route_names.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:go_router/go_router.dart';
@@ -114,7 +115,7 @@ class _WifiLimitState extends State<WifiLimit> {
                   child: const Text('Save Wifi List',
                       style: TextStyle(color: Colors.white)),
                   onPressed: () {
-                    context.goNamed('confirm-schedule',
+                    context.goNamed(RouteNames.confirmSchedule,
                         extra: {...widget.extra, 'wifiCubit': wifiCubit});
                   },
                 ),

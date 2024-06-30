@@ -7,6 +7,7 @@ import 'package:checkapp_plugin_example/features/home/presentation/widgets/carou
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/schedule_row.dart';
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/schedule_template_carousel.dart';
 import 'package:checkapp_plugin_example/features/home/presentation/widgets/endless_scrolling_widget.dart';
+import 'package:checkapp_plugin_example/router/route_names.dart';
 import 'package:checkapp_plugin_example/shared/widgets/grey_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,11 +30,11 @@ class HomeScreen extends StatelessWidget {
         checkappPlugin.checkBackgroundPermission(),
       ]);
       if (arePermissionsEnabled.contains(false) && context.mounted) {
-        context.goNamed('create-block-permission', extra: <String, dynamic>{
+        context.goNamed(RouteNames.createBlockPermission, extra: <String, dynamic>{
           'blockPermissions': arePermissionsEnabled
         });
       } else if (context.mounted) {
-        context.goNamed('create-block', extra: <String, dynamic>{});
+        context.goNamed(RouteNames.createBlock, extra: <String, dynamic>{});
       } else {
         print('context not mounted');
       }

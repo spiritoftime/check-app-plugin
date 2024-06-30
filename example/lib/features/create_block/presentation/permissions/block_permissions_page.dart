@@ -2,6 +2,7 @@ import 'package:checkapp_plugin/checkapp_plugin.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/permissions/widgets/number_permission.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/permissions/widgets/permission_explanation.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/utils.dart';
+import 'package:checkapp_plugin_example/router/route_names.dart';
 import 'package:checkapp_plugin_example/shared/widgets/lifecycle_handler.dart';
 
 import 'package:flutter/material.dart';
@@ -39,7 +40,7 @@ class _BlockPermissionsPageState extends State<BlockPermissionsPage> {
           blockPermissions = arePermissionsEnabled;
         });
         if (mounted && arePermissionsEnabled.every((e) => e)) {
-          context.goNamed('create-block', extra: widget.extra);
+          context.goNamed(RouteNames.createBlock, extra: widget.extra);
         }
       },
     );
