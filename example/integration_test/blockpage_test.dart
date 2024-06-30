@@ -82,7 +82,7 @@ void main() {
       await loadPage(tester,'create-block');
       Future<void> navigateScreen(String text, String screenKey) async {
         final websiteTabFinder = find.descendant(
-          of: find.byKey(const Key("Tab Bar")),
+          of: find.byKey(const Key("Tab Bar")), // change
           matching: find.text(text),
           skipOffstage: false,
         );
