@@ -45,6 +45,7 @@ class _AppScreenState extends State<AppScreen> {
                         .toList()
                     : state.apps;
                 return CustomCheckboxGroup(
+                  key: const Key("App Checkboxes"),
                   onChanged: _onAppCheckBoxChanged,
                   name: 'apps',
                   items: filteredApps,

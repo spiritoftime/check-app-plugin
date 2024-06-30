@@ -22,7 +22,6 @@ class CreateBlockPage extends StatefulWidget {
 }
 
 class _CreateBlockPageState extends State<CreateBlockPage> {
-
   late BlockCubit blockCubit;
   @override
   void initState() {
@@ -105,6 +104,7 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
                       : _isAppScreen && !_showSearchIcon
                           ? Expanded(
                               child: TextField(
+                                key: const Key("Filter"),
                                 decoration: const InputDecoration(
                                   alignLabelWithHint: true,
                                   contentPadding: EdgeInsets.only(top: 12),
@@ -148,6 +148,7 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
                               SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
                                 child: ButtonsTabBar(
+                                  key: const Key("Tab Bar"),
                                   buttonMargin:
                                       const EdgeInsets.only(right: 16),
                                   contentPadding: const EdgeInsets.symmetric(
@@ -176,16 +177,21 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
                                   child: TabBarView(
                                     children: [
                                       AppScreen(
+                                          key: const Key("App Screen"),
                                           blockCubit: blockCubit,
                                           searchApplicationTerm:
                                               _searchApplicationTerm),
                                       WebsiteScreen(
+                                        key: const Key("Website Screen"),
                                         blockCubit: blockCubit,
                                       ),
                                       KeywordScreen(
+                                        key: const Key("Keyword Screen"),
                                         blockCubit: blockCubit,
                                       ),
                                       PartialBlockingScreen(
+                                        key: const Key(
+                                            "Partial Blocking Screen"),
                                         blockCubit: blockCubit,
                                       )
                                     ],
@@ -215,7 +221,6 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
                         const Text("Please select at least one item to block"));
                     return;
                   }
-                 
 
                   if (widget.extra.containsKey('blockCubit') &&
                       context.mounted) {
