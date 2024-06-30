@@ -69,7 +69,7 @@ public class UtilsTest extends TestCase {
 
         String tc3 = "invalid input";
         List<List<String>> tc3List = parseStringToArray(tc3);
-        assertEquals("nvalid inpu", tc3List.get(0).get(0));
+        assertEquals("nvalid input", tc3List.get(0).get(0));
 
         String tc4 = "[00:38]";
         List<List<String>> tc4List = parseStringToArray(tc4);

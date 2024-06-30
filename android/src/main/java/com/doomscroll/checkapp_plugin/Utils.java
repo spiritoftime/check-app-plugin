@@ -101,7 +101,7 @@ public class Utils {
 
         // Format the current time
         String formattedTime = sdf.format(calendar.getTime());
-        currentDayTime.add(formattedTime.split(" ")[0]);
+        currentDayTime.add(formattedTime.split(" ")[0]); // day
         currentDayTime.add(formattedTime.split(" ")[1]);
 
         return currentDayTime;
@@ -153,6 +153,7 @@ public class Utils {
         context.startActivity(startMain);
 
     }
+
 
 
 }
