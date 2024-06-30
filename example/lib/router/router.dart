@@ -1,5 +1,6 @@
 import 'package:checkapp_plugin_example/features/basic/presentation/basic_screen.dart';
 import 'package:checkapp_plugin_example/features/blocking_conditions/presentation/blocking_conditions_page.dart';
+import 'package:checkapp_plugin_example/features/create_block/cubit/cubit/block_cubit.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/permissions/accessibility_permissions_page.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/permissions/block_permissions_page.dart';
 import 'package:checkapp_plugin_example/features/create_block/presentation/pages/create_block_page.dart';
@@ -21,15 +22,20 @@ final List<RouteBase> _permissionsRouter = <RouteBase>[
     name: 'create-block-permission',
     path: 'block-permission',
     builder: (BuildContext context, GoRouterState state) {
+      if (state.extra == null) return const BlockPermissionsPage(extra: {});
+
       final extra = state.extra as Map<String, dynamic>;
 
       return BlockPermissionsPage(extra: extra);
     },
   ),
-   GoRoute(
+  GoRoute(
     name: 'create-accessibility-permission',
     path: 'accessibility-permission',
     builder: (BuildContext context, GoRouterState state) {
+      if (state.extra == null)
+        return const AccessibilityPermissionsPage(extra: {});
+
       final extra = state.extra as Map<String, dynamic>;
 
       return AccessibilityPermissionsPage(extra: extra);
@@ -39,6 +45,8 @@ final List<RouteBase> _permissionsRouter = <RouteBase>[
     name: 'create-location-permission',
     path: 'location-permission',
     builder: (BuildContext context, GoRouterState state) {
+      if (state.extra == null) return const LocationPermission(extra: {});
+
       final extra = state.extra as Map<String, dynamic>;
 
       return LocationPermission(extra: extra);
@@ -48,6 +56,8 @@ final List<RouteBase> _permissionsRouter = <RouteBase>[
     name: 'create-wifi-permission',
     path: 'wifi-permission',
     builder: (BuildContext context, GoRouterState state) {
+      if (state.extra == null) return const WifiPermissionPage(extra: {});
+
       final extra = (state.extra as Map<String, dynamic>);
 
       return WifiPermissionPage(
@@ -61,6 +71,8 @@ final List<RouteBase> _createScheduleRouter = <RouteBase>[
     name: 'create-block',
     path: 'create-schedule',
     builder: (BuildContext context, GoRouterState state) {
+      if (state.extra == null) return const CreateBlockPage(extra: {});
+
       final extra = state.extra as Map<String, dynamic>;
 
       return CreateBlockPage(extra: extra);
@@ -70,6 +82,8 @@ final List<RouteBase> _createScheduleRouter = <RouteBase>[
     name: 'create-location',
     path: 'location',
     builder: (BuildContext context, GoRouterState state) {
+      if (state.extra == null) return const SetLocationPage(extra: {});
+
       final extra = state.extra as Map<String, dynamic>;
 
       return SetLocationPage(extra: extra);
@@ -79,6 +93,10 @@ final List<RouteBase> _createScheduleRouter = <RouteBase>[
     name: 'confirm-schedule',
     path: 'confirm',
     builder: (BuildContext context, GoRouterState state) {
+      if (state.extra == null) {
+        return  CreateSchedulePage(extra: {'blockCubit': BlockCubit()});
+      }
+
       final extra = state.extra as Map<String, dynamic>;
 
       return CreateSchedulePage(extra: extra);
@@ -88,6 +106,8 @@ final List<RouteBase> _createScheduleRouter = <RouteBase>[
     name: 'create-time',
     path: 'time',
     builder: (BuildContext context, GoRouterState state) {
+      if (state.extra == null) return const TimeLimitPage(extra: {});
+
       final extra = state.extra as Map<String, dynamic>;
 
       return TimeLimitPage(extra: extra);
@@ -97,6 +117,8 @@ final List<RouteBase> _createScheduleRouter = <RouteBase>[
     name: 'create-wifi',
     path: 'wifi',
     builder: (BuildContext context, GoRouterState state) {
+      if (state.extra == null) return const WifiLimit(extra: {});
+
       final extra = state.extra as Map<String, dynamic>;
 
       return WifiLimit(extra: extra);
@@ -106,6 +128,8 @@ final List<RouteBase> _createScheduleRouter = <RouteBase>[
     name: 'create-launch-count',
     path: 'launch-count',
     builder: (BuildContext context, GoRouterState state) {
+      if (state.extra == null) return const LaunchLimit(extra: {});
+
       final extra = state.extra as Map<String, dynamic>;
 
       return LaunchLimit(extra: extra);
@@ -115,6 +139,8 @@ final List<RouteBase> _createScheduleRouter = <RouteBase>[
     name: 'create-usage-limit',
     path: 'usage-limit',
     builder: (BuildContext context, GoRouterState state) {
+      if (state.extra == null) return const UsageLimit(extra: {});
+
       final extra = state.extra as Map<String, dynamic>;
 
       return UsageLimit(extra: extra);
@@ -124,6 +150,7 @@ final List<RouteBase> _createScheduleRouter = <RouteBase>[
     name: 'create-blocking-conditions',
     path: 'blocking-conditions',
     builder: (BuildContext context, GoRouterState state) {
+      if (state.extra == null) return const BlockingConditionsPage(extra: {});
       final extra = state.extra as Map<String, dynamic>;
       return BlockingConditionsPage(extra: extra);
     },
