@@ -1,4 +1,5 @@
 import 'package:checkapp_plugin_example/features/create_block/presentation/pages/create_block_page.dart';
+import 'package:checkapp_plugin_example/router/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
@@ -10,11 +11,10 @@ void main() {
         'verify search icon exists at app screen, but disappears at other screen',
         (tester) async {
       // Load app widget.
-      await tester.pumpWidget(const MaterialApp(
-        home: CreateBlockPage(
-          extra: {},
-        ),
-      ));
+      await tester.pumpWidget(const MyApp());
+
+      router.goNamed('create-block');
+      await tester.pumpAndSettle();
 //  verify search icon exists  at app screen
       expect(find.byIcon(Icons.search) as Function(dynamic p1), findsOneWidget);
       // Click on the search icon

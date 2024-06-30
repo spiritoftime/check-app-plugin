@@ -158,7 +158,7 @@ final List<RouteBase> _createScheduleRouter = <RouteBase>[
 ];
 
 /// The route configuration.
-final GoRouter _router = GoRouter(
+final GoRouter router = GoRouter(
   routes: <RouteBase>[
     GoRoute(
       name: 'home',
@@ -193,7 +193,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      routerConfig: _router,
+      routerConfig: router,
       theme: ThemeData(
         brightness: Brightness.dark,
         scaffoldBackgroundColor: Colors.black,
