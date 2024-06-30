@@ -1,0 +1,37 @@
+language: android
+jdk: oraclejdk8
+
+env:
+  global:
+    - ANDROID_SDK_ROOT=/usr/local/android-sdk
+    - FLUTTER_VERSION=stable
+
+android:
+  components:
+    - tools
+    - platform-tools
+    - build-tools-30.0.3
+    - android-30
+
+before_install:
+  - sudo apt-get update
+  - sudo apt-get install -y libstdc++6 fonts-droid-fallback lib32stdc++6 python3
+  - git clone https://github.com/flutter/flutter.git -b $FLUTTER_VERSION
+  - export PATH="$PATH:`pwd`/flutter/bin"
+  - flutter doctor
+
+script:
+  # Run Flutter tests at the root
+  - flutter test
+  
+  # Run Android unit tests
+  - cd android && ./gradlew test && cd ..
+  
+  # Run tests and integration tests in the example folder
+  - cd example
+  - flutter test
+  - flutter test integration_test/main.dart
+
+cache:
+  directories:
+    - $HOME/.pub-cache
