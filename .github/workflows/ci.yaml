@@ -1,31 +1,28 @@
 name: CI
 on: [push]
 jobs:
-  unit testing:
+  unit test:
     runs-on: ubuntu-latest
     steps:
       - name: Clone plugin repository
         uses: actions/checkout@v4
+
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: stable
           flutter-version-file: pubspec.yaml # path to pubspec.yaml
-      - run: flutter --version
 
+      - name: Verify Flutter installation
+        run: flutter --version
 
-    name: run unit tests
-    steps:
-      - name: run for flutter plugin
+      - name: Run unit tests for Flutter plugin
         run: flutter test
-      - name: run for example
+
+      - name: Run unit tests for example app
         run: |
           cd example
           flutter test
-    name: run android tests
-    uses: actions/checkout@v4
-
-    steps:
 
       - name: Set up JDK 17
         uses: actions/setup-java@v3
@@ -33,11 +30,12 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Setup Android SDK
+      - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: run example app tests
+      - name: Run Android tests for example app
         run: |
           cd example/android
           ./gradlew test
+
 
