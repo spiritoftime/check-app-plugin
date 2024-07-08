@@ -175,11 +175,11 @@ final GoRouter router = GoRouter(
             return const DetailsScreen();
           },
         ),
-        GoRoute(
-            path: 'basic',
-            builder: (BuildContext context, GoRouterState state) {
-              return BasicScreen();
-            }),
+        // GoRoute(
+        //     path: 'basic',
+        //     builder: (BuildContext context, GoRouterState state) {
+        //       return BasicScreen();
+        //     }),
         ..._createScheduleRouter,
         ..._permissionsRouter
       ],

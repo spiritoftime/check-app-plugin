@@ -34,6 +34,7 @@ jobs:
       - name: Unit Test
         run: |
           cd example/android
+          gradle wrapper
           ./gradlew testDebugUnitTest
 
       - name: Android Test Report
