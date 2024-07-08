@@ -1,7 +1,7 @@
 name: CI
 on: [push]
 jobs:
-  unit test:
+  unit_test:
     runs-on: ubuntu-latest
     steps:
       - name: Clone plugin repository
