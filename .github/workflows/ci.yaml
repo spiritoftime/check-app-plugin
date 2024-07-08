@@ -11,7 +11,9 @@ jobs:
         with:
           channel: stable
           flutter-version: 3.22.2
-      - run: flutter --version
+      - run: |
+         flutter --version
+         sdkmanager.bat --licenses
 
       - name: Run unit tests for Flutter plugin
         run: flutter test
