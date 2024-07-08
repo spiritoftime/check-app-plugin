@@ -60,13 +60,12 @@ jobs:
       # - name: Set Flutter SDK path
       #   run: echo "FLUTTER_HOME=${{ env.FLUTTER_ROOT }}" >> $GITHUB_ENV
 
-      # - name: Create local.properties
-      #   run: |
-      #     echo "sdk.dir=${{ env.ANDROID_HOME }}" > example/android/local.properties
-      #     echo "flutter.sdk=${{ env.FLUTTER_HOME }}" >> example/android/local.properties
-      #     echo "flutter.minSdkVersion=29" >> example/android/local.properties
-      #     echo "flutter.compileSdkVersion=33" >> example/android/local.properties
-      #     echo "flutter.targetSdkVersion=33" >> example/android/local.properties
+      - name: Create local.properties
+        run: |
+          echo "sdk.dir=${{ env.ANDROID_HOME }}" > example/android/local.properties
+          echo "flutter.minSdkVersion=29" >> example/android/local.properties
+          echo "flutter.compileSdkVersion=33" >> example/android/local.properties
+          echo "flutter.targetSdkVersion=33" >> example/android/local.properties
 
       # Execute unit tests
       - name: Unit Test
