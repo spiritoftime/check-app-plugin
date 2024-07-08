@@ -50,12 +50,12 @@ jobs:
           echo "flutter.compileSdkVersion=33" >> example/android/local.properties
           echo "flutter.targetSdkVersion=33" >> example/android/local.properties
 
-    - name: Setup Android SDK
-      uses: android-actions/setup-android@v2
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
 
-    - name: Accept Android SDK licenses
-      run: |
-        yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
+      - name: Accept Android SDK licenses
+        run: |
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
 
       # Execute unit tests
       - name: Unit Test
