@@ -4,17 +4,14 @@ jobs:
   unit_test:
     runs-on: ubuntu-latest
     steps:
-      - name: Clone plugin repository
+      - name: Clone repository
         uses: actions/checkout@v4
-
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-          flutter-version-file: pubspec.yaml # path to pubspec.yaml
-
-      - name: Verify Flutter installation
-        run: flutter --version
+          flutter-version: 3.19.0
+      - run: flutter --version
 
       - name: Run unit tests for Flutter plugin
         run: flutter test
