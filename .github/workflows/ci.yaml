@@ -26,17 +26,18 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        
+      - name: Build with Gradle
+        run: ./gradlew build
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
-      - name: get gradlew out
-        run: |
-          cd example/android
-          gradle wrapper
-          chmod +x ./gradlew
-          ./gradlew --version
+
       - name: Run Android tests for example app
         run: |
+          cd android
           ./gradlew test
 
 
