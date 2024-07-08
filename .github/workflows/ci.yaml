@@ -52,13 +52,14 @@ jobs:
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v2
- 
+        with:
+          accept-licenses: true
+
 
       # Execute unit tests
       - name: Unit Test
         run: |
           cd example/android
-          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
           gradle wrapper
           ./gradlew testDebugUnitTest
 
