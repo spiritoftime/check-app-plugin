@@ -65,6 +65,7 @@ jobs:
           echo "flutter.minSdkVersion=29" >> example/android/local.properties
           echo "flutter.compileSdkVersion=33" >> example/android/local.properties
           echo "flutter.targetSdkVersion=33" >> example/android/local.properties
+          echo "flutter.sdk=${{ env.FLUTTER_ROOT }}" >> example/android/local.properties
 
       # Execute unit tests
       - name: Unit Test
