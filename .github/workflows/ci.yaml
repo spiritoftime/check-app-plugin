@@ -31,7 +31,12 @@ jobs:
         with:
           channel: stable
           flutter-version: 3.22.2
-      - run: flutter --version
+      - run: |
+          flutter --version
+          flutter pub get
+          cd example
+          flutter pub get
+          cd ..
 
       - name: Accept Android SDK licenses
         run: |
