@@ -63,6 +63,7 @@ jobs:
       - name: Create local.properties
         run: |
           echo "sdk.dir=${{ env.ANDROID_HOME }}" > example/android/local.properties
+          # echo "flutter.sdk=${{ env.FLUTTER_ROOT }}" >> example/android/local.properties
           echo "flutter.minSdkVersion=29" >> example/android/local.properties
           echo "flutter.compileSdkVersion=33" >> example/android/local.properties
           echo "flutter.targetSdkVersion=33" >> example/android/local.properties
