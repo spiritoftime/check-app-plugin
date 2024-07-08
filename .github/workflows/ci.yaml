@@ -1,6 +1,37 @@
 name: CI
 on: [push]
 jobs:
+  android_unit_test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-java@v2
+        with:
+          java-version: "11"
+          distribution: "adopt"
+          cache: 'gradle'
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.22.2"
+          channel: "stable"
+
+      - run: flutter --version
+      - run: flutter pub get
+        working-directory: example
+
+      - name: Create local.properties
+        run: |
+          echo "sdk.dir=${{ env.ANDROID_SDK_ROOT }}" > example/android/local.properties
+          echo "flutter.minSdkVersion=29" >> example/android/local.properties
+          echo "flutter.compileSdkVersion=33" >> example/android/local.properties
+          echo "flutter.targetSdkVersion=33" >> example/android/local.properties
+          echo "flutter.sdk=${{ env.FLUTTER_ROOT }}" >> example/android/local.properties
+
+      - name: Run Android test(s) for plugin example
+        run: gradle --project-dir ./example/android --no-daemon test
   unit_test_flutter:
     runs-on: ubuntu-latest
     steps:
