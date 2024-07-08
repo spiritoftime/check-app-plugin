@@ -53,7 +53,7 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v2
         with:
-          accept-licenses: true
+          accept-android-sdk-licenses: true
 
 
       # Execute unit tests
