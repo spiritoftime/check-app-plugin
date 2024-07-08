@@ -32,7 +32,7 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Build SampleApplication
+      - name: run example app tests
         run: |
           cd example/android
           ./gradlew test
