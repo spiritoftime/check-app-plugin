@@ -32,6 +32,7 @@ jobs:
         
       - name: Build with Gradle
         run: |
+          gradle wrapper
           git update-index --chmod=+x gradlew
           ./gradlew build
 
